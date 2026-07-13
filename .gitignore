@@ -1,5 +1,17 @@
+# dependencies / build
 node_modules/
-extracted/
+.netlify/
+
+# local working notes — NEVER publish (owner name, project IDs, handoff)
+CLAUDE.md
 .remember/
+NOTES*.md
+HANDOFF*.md
+
+# import artifacts
+extracted/
 *.zip
+
+# os
 .DS_Store
+Thumbs.db

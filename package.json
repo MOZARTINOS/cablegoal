@@ -1,0 +1,12 @@
+{
+  "name": "cablegoal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cable Goal — interactive 3D forensic reconstruction of the Norway–England World Cup 2026 cable-goal incident.",
+  "homepage": "https://cablegoal.com",
+  "license": "MIT",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
