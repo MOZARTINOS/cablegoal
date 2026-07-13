@@ -12,6 +12,10 @@ HANDOFF*.md
 extracted/
 *.zip
 
+# private research notes (owner's forensic reports) — never publish
+deep research/
+*research*.md
+
 # os
 .DS_Store
 Thumbs.db
