@@ -121,6 +121,29 @@ html,body{overscroll-behavior:none;}
 #topbar{padding-top:calc(8px + env(safe-area-inset-top,0px));}
 .camsel button,button{min-height:38px;}
 .camsel button{min-width:44px;min-height:44px;}
+
+/* v9 HUD rhythm: unglue panels, balance spacing and typographic hierarchy (last in cascade = authoritative) */
+.camsel{gap:5px;padding:4px 6px}
+#telemetry{padding:13px 14px}
+#telemetry .stat{margin-bottom:7px}
+#telemetry .verdict{margin:11px 0 7px}
+#clearance,#matchScore{margin-top:2px}
+#caseScoreStrip{padding:10px 12px}
+.score{padding:8px 12px}
+.quickActions{gap:6px}
+@media(min-width:761px){
+  /* desktop: give the left stack a clear, even vertical rhythm so badge/score/hint don't crowd */
+  #forensicBadge{top:60px}
+  #caseScoreStrip{top:106px}
+  #orbitHint{top:150px}
+}
+@media(max-width:760px){
+  /* mobile: drop the side panels clear of the camera-tab bar so they stop touching it */
+  #telemetry{top:112px}
+  #caseScoreStrip{top:112px;min-width:120px}
+  #forensicBadge{top:112px}
+  .camsel{top:52px;gap:4px}
+}
 </style>
 </head>
 <body>
