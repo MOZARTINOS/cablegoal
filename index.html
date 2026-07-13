@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#07111b">
-<meta name="app-version" content="7.2-camera-crowd-fix">
+<meta name="app-version" content="9.0-forensic">
 <title>Cable Goal — did the ball hit the wire? | Norway 1–2 England, WC2026</title>
 <meta name="description" content="Interactive 3D forensic reconstruction of the disputed 45+2 goal in Norway–England, World Cup 2026. Re-kick Nyland's ball, see if it clips the overhead spidercam cable, and vote: contact or not? Free, open-source, runs in your browser.">
 
@@ -570,14 +570,6 @@ function goalOrFrameV6(prev){
   }
   return false
 }
-function stadiumBounceV6(){
-  if(pos.y>5.2)return;
-  const minX=-1.8,maxX=FIELD_L+1.8,minZ=-1.8,maxZ=FIELD_W+1.8,restitution=.46;
-  if(pos.x<minX){pos.x=minX;vel.x=Math.abs(vel.x)*restitution}
-  else if(pos.x>maxX){pos.x=maxX;vel.x=-Math.abs(vel.x)*restitution}
-  if(pos.z<minZ){pos.z=minZ;vel.z=Math.abs(vel.z)*restitution}
-  else if(pos.z>maxZ){pos.z=maxZ;vel.z=-Math.abs(vel.z)*restitution}
-}
 movePlayer=function(p,tx,tz,speed,dt,state='run'){
   const keeper=p.role==='gk'||p.role==='pickford';
   tx=clampV6(tx,keeper?3.25:4.7,keeper?101.75:100.3);tz=clampV6(tz,.8,FIELD_W-.8);
@@ -592,14 +584,14 @@ flightStep=function(dt){
   const kEff=K*(sp<DRAG_CRISIS&&vel.y<0?DRAG_CRISIS_MULT:1);vel.x+=(-kEff*sp*vel.x)*dt;vel.y+=(-G-kEff*sp*vel.y)*dt;vel.z+=(-kEff*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;
   ballSpeed=Math.hypot(vel.x,vel.y,vel.z);apexH=Math.max(apexH,pos.y);const ra=Math.abs(vel.y-prevVy)/dt/G;prevVy=vel.y;if((imuStepCounter++&1)===0){imu.push(Math.min(ra*.1,1));imu.shift()}
   if(!clipped&&px<CABLE_X&&pos.x>=CABLE_X){yAtCable=pos.y;if(Math.abs(pos.y-CABLE_Y)<=HIT_TOL){clipped=true;vel.y=-Math.abs(vel.y)*.34-2.6;vel.x*=.3;vel.z+=(Math.random()-.5)*2;const spike=sensorDetects?1:.13;for(let k=0;k<5;k++){imu.push(spike);imu.shift()}el('log').textContent=sensorDetects?seq('contactStrong'):seq('contactLight');haptic([22,35,45]);audio.cable();hitCableMat.emissive.setHex(0xff3b30);hitCableMat.emissiveIntensity=2.2;setTimeout(()=>hitCableMat.emissiveIntensity=0,450)}}
-  if(goalOrFrameV6(prev))return;stadiumBounceV6();pod.position.z+=(pos.z-pod.position.z)*.05;if(pos.y<5&&pos.x>48&&clipped)movePlayer(collector,pos.x,pos.z,8.5,dt);
+  if(goalOrFrameV6(prev))return;pod.position.z+=(pos.z-pod.position.z)*.05;if(pos.y<5&&pos.x>48&&clipped)movePlayer(collector,pos.x,pos.z,8.5,dt);
   if(pos.y<=.34&&vel.y<0){pos.y=.34;beginLooseBall()}else if((pos.x>FIELD_L+1.75||pos.x<-1.75||pos.z<-1.75||pos.z>FIELD_W+1.75)&&pos.y<1.2){beginLooseBall()}
 };
 looseBallStep=function(dt){
   looseElapsed+=dt;const prev={x:pos.x,y:pos.y,z:pos.z},air=pos.y>.341||Math.abs(vel.y)>.08;
   if(air){const sp=Math.hypot(vel.x,vel.y,vel.z);const kEff=K*(sp<DRAG_CRISIS&&vel.y<0?DRAG_CRISIS_MULT:1);vel.x+=(-kEff*sp*vel.x)*dt;vel.y+=(-G-kEff*sp*vel.y)*dt;vel.z+=(-kEff*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;if(pos.y<=.34&&vel.y<0){pos.y=.34;vel.y=-vel.y*.18;if(Math.abs(vel.y)<.75)vel.y=0;audio.noise(.045,.035,180)}}
   else{pos.y=.34;const hs=Math.hypot(vel.x,vel.z);if(hs>0){const decel=Math.min(hs,2.35*dt);vel.x-=vel.x/hs*decel;vel.z-=vel.z/hs*decel;pos.x+=vel.x*dt;pos.z+=vel.z*dt}vel.y=0}
-  if(goalOrFrameV6(prev))return;stadiumBounceV6();ballSpeed=Math.hypot(vel.x,vel.y,vel.z);
+  if(goalOrFrameV6(prev))return;ballSpeed=Math.hypot(vel.x,vel.y,vel.z);
   const lead=Math.min(.42,Math.max(.08,Math.hypot(vel.x,vel.z)/18)),ix=clampV6(pos.x+vel.x*lead,-1.3,FIELD_L+1.3),iz=clampV6(pos.z+vel.z*lead,-1.3,FIELD_W+1.3);
   const reached=movePlayer(looseReceiver,ix,iz,activeTeam==='eng'?9.4:9.1,dt);if(activeTeam==='eng')movePlayer(norMidL,pos.x-2.3,pos.z+1.4,7.1,dt);else movePlayer(collector,pos.x+2.5,pos.z-1.2,7.2,dt);
   const d=Math.hypot(looseReceiver.root.position.x-pos.x,looseReceiver.root.position.z-pos.z);if((reached||d<.78)&&(ballSpeed<7.5||looseElapsed>1.4)){vel={x:0,y:0,z:0};if(activeTeam==='eng'){enterPhase('eng_collect',seq('engDrive'))}else{norPossessor=looseReceiver;const sx=norPossessor.root.position.x,sz=norPossessor.root.position.z;const breakX=Math.max(sx+3,Math.min(80,sx+11));const recvX=Math.min(95,Math.max(breakX+5,86));const shootX=Math.min(96,Math.max(recvX+3,92));norPlan={breakX,breakZ:Math.max(24,Math.min(44,sz)),recvX,recvZ:34.6,shootX,shootZ:34.8};norBreakTarget={x:breakX,z:norPlan.breakZ};enterPhase('nor_collect',seq('norBreak'))}}
@@ -648,7 +640,6 @@ const skinColorsV7=[0xe6bd98,0xc88f69,0x8b5b3d,0x6a432f],bodyColorV7=new THREE.C
 
 function finishOutV7(kind){if(phase==='done')return;phase='done';vel={x:0,y:0,z:0};ballSpeed=0;kickBtn.disabled=false;shotScored=false;crowdRoar=.18;audio.whistle();haptic(28);el('resultPanel').classList.remove('open');const isSide=kind==='touchline',title=isSide?(lang==='no'?'INNKAST':'THROW-IN'):(lang==='no'?'BALLEN UTE':'BALL OUT OF PLAY'),sub=isSide?(lang==='no'?'Hele ballen krysset sidelinjen. Ingen sprett fra linjen.':'The whole ball crossed the touchline. It does not bounce from the line.'):(lang==='no'?'Ballen passerte mållinjen utenfor målet.':'The ball crossed the goal line outside the goal.');const bt=el('bannerTitle');bt.className='out';bt.textContent=title;el('bannerSub').textContent=sub;el('banner').classList.add('show');setLogText(sub);outRestartV7.querySelector('b').textContent=title;outRestartV7.querySelector('span').textContent=sub;setTimeout(()=>outRestartV7.classList.add('show'),420)}
 function checkOutV7(){if(phase==='done')return true;if(pos.z<-BALL_RADIUS||pos.z>FIELD_W+BALL_RADIUS){finishOutV7('touchline');return true}if(pos.x<-BALL_RADIUS||pos.x>FIELD_L+BALL_RADIUS){finishOutV7('goalLine');return true}return false}
-stadiumBounceV6=function(){};
 const flightStepV6Final=flightStep;flightStep=function(dt){const was=clipped;flightStepV6Final(dt);pod.position.z=POD_Z_V7;if(!was&&clipped)triggerCableFlashV7();if(phase!=='done')checkOutV7()};
 const looseBallStepV6Final=looseBallStep;looseBallStep=function(dt){if(checkOutV7())return;looseBallStepV6Final(dt);pod.position.z=POD_Z_V7;if(phase!=='done')checkOutV7()};
 const resetV6Final=reset;reset=function(){outRestartV7.classList.remove('show');contactFlashV7.classList.remove('show');cableFlashUntilV7=0;impactMarkerV7.visible=impactCoreV7.visible=false;impactLightV7.intensity=0;resetV6Final();pod.position.z=POD_Z_V7;updateRig()};
@@ -723,7 +714,7 @@ const animatePlayerV72Base=animatePlayer;animatePlayer=function(p,t){animatePlay
   if(p.root.rotation.x)p.root.rotation.x*=.82;
   if(p.state!=='slide'&&p.state!=='dive'){p.armL.rotation.x*=.78;p.armR.rotation.x*=.78;p.armL.rotation.z=clamp72(p.armL.rotation.z,-.48,.48);p.armR.rotation.z=clamp72(p.armR.rotation.z,-.48,.48)}};
 let frontCrowdStampV72=0;const animateFlagsV72Base=animateFlags;animateFlags=function(t,now){animateFlagsV72Base(t,now);if(now-frontCrowdStampV72>(reduced?72:48)){updateFrontCrowdV72(t);updateNearFlagsV72(t);frontCrowdStampV72=now}};
-let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'7.2',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
+let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
 
 el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag){p.tag.visible=true;p.tag.scale.set(2.55,.48,1)}})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
 }catch(error){console.error(error);window.__boot.fail(error)}},40);
