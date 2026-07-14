@@ -368,6 +368,14 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #resultPanel .yourVerdict #voteNo{background:#fff!important;color:#0f6f92!important;border:2px solid var(--teal)!important;font:900 13px 'Barlow Condensed'!important;letter-spacing:.6px;padding:11px 18px!important;box-shadow:0 3px 0 0 rgba(27,158,211,.28)}
 #resultPanel .yourVerdict #voteHit.selected{background:var(--coral)!important;color:#fff!important}
 #resultPanel .yourVerdict #voteNo.selected{background:var(--teal)!important;color:#fff!important}
+
+/* ── v11f: align the two info panels + pulsing verdict CTAs ── */
+#resultPanel #resultWhy,#resultPanel .resultHint{width:100%!important;max-width:none!important;margin:9px auto!important;box-sizing:border-box!important}
+@keyframes votePulseHit{0%,100%{box-shadow:0 3px 0 0 rgba(224,80,80,.30)}50%{box-shadow:0 3px 0 0 rgba(224,80,80,.30),0 0 16px 4px rgba(224,80,80,.55);transform:translateY(-1px) scale(1.04)}}
+@keyframes votePulseNo{0%,100%{box-shadow:0 3px 0 0 rgba(27,158,211,.30)}50%{box-shadow:0 3px 0 0 rgba(27,158,211,.30),0 0 16px 4px rgba(27,158,211,.55);transform:translateY(-1px) scale(1.04)}}
+#resultPanel .yourVerdict:not(:has(.selected)) #voteHit{animation:votePulseHit 1.25s ease-in-out infinite}
+#resultPanel .yourVerdict:not(:has(.selected)) #voteNo{animation:votePulseNo 1.25s ease-in-out infinite .62s}
+@media(prefers-reduced-motion:reduce){#resultPanel .yourVerdict #voteHit,#resultPanel .yourVerdict #voteNo{animation:none!important}}
 </style>
 </head>
 <body>
