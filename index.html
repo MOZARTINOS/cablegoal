@@ -478,6 +478,85 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #voteDash .vdNote{margin:22px 0 8px;font-size:11px;color:#7f8996;line-height:1.55;border-top:1px solid #ffffff14;padding-top:12px;font-family:'Noto Sans'}
 #dashIntroBtn{display:block;width:100%;margin-top:10px;background:transparent;border:0;color:var(--teal);font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.8px;font-size:12.5px;cursor:pointer;padding:4px}
 #dashIntroBtn:hover{color:#fff}
+
+/* ── v15: mobile HUD rebuild — 3-row topbar (score+utils / cam tabs / action pills), no overlaps ── */
+@media(max-width:760px){
+  /* topbar becomes a wrapped flex grid; quickActions children are promoted so rows can be recomposed */
+  #topbar{display:flex;flex-wrap:wrap;align-items:center;row-gap:7px;column-gap:6px}
+  #topbar .quickActions{display:contents}
+  /* row 1 — scorebug + language + settings */
+  #scoreBox{order:0;flex:1 1 auto;min-width:0;justify-content:flex-start}
+  #langToggle{order:1}
+  #gearBtn{order:2;flex:none}
+  /* row 2 — camera tabs back in flow, full width, scrollable */
+  #topbar .camsel{order:3;position:static;left:auto;right:auto;top:auto;transform:none;flex:1 1 100%;width:100%;max-width:none;margin:0}
+  /* row 3 — content actions as equal pills + sound */
+  #evidenceBtn,#dashHudBtn,#caseFileBtn{order:4;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #dashHudBtn{order:5}#caseFileBtn{order:6}#slowBtn{order:7;flex:none}#soundBtn{order:8;flex:none}
+  /* undo the old icon-only squeeze on Evidence: pills carry labels again */
+  #topbar #evidenceBtn{width:auto;padding:0 10px;font-size:10px}
+  #topbar #evidenceBtn:first-letter{font-size:13px}
+  /* compact scorebug so row 1 fits a phone */
+  #scoreBox.score{gap:6px!important;padding:6px 9px!important;box-shadow:4px 4px 0 0 var(--teal)!important}
+  .score .team{gap:5px}
+  .score .code{font-size:15px;letter-spacing:1px}
+  .score .scoreT{margin:0 2px!important;padding:1px 2px!important}
+  .score .scoreT .sc{font-size:16px!important;padding:1px 8px!important}
+  .score .clockWrap{gap:4px;margin-left:0}
+  .score .clock{font-size:10px;padding:2px 6px}
+  .score .plus{font-size:9px;padding:2px 5px}
+  .score .flag{width:18px;height:12px}
+  .score .ribbon{display:none}
+  /* camera tabs: tighter type so all six fit most phones; still scrolls as fallback */
+  #topbar .camsel button{font-size:11px;padding:6px 9px;min-height:40px}
+  /* side panels drop below the taller topbar and can no longer collide */
+  #telemetry{top:calc(172px + env(safe-area-inset-top,0px))!important}
+  /* declutter: the live accuracy card duplicates the result modal's case score — off on phones */
+  #caseScoreStrip{display:none!important}
+  /* analysis folds to a slim title chip; tap to expand for the verdict + stats */
+  body:not(.telemetry-open) #telemetry{width:auto;padding:8px 12px}
+  body:not(.telemetry-open) #telemetry #telemetryToggle{padding-bottom:0;width:auto;gap:10px;align-items:center;white-space:nowrap}
+  body:not(.telemetry-open) #telemetry .verdict{display:none}
+  /* result modal: true bottom sheet — never clips the top, voting first */
+  #resultPanel{flex-direction:column;top:auto!important;bottom:max(10px,env(safe-area-inset-bottom))!important;max-height:calc(100dvh - 84px)!important;overflow-y:auto}
+  #resultPanel.open{display:flex!important}
+  #resultPanel .yourVerdict{order:1;margin-top:8px!important;padding-top:12px}
+  #resultPanel #voteTally{order:2}
+  #resultPanel .resultActions{order:3;margin-top:12px}
+  #resultPanel h3{font-size:22px!important}
+  #resultPanel #resultWhy,#resultPanel .resultHint{font-size:11.5px!important;padding:9px 11px!important;line-height:1.45!important}
+  #resultPanel .resultScore div{padding:9px 8px!important}
+  #resultPanel .resultScore b{font-size:21px!important}
+}
+@media(max-width:430px){
+  .score .flag{display:none}
+  #topbar #evidenceBtn,#dashHudBtn,#caseFileBtn{padding:0 7px;font-size:9.5px}
+  #topbar .camsel button{padding:6px 7px;font-size:10.5px}
+  .presetChips button{padding:7px 9px!important;font-size:11px!important}
+  .dockHeader #controlToggle{padding:8px 9px;font-size:9px}
+}
+
+/* ── v16: match-day splash — bright card, diagonal NOR/ENG flag banner, gold 45+2 crest ── */
+#introCard{background:radial-gradient(circle at 50% 16%,rgba(64,122,166,.6),rgba(6,13,21,.84) 62%)}
+.introBox{position:relative;overflow:hidden;background:#f3efe6;border:1px solid rgba(0,0,0,.14);box-shadow:0 30px 110px rgba(0,0,0,.62),7px 7px 0 0 rgba(48,62,96,.2);padding:116px 22px 20px}
+.introBox::before{content:"";position:absolute;top:0;left:0;right:0;height:92px;background:
+  linear-gradient(105deg,transparent 0 47.2%,var(--gold) 47.2% 52.8%,transparent 52.8%),
+  linear-gradient(90deg,transparent 0 30%,#172442 30% 36%,transparent 36%) left top/46% 100% no-repeat,
+  linear-gradient(180deg,transparent 0 44%,#172442 44% 56%,transparent 56%) left top/46% 100% no-repeat,
+  linear-gradient(90deg,transparent 0 26%,#fff 26% 40%,transparent 40%) left top/46% 100% no-repeat,
+  linear-gradient(180deg,transparent 0 36%,#fff 36% 64%,transparent 64%) left top/46% 100% no-repeat,
+  linear-gradient(90deg,transparent 0 60%,#c8102e 60% 68%,transparent 68%) right top/46% 100% no-repeat,
+  linear-gradient(180deg,transparent 0 42%,#c8102e 42% 58%,transparent 58%) right top/46% 100% no-repeat,
+  linear-gradient(105deg,#c8102e 0 47%,transparent 47%),
+  linear-gradient(105deg,transparent 0 53%,#fdfdfd 53%)}
+.introBox::after{content:"45+2";position:absolute;top:92px;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:var(--gold);color:#07111b;font:800 12px "Barlow Condensed",sans-serif;letter-spacing:.5px;display:flex;align-items:center;justify-content:center}
+.introBox .introEyebrow{color:#127a9c!important}
+.introBox h2{color:#0c1119}
+.introBox p{color:#3c4658}
+.introSteps div{background:#fff;border:1px solid rgba(0,0,0,.10);color:#1b2333}
+.introSteps span{color:#3c4658}
+.introSteps b{color:#127a9c}
+.introActions #startCaseBtn{box-shadow:5px 5px 0 0 var(--teal)}
 </style>
 </head>
 <body>
@@ -817,7 +896,7 @@ const referee=createPlayer(47,55,REF,REF,'ref',0,2);
 // aliases retained by the branching attack choreography
 const engRight=madueke,engMid=rice,engBack=stones;
 [gk,norLB,norCB1,norCB2,norRB,norMidL,norMidC,norMidR,schjelderup,norwayReceiver,haaland].forEach(p=>p.team='nor');[engKeeper,konsa,stones,guehi,oreilly,rice,collector,madueke,bellingham,gordon,kane].forEach(p=>p.team='eng');referee.team='ref';
-function addNameTag(player,text,kit,state){const m=String(text).match(/^(.*?)\s+(\d+)$/);const name=m?m[1]:String(text),num=m?m[2]:'';const kl=(kit||'').toLowerCase();const team=(kl==='#c8102e'||kl==='#7cc24a')?'NOR':(kl==='#f4f4f4'||kl==='#e89a3a')?'ENG':'';const numCol=(kl==='#f4f4f4'||kl==='#e89a3a')?'#141f3a':'#ffffff';const roles={HAALAND:'STRIKER','ØDEGAARD':'CAPTAIN',NYLAND:'KEEPER',PICKFORD:'KEEPER',KANE:'CAPTAIN'};const role=roles[name]||'';const sub=team?(team+(role?' · '+role:'')):'MATCH OFFICIAL';const halo=state==='goal'?'#E05050':state==='sel'?'#ECD080':'#1B9ED3';const H=104;const sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));sp.position.set(0,2.72,0);player.root.add(sp);player.tag=sp;player.tagState=state||'default';function paint(){const me=document.createElement('canvas').getContext('2d');me.font='800 34px "Barlow Condensed"';const nameW=me.measureText(name).width;me.font='700 16px "Noto Sans"';const subW=me.measureText(sub).width;const chip=num?44:0,gap=num?13:0,padL=18,padR=20,txtW=Math.max(nameW,subW);const W=Math.ceil(padL+chip+gap+txtW+padR+10);const c=document.createElement('canvas');c.width=W;c.height=H;const q=c.getContext('2d');const RR=(x,y,w,h,r)=>{q.beginPath();q.moveTo(x+r,y);q.arcTo(x+w,y,x+w,y+h,r);q.arcTo(x+w,y+h,x,y+h,r);q.arcTo(x,y+h,x,y,r);q.arcTo(x,y,x+w,y,r);q.closePath()};const pillH=70,pillY=12,pillX=6,pillW=W-16;RR(pillX+5,pillY+6,pillW,pillH,16);q.fillStyle=halo;q.fill();RR(pillX,pillY,pillW,pillH,16);q.fillStyle='#0c0c11';q.fill();q.lineWidth=2;q.strokeStyle='rgba(255,255,255,.18)';q.stroke();let tx=pillX+padL;if(num){RR(tx,pillY+(pillH-44)/2,44,44,10);q.fillStyle=kit;q.fill();q.fillStyle=numCol;q.font='italic 900 28px "Barlow Condensed"';q.textAlign='center';q.textBaseline='middle';q.fillText(num,tx+22,pillY+pillH/2+1);tx+=44+gap}q.textAlign='left';q.textBaseline='alphabetic';q.fillStyle='#ffffff';q.font='800 34px "Barlow Condensed"';q.fillText(name,tx,pillY+38);q.fillStyle='#9aa6b2';q.font='700 16px "Noto Sans"';q.fillText(sub,tx,pillY+58);if(state==='goal'){q.save();q.translate(pillX+pillW-24,pillY+pillH/2);q.fillStyle='#fff';q.beginPath();q.arc(0,0,11,0,6.283);q.fill();q.fillStyle='#141414';for(let a=0;a<5;a++){const an=a/5*6.283-1.57;q.beginPath();q.arc(Math.cos(an)*5.5,Math.sin(an)*5.5,1.9,0,6.283);q.fill()}q.beginPath();q.arc(0,0,2.1,0,6.283);q.fill();q.restore()}const tx3=new THREE.CanvasTexture(c);tx3.encoding=THREE.sRGBEncoding;if(sp.material.map)sp.material.map.dispose();sp.material.map=tx3;sp.material.needsUpdate=true;if(!mobile){const wH=0.52;sp.scale.set(wH*(W/H),wH,1)}}registerLabel(paint)}
+function addNameTag(player,text,kit,state){const m=String(text).match(/^(.*?)\s+(\d+)$/);const name=m?m[1]:String(text),num=m?m[2]:'';const kl=(kit||'').toLowerCase();const team=(kl==='#c8102e'||kl==='#7cc24a')?'NOR':(kl==='#f4f4f4'||kl==='#e89a3a')?'ENG':'';const numCol=(kl==='#f4f4f4'||kl==='#e89a3a')?'#141f3a':'#ffffff';const roles={HAALAND:'STRIKER','ØDEGAARD':'CAPTAIN',NYLAND:'KEEPER',PICKFORD:'KEEPER',KANE:'CAPTAIN'};const role=roles[name]||'';const sub=team?(team+(role?' · '+role:'')):'MATCH OFFICIAL';const halo=state==='goal'?'#E05050':state==='sel'?'#ECD080':'#1B9ED3';const H=104;const sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));sp.position.set(0,2.72,0);player.root.add(sp);player.tag=sp;player.tagState=state||'default';function paint(){const me=document.createElement('canvas').getContext('2d');me.font='800 34px "Barlow Condensed"';const nameW=me.measureText(name).width;me.font='700 16px "Noto Sans"';const subW=me.measureText(sub).width;const chip=num?44:0,gap=num?13:0,padL=18,padR=20,txtW=Math.max(nameW,subW);const W=Math.ceil(padL+chip+gap+txtW+padR+10);const c=document.createElement('canvas');c.width=W;c.height=H;const q=c.getContext('2d');const RR=(x,y,w,h,r)=>{q.beginPath();q.moveTo(x+r,y);q.arcTo(x+w,y,x+w,y+h,r);q.arcTo(x+w,y+h,x,y+h,r);q.arcTo(x,y+h,x,y,r);q.arcTo(x,y,x+w,y,r);q.closePath()};const pillH=70,pillY=12,pillX=6,pillW=W-16;RR(pillX+5,pillY+6,pillW,pillH,16);q.fillStyle=halo;q.fill();RR(pillX,pillY,pillW,pillH,16);q.fillStyle='#0c0c11';q.fill();q.lineWidth=2;q.strokeStyle='rgba(255,255,255,.18)';q.stroke();let tx=pillX+padL;if(num){RR(tx,pillY+(pillH-44)/2,44,44,10);q.fillStyle=kit;q.fill();q.fillStyle=numCol;q.font='italic 900 28px "Barlow Condensed"';q.textAlign='center';q.textBaseline='middle';q.fillText(num,tx+22,pillY+pillH/2+1);tx+=44+gap}q.textAlign='left';q.textBaseline='alphabetic';q.fillStyle='#ffffff';q.font='800 34px "Barlow Condensed"';q.fillText(name,tx,pillY+38);q.fillStyle='#9aa6b2';q.font='700 16px "Noto Sans"';q.fillText(sub,tx,pillY+58);if(state==='goal'){q.save();q.translate(pillX+pillW-24,pillY+pillH/2);q.fillStyle='#fff';q.beginPath();q.arc(0,0,11,0,6.283);q.fill();q.fillStyle='#141414';for(let a=0;a<5;a++){const an=a/5*6.283-1.57;q.beginPath();q.arc(Math.cos(an)*5.5,Math.sin(an)*5.5,1.9,0,6.283);q.fill()}q.beginPath();q.arc(0,0,2.1,0,6.283);q.fill();q.restore()}const tx3=new THREE.CanvasTexture(c);tx3.encoding=THREE.sRGBEncoding;if(sp.material.map)sp.material.map.dispose();sp.material.map=tx3;sp.material.needsUpdate=true;const wH=mobile?0.72:0.52;sp.scale.set(wH*(W/H),wH,1)}registerLabel(paint)}
 addNameTag(collector,'ANDERSON 8','#f4f4f4');addNameTag(gordon,'GORDON 18','#f4f4f4');addNameTag(bellingham,'BELLINGHAM 10','#f4f4f4');addNameTag(haaland,'HAALAND 9','#c8102e');addNameTag(gk,'NYLAND 1','#7cc24a');addNameTag(norwayReceiver,'SØRLOTH 7','#c8102e');addNameTag(norMidR,'ØDEGAARD 10','#c8102e');addNameTag(norMidL,'BERGE 8','#c8102e');addNameTag(rice,'RICE 4','#f4f4f4');addNameTag(kane,'KANE 9','#f4f4f4');addNameTag(engKeeper,'PICKFORD 1','#e89a3a');
 function animatePlayer(p,t){const run=p.state==='run'||p.state==='dribble';const kick=p.state==='kick';const dive=p.state==='dive';const celebrate=p.state==='celebrate';const amp=run?.9:.08;const f=run?9:2.2;const w=Math.sin(t*f+p.phase);p.legL.rotation.x=w*amp;p.legR.rotation.x=-w*amp;p.armL.rotation.x=-w*amp*.72;p.armR.rotation.x=w*amp*.72;p.hips.position.y=.92+(run?Math.abs(Math.sin(t*f*2+p.phase))*.055:Math.sin(t*2+p.phase)*.018);p.hips.rotation.z=0;p.root.rotation.z=0;if(kick){const q=Math.min(1,(performance.now()-kickStarted)/750);p.legR.rotation.x=q<.45?-q*3.5:(q<.75?-1.55+(q-.45)*9.3:1.24-(q-.75)*4.5);p.armL.rotation.x=-.75;p.armR.rotation.x=.6}if(dive){const q=Math.min(1,(performance.now()-p.actionStarted)/620);p.root.rotation.z=(p.diveDir||1)*Math.sin(q*Math.PI/2)*1.18;p.hips.position.y=.92-q*.5;p.armL.rotation.z=-1.25;p.armR.rotation.z=1.25}if(celebrate){p.armL.rotation.z=-2.25;p.armR.rotation.z=2.25;p.hips.position.y=.98+Math.abs(Math.sin(t*7+p.phase))*.12}}
 // ball
@@ -917,7 +996,7 @@ function setScore(nor=1,eng=1,clock="45+2'"){el('scoreBox').innerHTML=`<span cla
 function preview(){const r=simulate(+pw.value,+an.value,+am.value);el('tApex').textContent=r.peak.toFixed(1)+' m';const judge=el('judgeVerdict');if(r.yc===null){el('tAtCable').textContent='– m';el('verdict').className='verdict';el('verdict').textContent=lang==='no'?'når ikke vaieren':'does not reach cable';el('clearance').textContent='—';judge.className='judgeVerdict clean';judge.querySelector('strong').textContent=tr('cleanVerdict')}else{const d=r.yc-CABLE_Y,hit=Math.abs(d)<=HIT_TOL;el('tAtCable').textContent=r.yc.toFixed(1)+' m';el('verdict').className='verdict '+(hit?'hit':'miss');el('verdict').textContent=hit?(lang==='no'?'TREFFER VAIEREN':'CABLE CONTACT'):(lang==='no'?'forbi vaieren':'misses cable');el('clearance').textContent=hit?`Δ ${d>=0?'+':''}${d.toFixed(1)} m`:`${d>0?'+':''}${d.toFixed(1)} m`;judge.className='judgeVerdict '+(hit?'':'clean');judge.querySelector('strong').textContent=tr(hit?'hitVerdict':'cleanVerdict')}const diff=Math.abs(+pw.value-30)/16+Math.abs(+an.value-49)/42+Math.abs(+am.value-2)/32;el('matchScore').textContent=(lang==='no'?'likhet med kampøyeblikket: ':'match-moment similarity: ')+Math.max(0,Math.round(100-diff*100))+'%'}
 [pw,an,am].forEach(s=>s.addEventListener('input',()=>{el('vPower').textContent=pw.value;el('vAngle').textContent=an.value;el('vAim').textContent=am.value;preview();updateCaseScore()}));
 document.querySelectorAll('.camsel button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.camsel button').forEach(x=>x.classList.remove('active'));b.classList.add('active');camMode=b.dataset.cam;if(camMode==='orbit')syncOrbitFromCamera();el('orbitHint').classList.add('hide')});el('gearBtn').onclick=()=>el('settings').classList.toggle('open');
-function hideIntro(){el('introCard').classList.add('hide');safeStore.set('wireIntroSeen','1');setTimeout(()=>el('introCard').style.display='none',320)}el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};/* intro start gate always shown */
+function hideIntro(){el('introCard').classList.add('hide');safeStore.set('wireIntroSeen','1');setTimeout(()=>el('introCard').style.display='none',320)}document.addEventListener('pointerdown',()=>{try{audio.resume()}catch(_){}},{once:true,capture:true});el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};/* intro start gate always shown */
 function caseScore(power=+pw.value,angle=+an.value,aim=+am.value,yc=null){const dv=Math.abs(power-DEFAULTS.power)/6,da=Math.abs(angle-DEFAULTS.angle)/12,di=Math.abs(aim-DEFAULTS.aim)/12;let score=1000-Math.round((dv*.28+da*.46+di*.26)*1000);if(yc!==null)score-=Math.min(220,Math.round(Math.abs((yc-CABLE_Y)-(canonical.yc-CABLE_Y))*58));return Math.max(0,Math.min(1000,score))}
 function updateCaseScore(yc=null){currentCaseScore=caseScore(+pw.value,+an.value,+am.value,yc);el('caseScoreValue').textContent=currentCaseScore;el('bestScoreValue').textContent=Math.max(bestCaseScore,currentCaseScore);const _csb=el('caseScoreBar');if(_csb)_csb.style.width=Math.max(0,Math.min(100,currentCaseScore/1000*100))+'%';return currentCaseScore}
 function haptic(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(e){}}
@@ -1207,7 +1286,7 @@ orbitZoom=function(delta){activateOrbit();orbit.distance=clampV6(orbit.distance*
 // Animate heads at the same low cadence as flags; keeps supporter movement inexpensive on phones.
 let lastHeadV6=0;const animateFlagsV5=animateFlags;animateFlags=function(t,now){animateFlagsV5(t,now);if(now-lastHeadV6<(reduced?90:55))return;lastHeadV6=now;for(let i=0;i<activeFanCount;i++){const m=activeFanMeta[i],energy=.025+Math.min(.18,crowdRoar*.06),wave=Math.sin(t*(1.8+(i%5)*.13)+m.p);dummy.position.set(m.x,m.y+.58*m.s+wave*energy,m.z);dummy.scale.setScalar(m.s);dummy.rotation.set(0,0,0);dummy.updateMatrix();activeFanHeads.setMatrixAt(i,dummy.matrix)}activeFanHeads.instanceMatrix.needsUpdate=true};
 // Labels remain available on mobile, at a smaller scale to preserve the play view.
-if(mobile){players.forEach(p=>{if(p.tag){p.tag.visible=true;p.tag.scale.set(2.55,.48,1)}})}
+if(mobile){players.forEach(p=>{if(p.tag)p.tag.visible=true})}
 
 
 window.__boot.set(82,__b('Final detailing and collisions…','Siste detaljer og kollisjoner…'),__b('DETAILS','DETALJER'));
@@ -1230,7 +1309,6 @@ const animatePlayerV6=animatePlayer;animatePlayer=function(p,t){const slide=p.st
 
 // All players receive readable names; key actors keep their larger existing tags.
 [[norLB,'WOLFE 5','#c8102e'],[norCB1,'HEGGEM 17','#c8102e'],[norCB2,'AJER 3','#c8102e'],[norRB,'RYERSON 26','#c8102e'],[norMidC,'BERG 6','#c8102e'],[schjelderup,'SCHJELDERUP 21','#c8102e'],[konsa,'KONSA 2','#f4f4f4'],[stones,'STONES 5','#f4f4f4'],[guehi,'GUÉHI 6','#f4f4f4'],[oreilly,"O'REILLY 3",'#f4f4f4'],[madueke,'MADUEKE 20','#f4f4f4'],[referee,'REFEREE','#181818']].forEach(([p,n,c])=>{if(!p.tag)addNameTag(p,n,c)});
-if(mobile)players.forEach(p=>{if(p.tag)p.tag.scale.set(2.25,.43,1)});
 
 // Front-row supporters: large enough to read as people from pitch cameras, with moving arms and scarves.
 const heroFanGroupV7=new THREE.Group();crowdGroup.add(heroFanGroupV7);const heroCountV7=reduced?88:156,heroBodyGeomV7=new THREE.CylinderGeometry(.22,.19,.92,7),heroHeadGeomV7=new THREE.SphereGeometry(.22,7,5),heroArmGeomV7=new THREE.CylinderGeometry(.055,.065,.68,6),heroScarfGeomV7=new THREE.BoxGeometry(.72,.08,.08);const heroBodyV7=new THREE.InstancedMesh(heroBodyGeomV7,new THREE.MeshBasicMaterial({color:0xededed}),heroCountV7),heroHeadV7=new THREE.InstancedMesh(heroHeadGeomV7,new THREE.MeshBasicMaterial({color:0xededed}),heroCountV7),heroArmLV7=new THREE.InstancedMesh(heroArmGeomV7,new THREE.MeshBasicMaterial({color:0xededed}),heroCountV7),heroArmRV7=new THREE.InstancedMesh(heroArmGeomV7,new THREE.MeshBasicMaterial({color:0xededed}),heroCountV7),heroScarfV7=new THREE.InstancedMesh(heroScarfGeomV7,new THREE.MeshBasicMaterial({color:0xededed}),heroCountV7);[heroBodyV7,heroHeadV7,heroArmLV7,heroArmRV7,heroScarfV7].forEach(o=>{o.instanceMatrix.setUsage(THREE.DynamicDrawUsage);o.frustumCulled=false;heroFanGroupV7.add(o)});const heroMetaV7=[];for(let i=0;i<heroCountV7;i++){const side=i%4,row=Math.floor(i/4)%3,u=(Math.floor(i/12)+.5)/Math.ceil(heroCountV7/12),isNor=side===1||side===2;let x,z,ry;if(side===0){x=6+u*(FIELD_L-12);z=-7.8-row*1.05;ry=0}else if(side===1){x=6+u*(FIELD_L-12);z=FIELD_W+7.8+row*1.05;ry=Math.PI}else if(side===2){x=-7.8-row*1.05;z=5+u*(FIELD_W-10);ry=Math.PI/2}else{x=FIELD_L+7.8+row*1.05;z=5+u*(FIELD_W-10);ry=-Math.PI/2}heroMetaV7.push({x,y:3.2+row*.82+(i%5)*.06,z,ry,p:Math.random()*6.28,s:.88+Math.random()*.22,isNor})}
@@ -1318,7 +1396,7 @@ const animatePlayerV72Base=animatePlayer;animatePlayer=function(p,t){animatePlay
 let frontCrowdStampV72=0;const animateFlagsV72Base=animateFlags;animateFlags=function(t,now){animateFlagsV72Base(t,now);if(now-frontCrowdStampV72>(reduced?72:48)){updateFrontCrowdV72(t);updateNearFlagsV72(t);frontCrowdStampV72=now}};
 let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
 
-el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag){p.tag.visible=true;p.tag.scale.set(2.55,.48,1)}})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
+el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag)p.tag.visible=true})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
 }catch(error){console.error(error);window.__boot.fail(error)}},40);
 </script>
 <script>
