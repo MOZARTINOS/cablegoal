@@ -1,8 +1,28 @@
 # Netlify deploy config for cablegoal.com
-# Static site is the repo root (index.html); serverless vote counter lives in netlify/functions.
+# The build copies ONLY the intended public files into _site/ and publishes that
+# directory — never the repo root. This keeps local notes/research (gitignored but
+# present in the working tree) out of any deploy, including careless manual ones,
+# and stops package.json / function source from being served as static files.
 [build]
-  publish = "."
+  command = "mkdir -p _site && cp index.html og.jpg banner.jpg robots.txt sitemap.xml _site/"
+  publish = "_site"
   functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Security headers for everything the site serves.
+# The app is a single offline-capable HTML file: all scripts/styles are inline
+# (hence 'unsafe-inline') and audio/fonts/images are base64 data: URIs. The CSP
+# still blocks remote scripts, plugins, framing and cross-site form posts.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    content-security-policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    x-content-type-options = "nosniff"
+    x-frame-options = "DENY"
+    referrer-policy = "strict-origin-when-cross-origin"
+    permissions-policy = "camera=(), microphone=(), geolocation=()"
 
 # Friendly cache for the single HTML app; the vote function sets its own no-store headers.
 [[headers]]

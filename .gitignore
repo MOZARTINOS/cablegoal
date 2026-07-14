@@ -1,6 +1,7 @@
 # dependencies / build
 node_modules/
 .netlify/
+_site/
 
 # secrets / local env — never commit
 .env
