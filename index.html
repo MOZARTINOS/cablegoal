@@ -8082,6 +8082,8 @@ var qrcode = function() {
   function rr(q,x,y,w,h,r){q.beginPath();q.moveTo(x+r,y);q.arcTo(x+w,y,x+w,y+h,r);q.arcTo(x+w,y+h,x,y+h,r);q.arcTo(x,y+h,x,y,r);q.arcTo(x,y,x+w,y,r);q.closePath();}
   function diamond(q,cx,cy,s,fill){q.save();q.translate(cx,cy);q.rotate(Math.PI/4);q.fillStyle=fill;q.fillRect(-s/2,-s/2,s,s);q.restore();}
   function fitFont(q,text,weight,style,max,startPx,minPx){var px=startPx;do{q.font=(style?'italic ':'')+weight+' '+px+'px "Barlow Condensed"';if(q.measureText(text).width<=max)break;px-=4;}while(px>minPx);return px;}
+  // app `lang` lives in the main script's closure — resolve it the same way curLang() does
+  function cardLang(){try{var s=localStorage.getItem('wiregoal_lang');if(s==='no'||s==='en')return s}catch(e){}return (document.documentElement.lang||'').indexOf('n')===0?'no':'en';}
 
   function drawQR(q,x,y,size,dark,light){
     try{var qr=qrcode(0,'M');qr.addData(QURL);qr.make();var n=qr.getModuleCount(),pad=2,cells=n+pad*2,cs=size/cells;
@@ -8101,7 +8103,7 @@ var qrcode = function() {
   function drawCard(stance,W,H){
     var hit=stance==='hit';
     // words follow the interface language; colours/score/cross stay driven by the verdict (stance)
-    var no=(typeof lang!=='undefined'&&lang==='no');
+    var no=cardLang()==='no';
     var L=no?{
       verd:'KJENNELSEN',pillHit:'KABELKONTAKT',pillClean:'REN BANE',
       hlHit:['DEN','TRAFF'],hlClean:['INGEN','KONTAKT'],
@@ -8186,7 +8188,7 @@ var qrcode = function() {
     try{await document.fonts.ready;}catch(e){}
     var sq=drawCard(stance,1080,1080);
     // invite text — travels with the square card so people know where to play
-    var invite=(lang==='no'
+    var invite=(cardLang()==='no'
       ?(stance==='hit'?'Den traff kabelen. 45+2 — spill selv på cablegoal.com':'Ren bane. 45+2 — spill selv på cablegoal.com')
       :(stance==='hit'?'It hit the cable. 45+2 — play it yourself at cablegoal.com':'No contact. 45+2 — play it yourself at cablegoal.com'));
     function toBlob(cv){return new Promise(function(res){cv.toBlob(res,'image/png');});}
