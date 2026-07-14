@@ -9,7 +9,7 @@
 <meta name="description" content="Re-kick Nyland’s disputed 45+2 goal in an interactive 3D reconstruction of Norway–England, WC2026. Did it clip the spidercam wire? Watch, then vote.">
 <link rel="canonical" href="https://cablegoal.com/">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzA3MTExYiIvPjxsaW5lIHgxPSIyLjUiIHkxPSIxMC41IiB4Mj0iMjkuNSIgeTI9IjE4LjUiIHN0cm9rZT0iIzlhYTZiMiIgc3Ryb2tlLXdpZHRoPSIyIi8+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNi41IiByPSI3LjIiIGZpbGw9IiNmNGY0ZjQiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE0IiByPSIxLjciIGZpbGw9IiMwNzExMWIiLz48cGF0aCBkPSJNMTYgMTQgMTIuNyAxOC40IDE5LjMgMTguNFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA3MTExYiIgc3Ryb2tlLXdpZHRoPSIxLjEiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48Y2lyY2xlIGN4PSI5LjciIGN5PSIxMy40IiByPSIxLjUiIGZpbGw9IiNmZmQ2MGEiLz48L3N2Zz4=">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMjA0YTcwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTIzMTRjIi8+PC9saW5lYXJHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9InMiIGN4PSIuMzgiIGN5PSIuMzIiIHI9Ii44Ij48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNlNmY0ZmYiLz48c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iIzhmZDBmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzRhYTZlZSIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgcng9IjciIGZpbGw9InVybCgjYikiLz48bGluZSB4MT0iMi41IiB5MT0iOSIgeDI9IjI5LjUiIHkyPSIyMCIgc3Ryb2tlPSIjOWFhNmIyIiBzdHJva2Utd2lkdGg9IjEuNiIgb3BhY2l0eT0iLjYiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2LjUiIHI9IjgiIGZpbGw9InVybCgjcykiIHN0cm9rZT0iIzJiNmVhMCIgc3Ryb2tlLXdpZHRoPSIuNiIvPjxnIHN0cm9rZT0iIzJiNmVhMCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiPjxwYXRoIGQ9Ik0xNiAxMy43IDE4LjY2IDE1LjYzIDE3LjY1IDE4Ljc3IDE0LjM1IDE4Ljc3IDEzLjM0IDE1LjYzWiIgZmlsbD0iIzJiNmVhMCIvPjxwYXRoIGQ9Ik0xNiAxMy43IDE2IDguN00xOC42NiAxNS42MyAyMy40IDE0LjJNMTcuNjUgMTguNzcgMjAuNSAyMi44TTE0LjM1IDE4Ljc3IDExLjUgMjIuOE0xMy4zNCAxNS42MyA4LjYgMTQuMiIvPjwvZz48L3N2Zz4=">
 
 <!-- Open Graph / Facebook / LinkedIn -->
 <meta property="og:type" content="website">
@@ -8093,10 +8093,10 @@ var qrcode = function() {
     }catch(e){return false;}
   }
 
-  function flagCrossNor(q,W,H){ // faint navy Scandinavian cross, offset left-of-centre
-    q.save();q.globalAlpha=0.16;q.fillStyle=NORNAVY;var vx=W*0.34,vw=W*0.10,hy=H*0.30,hh=H*0.16;
-    q.fillStyle='#fff';q.fillRect(vx-6,0,vw+12,H);q.fillRect(0,hy-6,W,hh+12);
-    q.fillStyle=NORNAVY;q.fillRect(vx,0,vw,H);q.fillRect(0,hy,W,hh);q.restore();
+  function flagCrossNor(q,W,H){ // Norwegian flag cross, offset left-of-centre. Real flag ratios: white border = 1/2 of the blue bar on each side (6-1-2-1-12)
+    q.save();var vx=W*0.34,vw=W*0.10,hy=H*0.30,hh=H*0.16,bw=vw*0.5,bh=hh*0.5;
+    q.globalAlpha=0.32;q.fillStyle='#fff';q.fillRect(vx-bw,0,vw+bw*2,H);q.fillRect(0,hy-bh,W,hh+bh*2);
+    q.globalAlpha=0.55;q.fillStyle='#2c4d99';q.fillRect(vx,0,vw,H);q.fillRect(0,hy,W,hh);q.restore();
   }
   function crossEng(q,W,H){q.save();q.globalAlpha=1;q.strokeStyle='#dde3ea';q.lineWidth=W*0.05;q.beginPath();q.moveTo(W/2,0);q.lineTo(W/2,H);q.moveTo(0,H*0.46);q.lineTo(W,H*0.46);q.stroke();q.restore();}
 
