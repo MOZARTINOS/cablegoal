@@ -16,6 +16,10 @@ extracted/
 deep research/
 *research*.md
 
+# internal design references / screenshots (not for the public repo)
+player-tags-selection.png
+ChatGPT Image*.png
+
 # os
 .DS_Store
 Thumbs.db
