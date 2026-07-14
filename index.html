@@ -1137,7 +1137,7 @@ function sequenceStep(dt){sequenceTime+=dt;
   else if(phase==='gordon_cut'){movePlayer(gordon,28.5,43,7.6,dt,'dribble');movePlayer(bellingham,24.5,35.2,7.2,dt);movePlayer(kane,18.5,32,5.8,dt);movePlayer(norLB,17,45,6,dt);setBallPosition(gordon.root.position.x-.58,.34+.07*Math.abs(Math.sin(sequenceTime*12)),gordon.root.position.z-.05,dt);if(sequenceTime>=1.05)enterPhase('gordon_to_bellingham',seq('gordonBell'))}
   else if(phase==='gordon_to_bellingham'){movePlayer(bellingham,23.7,35.1,5.5,dt);const to={x:bellingham.root.position.x-.32,y:.34,z:bellingham.root.position.z};ballArc(sequenceStart,to,sequenceTime/.55,.38,dt);if(sequenceTime>=.55)enterPhase('eng_bellingham_drive',seq('bellDrive'))}
   else if(phase==='eng_bellingham_drive'){movePlayer(bellingham,12.8,33.4,7.4,dt,'dribble');movePlayer(norCB1,bellingham.root.position.x+1.6,bellingham.root.position.z+1.5,7.5,dt);movePlayer(norCB2,17,30,6.6,dt);movePlayer(gk,NOR_GOAL_X+1.1,34,2.3,dt);setBallPosition(bellingham.root.position.x-.62,.34+.075*Math.abs(Math.sin(sequenceTime*13)),bellingham.root.position.z,dt);if(sequenceTime>.95){if(norCB1.state!=='slide')norCB1.actionStarted=performance.now();norCB1.state='slide';norCB1.slideDir=-1}if(sequenceTime>=1.55){gk.state='dive';gk.actionStarted=performance.now();gk.diveDir=-1;enterPhase('eng_shot',seq('engShot'))}}
-  else if(phase==='eng_shot'){const to={x:4.55,y:.74,z:31.15};ballArc(sequenceStart,to,sequenceTime/.48,.12,dt);if(sequenceTime>=.48)enterPhase('eng_goal_wait')}
+  else if(phase==='eng_shot'){const to={x:NOR_GOAL_X-.9,y:.74,z:31.15};ballArc(sequenceStart,to,sequenceTime/.48,.12,dt);if(sequenceTime>=.48)enterPhase('eng_goal_wait')}
   else if(phase==='eng_goal_wait'){if(sequenceTime>=.42)showGoal('eng')}
   else if(phase==='nor_collect'){norPossessor.state='dribble';const fx=norPossessor.root.position.x+.48,fz=norPossessor.root.position.z;setBallPosition(pos.x+(fx-pos.x)*.22,.34+.035*Math.abs(Math.sin(sequenceTime*10)),pos.z+(fz-pos.z)*.22,dt);if(sequenceTime>=.34)enterPhase('nor_break',seq('norBreak'))}
   else if(phase==='nor_break'){movePlayer(norPossessor,norBreakTarget.x,norBreakTarget.z,8.5,dt,'dribble');movePlayer(haaland,norPlan.recvX-3,norPlan.recvZ,8,dt);movePlayer(engMid,norBreakTarget.x-6,33,6.8,dt);movePlayer(engBack,norBreakTarget.x-5,46,6.5,dt);setBallPosition(norPossessor.root.position.x+.62,.34+.08*Math.abs(Math.sin(sequenceTime*11)),norPossessor.root.position.z,dt);if(sequenceTime>=1.35)enterPhase('nor_to_haaland',seq('norPass'))}
@@ -3769,16 +3769,19 @@ var qrcode = function() {
   async function share(stance){
     try{await document.fonts.ready;}catch(e){}
     var sq=drawCard(stance,1080,1080);
-    var files=[],blobs={};
+    // invite text — travels with the square card so people know where to play
+    var invite=(lang==='no'
+      ?(stance==='hit'?'Den traff kabelen. 45+2 — spill selv på cablegoal.com':'Ren bane. 45+2 — spill selv på cablegoal.com')
+      :(stance==='hit'?'It hit the cable. 45+2 — play it yourself at cablegoal.com':'No contact. 45+2 — play it yourself at cablegoal.com'));
     function toBlob(cv){return new Promise(function(res){cv.toBlob(res,'image/png');});}
     var sb=await toBlob(sq);
     var file=new File([sb],'cablegoal-verdict.png',{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{await navigator.share({files:[file],title:'Cable Goal',text:(lang==='no'?(stance==='hit'?'Den traff kabelen. 45+2 — spill selv på cablegoal.com':'Ren bane. 45+2 — spill selv på cablegoal.com'):(stance==='hit'?'It hit the cable. 45+2 — play it yourself at cablegoal.com':'No contact. 45+2 — play it yourself at cablegoal.com')),url:'https://cablegoal.com'});return;}catch(e){if(e&&e.name==='AbortError')return;}
+      try{await navigator.share({files:[file],title:'Cable Goal',text:invite,url:QURL});return;}catch(e){if(e&&e.name==='AbortError')return;}
     }
-    // download fallback (square + story)
-    var st=drawCard(stance,1080,1920);
-    dl(sq,'cablegoal-verdict-square.png');dl(st,'cablegoal-verdict-story.png');
+    // desktop fallback: copy the invite text to clipboard + download the SQUARE card only (no tall story)
+    try{if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(invite);}catch(e){}
+    dl(sq,'cablegoal-verdict-square.png');
   }
   function dl(cv,name){cv.toBlob(function(b){var a=document.createElement('a');a.href=URL_(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL_revoke(a.href);},1500);},'image/png');}
   var URL_=function(b){return URL_obj().createObjectURL(b);},URL_revoke=function(u){URL_obj().revokeObjectURL(u);};
