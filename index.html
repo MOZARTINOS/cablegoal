@@ -540,7 +540,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   /* camera tabs: tighter type so all six fit most phones; still scrolls as fallback */
   #topbar .camsel button{font-size:11px;padding:6px 9px;min-height:40px}
   /* side panels drop below the taller topbar and can no longer collide */
-  #telemetry{top:calc(150px + env(safe-area-inset-top,0px))!important}
+  #telemetry{top:calc(172px + env(safe-area-inset-top,0px))!important}
   /* declutter: the live accuracy card duplicates the result modal's case score — off on phones */
   #caseScoreStrip{display:none!important}
   /* analysis folds to a slim title chip; tap to expand for the verdict + stats */
@@ -576,7 +576,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
      the centred tabs). Container stays full-row only to force its own line break, but is now
      transparent — each tab becomes its own frosted chip, centred as a group. */
   #topbar .camsel{
-    justify-content:flex-start;
+    justify-content:center;justify-content:safe center;
     background:transparent!important;border:0!important;box-shadow:none!important;
     -webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important;gap:5px!important
   }
@@ -609,22 +609,6 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   #topbar .camsel{order:6!important}
   #topbar #gearBtn{position:absolute;top:max(9px,env(safe-area-inset-top,0px));right:10px;order:0}
 }
-
-/* ── v20: collapsed "Kick analysis" chip — nudge it up (done via #telemetry top), give it a
-   soft cyan glow so it reads as a tappable control, and make the expand chevron obvious:
-   points DOWN (⌄ = open) when collapsed, gently bobs to invite a tap, flips up when open. ── */
-body:not(.telemetry-open) #telemetry{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 34px rgba(0,0,0,.46),0 0 20px rgba(36,220,239,.28),0 0 0 1px rgba(36,220,239,.22);
-  animation:teleGlow 2.8s ease-in-out infinite
-}
-body:not(.telemetry-open) #telemetryToggle{color:#dff6fb}
-/* chevron: bigger, bright cyan, points down (expand) when collapsed with a soft bob */
-#telemetryToggle b{font-size:15px;line-height:1;color:#3fdcef;transition:transform .2s ease;text-shadow:0 0 8px rgba(63,220,239,.55)}
-body:not(.telemetry-open) #telemetryToggle b{transform:none;animation:teleBob 1.6s ease-in-out infinite}
-body.telemetry-open #telemetryToggle b{transform:rotate(180deg)}
-@keyframes teleGlow{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 34px rgba(0,0,0,.46),0 0 14px rgba(36,220,239,.20),0 0 0 1px rgba(36,220,239,.18)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 34px rgba(0,0,0,.46),0 0 26px rgba(36,220,239,.42),0 0 0 1px rgba(36,220,239,.30)}}
-@keyframes teleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
-@media(prefers-reduced-motion:reduce){body:not(.telemetry-open) #telemetry{animation:none}body:not(.telemetry-open) #telemetryToggle b{animation:none}}
 
 /* ── v16: match-day splash — bright card, diagonal NOR/ENG flag banner, gold 45+2 crest ── */
 #introCard{background:radial-gradient(circle at 50% 16%,rgba(64,122,166,.6),rgba(6,13,21,.84) 62%)}
