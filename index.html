@@ -503,6 +503,10 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 
 /* ── v15: mobile HUD rebuild — 3-row topbar (score+utils / cam tabs / action pills), no overlaps ── */
 @media(max-width:760px){
+  /* fine-tune sliders are always shown on mobile (controls-open forced on boot) — drop the redundant fold toggle */
+  .dockHeader #controlToggle{display:none!important}
+  /* with the toggle gone, centre the remaining aim-preset chips */
+  #dock .dockHeader{justify-content:center}
   /* topbar becomes a wrapped flex grid; quickActions children are promoted so rows can be recomposed */
   #topbar{display:flex;flex-wrap:wrap;align-items:center;row-gap:7px;column-gap:6px}
   #topbar .quickActions{display:contents}
@@ -5588,7 +5592,7 @@ const animatePlayerV72Base=animatePlayer;animatePlayer=function(p,t){animatePlay
 let frontCrowdStampV72=0;const animateFlagsV72Base=animateFlags;animateFlags=function(t,now){animateFlagsV72Base(t,now);if(now-frontCrowdStampV72>(reduced?72:48)){updateFrontCrowdV72(t);updateNearFlagsV72(t);frontCrowdStampV72=now}};
 let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
 
-el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag)p.tag.visible=true})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
+el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';document.body.classList.add('controls-open');if(!mobile)document.body.classList.add('telemetry-open');if(mobile){players.forEach(p=>{if(p.tag)p.tag.visible=true})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
 /* ── GLB players: Quaternius "Man" (CC0, poly.pizza/m/HMnuH5geEG) replaces the procedural
    bodies. The procedural model stays in the file as an automatic fallback: if the GLB or
    loader is missing/fails, nothing below runs and the old cylinder players remain visible. */
