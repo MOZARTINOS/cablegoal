@@ -572,17 +572,21 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 
 /* ── v18: mobile topbar — centre camera tabs + lift the flat-dark pills into readable frosted glass ── */
 @media(max-width:760px){
-  /* centre the camera-tab row (safe = never clips the first tab when it overflows and must scroll) */
-  #topbar .camsel{justify-content:center;justify-content:safe center}
-  /* the mobile override had flattened this to near-black #0a0f16 — restore frosted glass, a touch lighter so labels read */
+  /* camera row: drop the full-width container box (it left empty frosted space either side of
+     the centred tabs). Container stays full-row only to force its own line break, but is now
+     transparent — each tab becomes its own frosted chip, centred as a group. */
   #topbar .camsel{
-    background:linear-gradient(150deg,rgba(26,42,63,.60),rgba(9,18,30,.72))!important;
-    border:1px solid rgba(150,190,225,.26)!important;
-    -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 8px 24px rgba(0,0,0,.4)!important
+    justify-content:center;justify-content:safe center;
+    background:transparent!important;border:0!important;box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important;gap:5px!important
   }
-  #topbar .camsel button{color:#c6d3e1}
-  #topbar .camsel button.active{color:#0b0f16}
+  #topbar .camsel button:not(.active){
+    background:linear-gradient(150deg,rgba(26,42,63,.58),rgba(9,18,30,.72))!important;
+    border:1px solid rgba(150,190,225,.24)!important;
+    -webkit-backdrop-filter:blur(14px) saturate(145%);backdrop-filter:blur(14px) saturate(145%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.35)!important;
+    color:#e6eef6!important
+  }
   /* action-row pills (Evidence / Story / flags / slow / sound) — frosted, brighter edge + text; leave Voting's gradient alone */
   #topbar .quickActions button:not(#dashHudBtn):not(.active),
   #topbar #evidenceBtn,#topbar #caseFileBtn,#topbar #slowBtn,#topbar #soundBtn,#topbar .langToggle{
