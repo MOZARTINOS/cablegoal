@@ -275,9 +275,15 @@ input[type=range]{height:5px!important;background:linear-gradient(90deg,var(--te
 input[type=range]::-webkit-slider-thumb{width:18px;height:18px;background:var(--gold);border:2px solid #05070c;box-shadow:0 0 0 3px #ecd08029}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--gold);border:2px solid #05070c;box-shadow:0 0 0 3px #ecd08029}
 .big{font-family:'Barlow Condensed'!important;font-weight:900!important;letter-spacing:1.4px!important;border-radius:9px}
-#kickBtn{position:relative;background:var(--gold)!important;color:#07111b!important;box-shadow:5px 5px 0 0 var(--teal)!important;transition:box-shadow .12s}
-#kickBtn:active{box-shadow:2px 2px 0 0 var(--teal)!important}
-#kickBtn:disabled{opacity:.45}
+#kickBtn{position:relative;overflow:hidden;background:var(--gold)!important;color:#07111b!important;box-shadow:5px 5px 0 0 var(--teal);transition:box-shadow .12s;animation:kickGlow 1.9s ease-in-out infinite}
+#kickBtn:active{box-shadow:2px 2px 0 0 var(--teal)!important;animation:none}
+#kickBtn:disabled{opacity:.45;animation:none}
+/* KICK = hero CTA: breathing gold halo + shimmer sweep, invites the press */
+#kickBtn::after{content:'';position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.85) 50%,transparent 80%);transform:translateX(-160%) skewX(-16deg);animation:kickSheen 2.8s ease-in-out infinite;pointer-events:none}
+#kickBtn:disabled::after{display:none}
+@keyframes kickGlow{0%,100%{box-shadow:5px 5px 0 0 var(--teal),0 0 0 0 rgba(236,208,128,0)}50%{box-shadow:5px 5px 0 0 var(--teal),0 0 24px 6px rgba(236,208,128,.85)}}
+@keyframes kickSheen{0%,12%{transform:translateX(-160%) skewX(-16deg)}55%,100%{transform:translateX(520%) skewX(-16deg)}}
+@media(prefers-reduced-motion:reduce){#kickBtn{animation:none}#kickBtn::after{display:none}}
 #resetBtn{background:#0c141d!important;color:#fff!important;border:1px solid #ffffff1f!important}
 #cleanControls #ccKick{background:var(--gold)!important;color:#07111b!important}
 /* Situation banner */
@@ -384,8 +390,8 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #resultPanel #resultWhy,#resultPanel .resultHint{width:100%!important;max-width:none!important;margin:9px auto!important;box-sizing:border-box!important}
 @keyframes votePulseHit{0%,100%{box-shadow:0 3px 0 0 rgba(224,80,80,.30)}50%{box-shadow:0 3px 0 0 rgba(224,80,80,.30),0 0 16px 4px rgba(224,80,80,.55);transform:translateY(-1px) scale(1.04)}}
 @keyframes votePulseNo{0%,100%{box-shadow:0 3px 0 0 rgba(27,158,211,.30)}50%{box-shadow:0 3px 0 0 rgba(27,158,211,.30),0 0 16px 4px rgba(27,158,211,.55);transform:translateY(-1px) scale(1.04)}}
-#resultPanel .yourVerdict:not(:has(.selected)) #voteHit{animation:votePulseHit 1.25s ease-in-out infinite}
-#resultPanel .yourVerdict:not(:has(.selected)) #voteNo{animation:votePulseNo 1.25s ease-in-out infinite .62s}
+#resultPanel .yourVerdict #voteHit{animation:votePulseHit 1.25s ease-in-out infinite}
+#resultPanel .yourVerdict #voteNo{animation:votePulseNo 1.25s ease-in-out infinite .62s}
 @media(prefers-reduced-motion:reduce){#resultPanel .yourVerdict #voteHit,#resultPanel .yourVerdict #voteNo{animation:none!important}}
 
 /* ── v11g: scorebox breathing (tuck teal, separate digits) + visible language toggle ── */
@@ -502,7 +508,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 <aside class="hud" id="evidencePanel"><button class="closePanel" id="closeEvidence">×</button><h3 data-i18n="evidenceTitle">Case 45+2: what does the evidence say?</h3><div class="evidenceGrid"><article class="evidenceCard visual"><b data-i18n="visualReplay">Visual replay</b><p data-i18n="visualText">The sudden drop of the ball and Norway’s immediate reaction support the contact theory.</p></article><article class="evidenceCard sensor"><b data-i18n="sensorData">Ball sensor</b><p data-i18n="sensorText">FIFA said the chip showed no spike, so contact was not confirmed.</p></article></div><div class="lawCard"><b data-i18n="lawTitle">IFAB law</b><p data-i18n="lawText">If the ball touches an outside agent, play is stopped and restarted with a dropped ball at the point of contact.</p></div><div class="judgeVerdict" id="judgeVerdict"><span data-i18n="modelVerdict">Model verdict</span><strong>GOAL SHOULD BE DISALLOWED</strong></div><div class="pulseHeadline" data-i18n="pulseTitle">Debate pulse</div><div class="pulseGrid"><div class="pulseCard nor"><b>🇳🇴 Norway</b><p data-i18n="pulseNor">“We were robbed”, “rules are rules”, distrust of VAR — yet pride in a historic tournament.</p></div><div class="pulseCard eng"><b>🏴 England</b><p data-i18n="pulseEng">“We got lucky”, “play to the whistle”, admiration for Bellingham’s run — and debate whether one episode should decide the match.</p></div><div class="pulseCard common"><b>🌍 Global internet</b><p data-i18n="pulseCommon">The main demand: slow motion, more angles, TV picture vs sensor comparison — and a way to test the trajectory yourself.</p></div></div><small data-i18n="evidenceNote">Player positions are an approximate reconstruction from the wide replay; the physical kick parameters are preserved unchanged.</small><button class="evStoryLink" id="evStoryLink" data-i18n="readFullStory">Read the full case file →</button></aside>
 <div class="hud" id="resultPanel"><button class="closePanel" id="closeResult">×</button><div id="resultKicker">FORENSIC RESULT</div><h3 id="resultTitle">Result</h3><p id="resultWhy"></p><p id="resultHint" class="resultHint"></p><div class="resultScore"><div><b id="resultScoreValue">1000</b><span data-i18n="caseScoreLabel">case score</span></div><div><b id="resultDeltaValue">−0.2 m</b><span data-i18n="deltaLabel">delta at the cable</span></div></div><div class="resultActions"><button id="shareBtn" data-i18n="share">Share the verdict</button><button id="slowReplayBtn" data-i18n="slowReplay">Replay 0.35×</button><button id="replayBtn" data-i18n="replay">Again</button></div><div class="yourVerdict"><span data-i18n="yourVerdict">Your verdict:</span><button id="voteHit" data-i18n="voteHit">There was contact</button><button id="voteNo" data-i18n="voteNo">No contact</button></div></div>
 
-<div class="hud" id="dock"><div class="dockHeader"><button id="controlToggle"><span data-i18n="parameters">Parameters</span>⌃</button><div class="presetChips"><button data-preset="match" class="active" data-i18n="presetMatch">Match</button><button data-preset="low" data-i18n="presetLow">Lower</button><button data-preset="high" data-i18n="presetHigh">Higher</button><button data-preset="wide" data-i18n="presetWide">Wide</button></div></div><div class="advancedControls"><div class="slider"><label><span data-i18n="power">Power</span><span><b id="vPower">30</b> m/s</span></label><input type="range" id="power" min="20" max="36" value="30" step="1"></div><div class="slider"><label><span data-i18n="angle">Angle</span><span><b id="vAngle">49</b>°</span></label><input type="range" id="angle" min="20" max="62" value="49" step="1"></div><div class="slider"><label><span data-i18n="aim">Aim</span><span><b id="vAim">2</b>°</span></label><input type="range" id="aim" min="-16" max="16" value="2" step="1"></div></div><div class="btns"><button class="big" id="kickBtn" data-i18n="kick">Kick</button><button class="big" id="resetBtn" data-i18n="reset">Reset</button></div></div>
+<div class="hud" id="dock"><div class="dockHeader"><button id="controlToggle"><span data-i18n="parameters">Parameters</span>⌃</button><div class="presetChips"><button data-preset="low" data-i18n="presetLow">Lower</button><button data-preset="high" data-i18n="presetHigh">Higher</button><button data-preset="wide" data-i18n="presetWide">Wide</button><button data-preset="match" class="active" data-i18n="presetMatch">Match</button></div></div><div class="advancedControls"><div class="slider"><label><span data-i18n="power">Power</span><span><b id="vPower">30</b> m/s</span></label><input type="range" id="power" min="20" max="36" value="30" step="1"></div><div class="slider"><label><span data-i18n="angle">Angle</span><span><b id="vAngle">49</b>°</span></label><input type="range" id="angle" min="20" max="62" value="49" step="1"></div><div class="slider"><label><span data-i18n="aim">Aim</span><span><b id="vAim">2</b>°</span></label><input type="range" id="aim" min="-16" max="16" value="2" step="1"></div></div><div class="btns"><button class="big" id="kickBtn" data-i18n="kick">Kick</button><button class="big" id="resetBtn" data-i18n="reset">Reset</button></div></div>
 <div class="hud" id="cleanControls"><button id="ccKick">Kick</button><button id="ccReset">Reset</button><button id="ccExit">Exit</button></div>
 <style id="caseFileCss">
 #caseFile{position:fixed;inset:0;z-index:60;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--pageBg);color:var(--ink);pointer-events:auto}
@@ -592,11 +598,13 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #dashIntroBtn:hover{filter:brightness(1.06)}
 @keyframes dashShimmer{0%{background-position:0% 50%}100%{background-position:320% 50%}}
 @keyframes dashGlow{0%,100%{box-shadow:0 0 14px 2px rgba(236,208,128,.45),0 6px 18px rgba(27,158,211,.25);transform:translateY(0)}50%{box-shadow:0 0 26px 7px rgba(236,208,128,.75),0 8px 24px rgba(27,158,211,.5);transform:translateY(-1px)}}
-.quickActions #dashHudBtn{background:linear-gradient(100deg,#ECD080,#fff2c8,#1B9ED3,#ECD080)!important;background-size:300% 100%!important;color:#08131f!important;font-family:'Barlow Condensed'!important;font-weight:900!important;letter-spacing:.7px;text-transform:uppercase;border:0!important;padding:0 12px!important;animation:dashShimmer 4s linear infinite,dashGlowSm 2.1s ease-in-out infinite}
+.quickActions #dashHudBtn{position:relative;overflow:hidden;background:linear-gradient(100deg,#1B9ED3,#8fe0ff,#0c6fa0,#1B9ED3)!important;background-size:300% 100%!important;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.35);font-family:'Barlow Condensed'!important;font-weight:900!important;letter-spacing:.7px;text-transform:uppercase;border:0!important;padding:0 12px!important;animation:dashShimmer 4s linear infinite,dashGlowBlue 2.1s ease-in-out infinite}
+.quickActions #dashHudBtn::after{content:'';position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.7) 50%,transparent 80%);transform:translateX(-160%) skewX(-16deg);animation:kickSheen 3.2s ease-in-out infinite;pointer-events:none}
 @keyframes dashGlowSm{0%,100%{box-shadow:0 0 8px 1px rgba(236,208,128,.5)}50%{box-shadow:0 0 17px 5px rgba(236,208,128,.9)}}
+@keyframes dashGlowBlue{0%,100%{box-shadow:0 0 8px 1px rgba(27,158,211,.55)}50%{box-shadow:0 0 19px 6px rgba(27,158,211,.95)}}
 .vdShareBtn{display:block;width:100%;margin-top:12px;padding:12px;border:0;border-radius:11px;cursor:pointer;color:#08131f;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:14px;background:linear-gradient(100deg,#ECD080,#6DCF3C,#1B9ED3,#ECD080);background-size:300% 100%;animation:dashShimmer 4.5s linear infinite;box-shadow:0 4px 16px rgba(27,158,211,.3)}
 .vdShareBtn:hover{filter:brightness(1.07)}
-@media(prefers-reduced-motion:reduce){#dashIntroBtn,.quickActions #dashHudBtn,.vdShareBtn{animation:none!important}}
+@media(prefers-reduced-motion:reduce){#dashIntroBtn,.quickActions #dashHudBtn,.vdShareBtn{animation:none!important}.quickActions #dashHudBtn::after{display:none}}
 
 /* ── v14: dashboard responsive / mobile ── */
 @media(max-width:600px){
@@ -737,7 +745,7 @@ function cornerScreen(x,y,z,ry,team){const c=document.createElement('canvas');c.
 cornerScreen(12,27,-15,0,'eng');cornerScreen(FIELD_L-12,27,-15,0,'eng');cornerScreen(12,27,FIELD_W+15,Math.PI,'nor');cornerScreen(FIELD_L-12,27,FIELD_W+15,Math.PI,'nor');
 window.__boot.set(52,__b('Seating the supporter sections…','Plasserer supportersektorene…'),__b('STANDS','TRIBUNER'));
 // crowd instancing
-const crowdGroup=new THREE.Group();scene.add(crowdGroup);const crowdGeom=new THREE.CylinderGeometry(.18,.18,.78,6);const crowdMat=new THREE.MeshBasicMaterial({color:0xe6e6e6});let crowdCount=0;const density=reduced?.86:1.62;sideDefs.forEach(s=>crowdCount+=Math.floor(s.len*density)*34);const crowd=new THREE.InstancedMesh(crowdGeom,crowdMat,crowdCount);crowd.instanceMatrix.setUsage(THREE.StaticDrawUsage);crowd.frustumCulled=false;const dummy=new THREE.Object3D(),color=new THREE.Color();let ci=0;const crowdMeta=[];sideDefs.forEach((s,si)=>{const cols=Math.floor(s.len*density);for(let r=0;r<34;r++)for(let c=0;c<cols;c++){const tier=r<12?0:r<22?1:2;const rr=tier===0?r:tier===1?r-12:r-22;const depth=tier===0?16:tier===1?15:18;const rows=tier===0?12:tier===1?10:12;const lx=(c/(cols-1)-.5)*s.len;const lz=-4-(rr+.5)/rows*depth;const ly=(tier===0?2:tier===1?11:21)+rr*(tier===2?.72:.62)+.65;const co=Math.cos(s.ry),sn=Math.sin(s.ry);const wx=s.x+lx*co+lz*sn,wz=s.z-lx*sn+lz*co;dummy.position.set(wx,ly,wz);dummy.scale.setScalar(.82+Math.random()*.33);dummy.rotation.y=s.ry+(Math.random()-.5)*.25;dummy.updateMatrix();crowd.setMatrixAt(ci,dummy.matrix);const isEnd=(si===2||si===3);const useTeam=isEnd?(si===2?'nor':'eng'):(Math.random()<.5?'nor':'eng');const pure=isEnd?.9:.62;if(useTeam==='nor')color.set(Math.random()<pure?0xc8102e:Math.random()<.5?0xf3f3f3:0x172442);else color.set(Math.random()<pure?0xf4f4f4:Math.random()<.5?0xc8102e:0x23354b);if(!isEnd&&Math.random()<.1){const NEUT=[0x2a7d46,0xe0a01e,0x7a4fb0,0xd8642a,0x1f7fb0,0xcfd3d8];color.set(NEUT[(Math.random()*NEUT.length)|0]);}color.offsetHSL((Math.random()-.5)*.02,0,(Math.random()-.5)*.12);crowd.setColorAt(ci,color);crowdMeta.push({x:wx,y:ly,z:wz,s:dummy.scale.x,p:Math.random()*6.28,team:useTeam});ci++}});if(crowd.instanceColor)crowd.instanceColor.needsUpdate=true;crowdGroup.add(crowd);
+const crowdGroup=new THREE.Group();scene.add(crowdGroup);const crowdGeom=new THREE.CylinderGeometry(.18,.18,.78,6);const crowdMat=new THREE.MeshBasicMaterial({color:0xe6e6e6});let crowdCount=0;const density=reduced?.86:1.62;sideDefs.forEach(s=>crowdCount+=Math.floor(s.len*density)*34);const crowd=new THREE.InstancedMesh(crowdGeom,crowdMat,crowdCount);crowd.instanceMatrix.setUsage(THREE.StaticDrawUsage);crowd.frustumCulled=false;const dummy=new THREE.Object3D(),color=new THREE.Color();let ci=0;const crowdMeta=[];sideDefs.forEach((s,si)=>{const cols=Math.floor(s.len*density);for(let r=0;r<34;r++)for(let c=0;c<cols;c++){const tier=r<12?0:r<22?1:2;const rr=tier===0?r:tier===1?r-12:r-22;const depth=tier===0?16:tier===1?15:18;const rows=tier===0?12:tier===1?10:12;const lx=(c/(cols-1)-.5)*s.len;const lz=-4-(rr+.5)/rows*depth;const ly=(tier===0?2:tier===1?11:21)+rr*(tier===2?.72:.62)+.65;const co=Math.cos(s.ry),sn=Math.sin(s.ry);const wx=s.x+lx*co+lz*sn,wz=s.z-lx*sn+lz*co;dummy.position.set(wx,ly,wz);dummy.scale.setScalar(.82+Math.random()*.33);dummy.rotation.y=s.ry+(Math.random()-.5)*.25;dummy.updateMatrix();crowd.setMatrixAt(ci,dummy.matrix);const isEnd=(si===2||si===3);const useTeam=isEnd?(si===2?'eng':'nor'):(Math.random()<.5?'nor':'eng');const pure=isEnd?.9:.62;if(useTeam==='nor')color.set(Math.random()<pure?0xc8102e:Math.random()<.5?0xf3f3f3:0x172442);else color.set(Math.random()<pure?0xf4f4f4:Math.random()<.5?0xc8102e:0x23354b);if(!isEnd&&Math.random()<.1){const NEUT=[0x2a7d46,0xe0a01e,0x7a4fb0,0xd8642a,0x1f7fb0,0xcfd3d8];color.set(NEUT[(Math.random()*NEUT.length)|0]);}color.offsetHSL((Math.random()-.5)*.02,0,(Math.random()-.5)*.12);crowd.setColorAt(ci,color);crowdMeta.push({x:wx,y:ly,z:wz,s:dummy.scale.x,p:Math.random()*6.28,team:useTeam});ci++}});if(crowd.instanceColor)crowd.instanceColor.needsUpdate=true;crowdGroup.add(crowd);
 // A lightweight animated supporter layer: only a subset moves, keeping mobile frame time stable.
 const activeFanCount=Math.min(reduced?240:620,Math.floor(crowdMeta.length/5));
 const activeFans=new THREE.InstancedMesh(crowdGeom,new THREE.MeshBasicMaterial({color:0xe6e6e6}),activeFanCount);activeFans.instanceMatrix.setUsage(THREE.DynamicDrawUsage);activeFans.frustumCulled=false;const activeFanMeta=[];
@@ -756,15 +764,15 @@ function flagTexture(team){const c=document.createElement('canvas');c.width=384;
 const flagTexNor=flagTexture('nor'),flagTexEng=flagTexture('eng');
 function addFanFlag(team,x,y,z,ry,scale=1){const geo=new THREE.PlaneGeometry(3.2*scale,1.9*scale,8,4),m=new THREE.MeshBasicMaterial({map:team==='nor'?flagTexNor:flagTexEng,side:THREE.DoubleSide,transparent:true});const f=new THREE.Mesh(geo,m);f.position.set(x,y,z);f.rotation.y=ry;f.castShadow=false;scene.add(f);const pole=mesh(new THREE.CylinderGeometry(.035,.035,2.5*scale,6),mat(0xaab4bd,.55,.5),false,false);pole.position.set(x-1.65*scale*Math.cos(ry),y-.45*scale,z+1.65*scale*Math.sin(ry));scene.add(pole);fanFlags.push({mesh:f,base:new Float32Array(geo.attributes.position.array),phase:Math.random()*6.28});}
 (function(){const placed=[];function ok(x,y,z){for(const p of placed){if(Math.hypot(x-p[0],y-p[1],z-p[2])<5.2)return false}placed.push([x,y,z]);return true}for(let i=0;i<8;i++){const fx=13+i*11.4,fy=8.6+(i%3)*4.4,depthN=FIELD_W+21.5+(i%2)*6.5,depthE=-21.5-((i+1)%2)*6.5,fy2=9.4+((i+1)%3)*4.4,tFar=i%2?'eng':'nor',tNear=i%2?'nor':'eng';if(ok(fx,fy,depthN))addFanFlag(tFar,fx,fy,depthN,Math.PI,.8+(i%2)*.16);if(ok(fx,fy2,depthE))addFanFlag(tNear,fx,fy2,depthE,0,.8+((i+1)%2)*.16)}})();
-addFanFlag('nor',-22,16,18,Math.PI/2,1.15);addFanFlag('eng',FIELD_L+22,16,50,-Math.PI/2,1.15);
-for(let i=0;i<6;i++){addFanFlag('nor',-22-(i%2)*8,8+(i%3)*6,9+i*9,Math.PI/2,.72+(i%2)*.18);addFanFlag('eng',FIELD_L+22+(i%2)*8,9+((i+1)%3)*6,10+i*9,-Math.PI/2,.72+((i+1)%2)*.18)}
+addFanFlag('eng',-22,16,18,Math.PI/2,1.15);addFanFlag('nor',FIELD_L+22,16,50,-Math.PI/2,1.15);
+for(let i=0;i<6;i++){addFanFlag('eng',-22-(i%2)*8,8+(i%3)*6,9+i*9,Math.PI/2,.72+(i%2)*.18);addFanFlag('nor',FIELD_L+22+(i%2)*8,9+((i+1)%3)*6,10+i*9,-Math.PI/2,.72+((i+1)%2)*.18)}
 
 // low-cost supporter tifos, scarves and phone flashes
 function supporterBanner(text,team,x,y,z,ry,w=15,h=4){const c=document.createElement('canvas');c.width=1024;c.height=256;const q=c.getContext('2d');q.fillStyle=team==='nor'?'#b80f2d':'#f1f1ed';q.fillRect(0,0,c.width,c.height);q.fillStyle=team==='nor'?'#fff':'#b80f2d';q.textAlign='center';q.textBaseline='middle';let fs=92;q.font='900 '+fs+'px "Barlow Condensed"';while(q.measureText(text).width>c.width-90&&fs>26){fs-=3;q.font='900 '+fs+'px "Barlow Condensed"';}q.fillText(text,c.width/2,c.height/2);q.strokeStyle=team==='nor'?'#08245c':'#b80f2d';q.lineWidth=18;q.strokeRect(8,8,c.width-16,c.height-16);const tx=new THREE.CanvasTexture(c);tx.encoding=THREE.sRGBEncoding;const b=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tx,side:THREE.DoubleSide}),false,false);b.position.set(x,y,z);b.rotation.y=ry;scene.add(b);return b}
-supporterBanner('NORGE','nor',-25,24,cz,Math.PI/2,17,4.2);supporterBanner('VI SÅ DET  ·  45+2','nor',-25,16.5,cz,Math.PI/2,20,4.4);supporterBanner('ENGLAND','eng',FIELD_L+25,24,cz,-Math.PI/2,17,4.2);supporterBanner('PLAY TO THE WHISTLE','eng',FIELD_L+25,16.5,cz,-Math.PI/2,22,4.4);
+supporterBanner('ENGLAND','eng',-25,24,cz,Math.PI/2,17,4.2);supporterBanner('PLAY TO THE WHISTLE','eng',-25,16.5,cz,Math.PI/2,22,4.4);supporterBanner('NORGE','nor',FIELD_L+25,24,cz,-Math.PI/2,17,4.2);supporterBanner('VI SÅ DET  ·  45+2','nor',FIELD_L+25,16.5,cz,-Math.PI/2,20,4.4);
 // giant draped cross-flags on each goal-end wall — Norway Nordic cross + England St George cross, framing the name banners
 (function(){function wallFlag(tex,x,y,z,ry,w){const h=w*.63;const b=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}),false,false);b.position.set(x,y,z);b.rotation.y=ry;scene.add(b);return b}
-[[-24.7,Math.PI/2,flagTexNor],[FIELD_L+24.7,-Math.PI/2,flagTexEng]].forEach(function(a){const x=a[0],ry=a[1],tx=a[2];wallFlag(tx,x,10,cz-21,ry,12);wallFlag(tx,x,10,cz+21,ry,12);wallFlag(tx,x,19,cz-12,ry,9);wallFlag(tx,x,19,cz+12,ry,9);});})();
+[[-24.7,Math.PI/2,flagTexEng],[FIELD_L+24.7,-Math.PI/2,flagTexNor]].forEach(function(a){const x=a[0],ry=a[1],tx=a[2];wallFlag(tx,x,10,cz-21,ry,12);wallFlag(tx,x,10,cz+21,ry,12);wallFlag(tx,x,19,cz-12,ry,9);wallFlag(tx,x,19,cz+12,ry,9);});})();
 // pitch-side club banners draped along each goal-end wall, in front of the crowd (like the real match)
 (function(){const norNames=['BODØ','ROSENBORG','BERGEN','MOLDE','OSLO','TROMSØ','STAVANGER','TRONDHEIM'];const engNames=['BLACKPOOL','WEST BROM','CAERNARFON','CANNOCK','WISBECH','MANSFIELD','GRIMSBY','NUNEATON'];const n=8,dz=7.0,z0=cz-(n-1)*dz/2;for(let i=0;i<n;i++){const z=z0+i*dz;supporterBanner(norNames[i],'nor',-20,3.4,z,Math.PI/2,6.8,2.3);supporterBanner(engNames[i],'eng',FIELD_L+20,3.4,z,-Math.PI/2,6.8,2.3);}})();
 const flashPos=[];for(let i=0;i<(reduced?55:120);i++){const side=i%4,sd=sideDefs[side],lx=(Math.random()-.5)*sd.len,lz=-8-Math.random()*42,ly=5+Math.random()*24,co=Math.cos(sd.ry),sn=Math.sin(sd.ry);flashPos.push(sd.x+lx*co+lz*sn,ly,sd.z-lx*sn+lz*co)}const flashGeo=new THREE.BufferGeometry();flashGeo.setAttribute('position',new THREE.Float32BufferAttribute(flashPos,3));const phoneFlashes=new THREE.Points(flashGeo,new THREE.PointsMaterial({color:0xeef8ff,size:reduced?.16:.22,transparent:true,opacity:.22,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(phoneFlashes);
@@ -1081,24 +1089,25 @@ function showGoal(team){phase='done';shotScored=true;kickBtn.disabled=false;crow
 const CLXV11=(x)=>Math.max(2,Math.min(FIELD_L-2,x)),CLZV11=(z)=>Math.max(2,Math.min(FIELD_W-2,z));
 function runV11(p,tx,tz,sp,dt){movePlayer(p,CLXV11(tx),CLZV11(tz),sp,dt,'run')}
 function shapeShiftV11(dt){
-  // Formation shifts independent of where the ball lands — safe to run from the
-  // wind-up so the pitch is already alive the instant Nyland strikes the ball.
-  runV11(norMidL,norMidL.base.x+9,norMidL.base.z-1,5.8,dt);   // Berge pushes up
-  runV11(norMidC,norMidC.base.x+9,norMidC.base.z,5.6,dt);     // Berg
-  runV11(norMidR,norMidR.base.x+9,norMidR.base.z+1,5.8,dt);   // Ødegaard
-  runV11(norLB,norLB.base.x+6,norLB.base.z,5.0,dt);
-  runV11(norCB1,norCB1.base.x+7,norCB1.base.z,5.2,dt);        // Heggem tracks up
-  runV11(norCB2,norCB2.base.x+7,norCB2.base.z,5.0,dt);
-  runV11(norRB,norRB.base.x+6,norRB.base.z,5.0,dt);
-  runV11(stones,stones.base.x+3,stones.base.z,4.6,dt);
-  runV11(guehi,guehi.base.x+3,guehi.base.z,4.6,dt);
-  runV11(konsa,konsa.base.x+3,konsa.base.z,4.4,dt);
-  runV11(oreilly,oreilly.base.x+3,oreilly.base.z,4.6,dt);
-  runV11(engKeeper,Math.min(97,engKeeper.base.x-3.5),engKeeper.base.z,2.2,dt); // off his line
-  runV11(referee,referee.base.x+2,referee.base.z-4,4.6,dt);   // ref follows play
-  if(performance.now()-kickStarted>620)runV11(gk,Math.min(9.5,gk.base.x+3.6),34,2.0,dt); // Nyland steps off after the strike
+  // Far, never-reached targets so every player keeps actually RUNNING across the
+  // pitch for the whole flight (not just pumping legs in place). Norway stream up
+  // on their own long kick; England slide across and drop to cover the drop zone.
+  runV11(norMidL,norMidL.base.x+34,norMidL.base.z-3,7.4,dt);  // Berge surges up
+  runV11(norMidC,norMidC.base.x+34,norMidC.base.z,7.1,dt);    // Berg
+  runV11(norMidR,norMidR.base.x+34,norMidR.base.z+3,7.4,dt);  // Ødegaard
+  runV11(norLB,norLB.base.x+26,norLB.base.z-2,6.7,dt);
+  runV11(norCB1,norCB1.base.x+30,norCB1.base.z,6.9,dt);       // Heggem breaks the line
+  runV11(norCB2,norCB2.base.x+30,norCB2.base.z,6.7,dt);       // Ajer
+  runV11(norRB,norRB.base.x+26,norRB.base.z+2,6.7,dt);        // Ryerson overlaps
+  runV11(stones,stones.base.x+11,stones.base.z-5,5.6,dt);     // England back line drops & spreads
+  runV11(guehi,guehi.base.x+11,guehi.base.z+5,5.6,dt);
+  runV11(konsa,konsa.base.x+9,konsa.base.z-6,5.4,dt);
+  runV11(oreilly,oreilly.base.x+9,oreilly.base.z+6,5.6,dt);
+  runV11(engKeeper,Math.min(97,engKeeper.base.x-4),engKeeper.base.z,2.6,dt); // off his line
+  runV11(referee,referee.base.x+24,referee.base.z-9,5.8,dt);  // ref sprints to follow play
+  if(performance.now()-kickStarted>620)runV11(gk,Math.min(12,gk.base.x+7),34,2.6,dt); // Nyland runs out after the strike
 }
-function flightChoreo(dt){
+function flightChoreo(dt){try{window.__fc=(window.__fc||0)+1;
   shapeShiftV11(dt);
   const lx=pos.x+vel.x*.42,lz=pos.z+vel.z*.42;                 // where the ball is heading
   runV11(collector,lx,lz,8.7,dt);                             // Anderson #8 attacks the drop
@@ -1111,7 +1120,7 @@ function flightChoreo(dt){
   runV11(haaland,Math.min(lx+2,80),(haaland.base.z+lz)/2,7.0,dt);             // chasing flick-on
   runV11(norwayReceiver,Math.min(lx-2,74),(norwayReceiver.base.z+lz)/2,6.7,dt); // Sørloth
   runV11(schjelderup,Math.min(lx-6,66),schjelderup.base.z-2,6.5,dt);
-}
+}catch(e){window.__fcErr=(window.__fcErr||'')+' | '+e.message}}
 function windupStep(dt){
   // Ball is still at rest on Nyland's foot; the pitch stirs, then the strike
   // launches the ball at foot contact (~430 ms into the swing) — not from thin air.
@@ -1314,7 +1323,7 @@ const animatePlayerV72Base=animatePlayer;animatePlayer=function(p,t){animatePlay
   if(p.root.rotation.x)p.root.rotation.x*=.82;
   if(p.state!=='slide'&&p.state!=='dive'){p.armL.rotation.x*=.78;p.armR.rotation.x*=.78;p.armL.rotation.z=clamp72(p.armL.rotation.z,-.48,.48);p.armR.rotation.z=clamp72(p.armR.rotation.z,-.48,.48)}};
 let frontCrowdStampV72=0;const animateFlagsV72Base=animateFlags;animateFlags=function(t,now){animateFlagsV72Base(t,now);if(now-frontCrowdStampV72>(reduced?72:48)){updateFrontCrowdV72(t);updateNearFlagsV72(t);frontCrowdStampV72=now}};
-let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
+let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getPlayers:()=>players.map(p=>({r:p.role,st:p.state,x:+p.root.position.x.toFixed(2),z:+p.root.position.z.toFixed(2)})),tScale:()=>timeScale,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
 
 el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag){p.tag.visible=true;p.tag.scale.set(2.55,.48,1)}})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
 }catch(error){console.error(error);window.__boot.fail(error)}},40);
