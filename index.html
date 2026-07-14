@@ -91,7 +91,7 @@
 @supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){.score,.camsel,#gearBtn,.quickActions button,#telemetry,#settings,#evidencePanel,#resultPanel,#caseScoreStrip,#momentRule,#dock .dockHeader,#cleanControls button{background:var(--glass-strong)}}
 @media(max-width:760px){
   #topbar{isolation:isolate}.camsel{left:7px;right:7px;top:49px;transform:none;max-width:none;padding-right:8px}
-  #orbitHint{top:auto;bottom:118px;max-width:calc(100vw - 24px);overflow:hidden;text-overflow:ellipsis}
+  #orbitHint{top:auto;bottom:134px;max-width:calc(100vw - 24px);overflow:hidden;text-overflow:ellipsis}
   #settings{position:fixed;top:auto!important;left:7px;right:7px;bottom:max(8px,env(safe-area-inset-bottom));width:auto!important;max-height:72vh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:16px}
   #telemetry{top:96px}
   #caseScoreStrip{top:96px}
@@ -598,6 +598,16 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   }
   #topbar .langToggle{padding:2px;gap:2px}
   #topbar .langToggle button:not(.active){background:transparent!important;box-shadow:none!important;border:0!important}
+}
+
+/* ── v19: swap topbar rows — primary actions (Evidence/Voting/Story) sit right under the
+   scorebug; secondary camera-angle tabs move to the bottom row. quickActions becomes a real
+   full-width flex row (instead of display:contents) so it forms one clean line; the settings
+   gear is pinned to the row-1 top-right corner so row 1 stays scorebug + gear. ── */
+@media(max-width:760px){
+  #topbar .quickActions{display:flex!important;order:4;flex:1 1 100%;width:100%;flex-wrap:wrap;align-items:center;gap:6px}
+  #topbar .camsel{order:6!important}
+  #topbar #gearBtn{position:absolute;top:max(9px,env(safe-area-inset-top,0px));right:10px;order:0}
 }
 
 /* ── v16: match-day splash — bright card, diagonal NOR/ENG flag banner, gold 45+2 crest ── */
@@ -5634,7 +5644,7 @@ const raw=atob(b64);const buf=new ArrayBuffer(raw.length);const u8=new Uint8Arra
 new THREE.GLTFLoader().parse(buf,'',function(gltf){try{
 const src=gltf.scene;
 const box=new THREE.Box3().setFromObject(src);
-const S=1.87/Math.max(.001,box.max.y-box.min.y);
+const S=2.05/Math.max(.001,box.max.y-box.min.y);
 const clips={};gltf.animations.forEach(c=>{clips[c.name.split('|').pop().replace(/^Man_/,'')]=c});
 const ONE_SHOT={RunningJump:1,Jump:1,Sitting:1,Death:1};
 const matCache={};
