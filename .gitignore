@@ -2,6 +2,10 @@
 node_modules/
 .netlify/
 
+# secrets / local env — never commit
+.env
+.env.*
+
 # local working notes — NEVER publish (owner name, project IDs, handoff)
 CLAUDE.md
 .remember/

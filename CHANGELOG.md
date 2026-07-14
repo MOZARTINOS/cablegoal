@@ -1,3 +1,46 @@
+# CHANGELOG
+
+## v9.1 — pre-launch audit pass
+Cross-browser, honesty and repo-hygiene pass before the public/open-source launch.
+
+- **Voting backend rewritten for honesty + reliability** (`netlify/functions/vote.mjs`):
+  - Counter is now updated with an optimistic compare-and-swap (`onlyIfMatch` etag,
+    5 retries) instead of a plain read-modify-write — concurrent votes are no longer
+    lost during a traffic spike.
+  - Server-side per-browser dedup via an HttpOnly `cgv` token cookie: the server
+    remembers each browser's current choice, so re-votes only ever move one vote.
+    The client `prev` field is no longer trusted.
+  - Per-IP rate limit tightened 8 → 3 writes/min.
+  - Tally now tracks per-country counts from Netlify edge geo (`{hit, no, byCountry}`).
+- **Dashboard is real-data only** (`index.html`): removed the seeded demo leaderboard,
+  fake session feed and client-side `demoHit/demoClean` numbers. The dashboard now
+  shows the live global split and a per-country leaderboard from the backend, with an
+  empty state until real votes arrive. Voting is anonymous (choice + edge-geo country).
+- **Safari / mobile compatibility:** added the missing `-webkit-backdrop-filter`
+  prefix to every glass panel (iOS 15–17 now renders the blur); restored pinch-zoom
+  by dropping `maximum-scale/user-scalable=no` (a11y); WebGL context-loss now shows a
+  visible reload overlay instead of a hidden status line.
+- **Repo hygiene for the public release:** `.env` added to `.gitignore`; README credits
+  the real audio sources (Alanga Music anthems; Viking Row / Sweet Caroline chants) as
+  a fan tribute and removed dead links to the private `CLAUDE.md`; in-app Settings now
+  carries an audio-credit line; `og.png` optimized.
+- Dead code removed and public version metadata unified to **9.1-forensic**.
+
+## v9.0 — forensic + community build
+Physics, presentation and community layer over v8.
+
+- Full-team flight choreography (all 22 players traverse the pitch during the 2.6 s
+  flight) + a ~430 ms wind-up phase so the ball launches off Nyland's foot.
+- Goals seated on the bylines with keepers standing in front of the nets.
+- Share card: square 1080×1080 only, verdict-inverted "alternate reality" scoreline,
+  EN/NO interface copy, clipboard invite with the cablegoal.com link and an inlined QR.
+- Bilingual (EN/NO) Case File wiki (story / timeline / camps / facts) with a toolbar entry.
+- Positional stadium audio: pre-goal fan chants + goal-triggered anthems (offline base64).
+- Community vote counter (Netlify Functions + Blobs) surfaced in the result panel.
+- Drag-crisis aerodynamics for the Trionda ball; sloped spidercam cable geometry.
+
+---
+
 # CHANGELOG — v8.0 (production pass over v7.2)
 
 ## Localization: Russian fully removed, EN + NO only

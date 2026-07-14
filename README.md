@@ -65,23 +65,28 @@ Good first areas to dig into:
 - **Translations** beyond EN/NO
 
 The entire app lives in **`index.html`** (Three.js r128 is inlined). Edit the app
-code, not the inlined library blob. See [`CLAUDE.md`](CLAUDE.md) for the physics
-constants, architecture invariants and the forensic reference data.
+code, not the inlined library blob. Physics constants and architecture invariants
+are documented inline near the top of the app code (`FIELD_L`, `ORIGIN`, `CABLE_X`,
+`CABLE_Y`, `HIT_TOL`, drag/step constants).
 
 ## Accuracy & disclaimer
 
 This is a **best-effort reconstruction for public discussion**, not an official
 finding. Contact coordinates, cable slope and launch parameters are estimates
-drawn from public footage and reporting; confirmed vs. estimated facts are tagged
-in [`CLAUDE.md`](CLAUDE.md). It is not affiliated with FIFA, UEFA, or any club or
-federation.
+drawn from public footage and reporting. It is not affiliated with FIFA, UEFA, or
+any club or federation.
 
 ## Credits & audio
 
 - Reconstruction & code: **Alexeev Digital Lab**
-- Fan chants and national-anthem clips used in the app are third-party recordings;
-  rights remain with their respective owners. Contributors redistributing the repo
-  should replace them with CC0 / royalty-free equivalents.
+- Audio is used as a non-commercial fan tribute; all rights remain with the
+  respective owners. Sources:
+  - National-anthem clips — *"World Cup Anthems 2026"* by **Alanga Music** (YouTube).
+  - Norway supporter chant ("Viking Row / Ro!") — YouTube clip `G5WUEqEkQZU`.
+  - England supporter chant ("Sweet Caroline") — YouTube clip `d5s_SGIMoqY`.
+- These clips are **not** original works of this project and are **not** covered by
+  its MIT license. Contributors redistributing the repo should replace them with
+  CC0 / royalty-free equivalents.
 
 ## License
 
