@@ -297,7 +297,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--gold
 .yourVerdict button{font-family:'Barlow Condensed';font-weight:800}
 .yourVerdict button.selected{border-color:var(--teal)!important;color:var(--teal)!important}
 /* Intro + settings CTAs */
-#introCard #startCaseBtn{background:var(--gold)!important;color:#07111b!important;font-family:'Barlow Condensed';font-weight:900}
+#introCard #startCaseBtn{background:var(--lime)!important;color:#07111b!important;font-family:'Barlow Condensed';font-weight:900}
 #introEyebrow,.introEyebrow{color:var(--teal)!important}
 #presetBtn{background:var(--gold)!important;color:#09121c!important}
 /* goal: score-digit teal→gold flash */
@@ -467,7 +467,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 </style>
 </head>
 <body>
-<div id="introCard"><div class="introBox"><div class="introEyebrow" data-i18n="introEyebrow">CASE 45+2 / INTERACTIVE RECONSTRUCTION</div><h2 data-i18n="introTitle">Hit the cable. Check the verdict.</h2><p data-i18n="introText">Recreate Nyland’s kick, compare your trajectory with the canonical one and see why one metre changes the whole match.</p><div class="introSteps"><div><b>1</b><span data-i18n="introStep1">Choose power, angle and direction.</span></div><div><b>2</b><span data-i18n="introStep2">Watch the cable and the second ball.</span></div><div><b>3</b><span data-i18n="introStep3">Compare the outcome with the IFAB law.</span></div></div><div class="introActions"><button id="skipIntroBtn" data-i18n="skipIntro">Skip intro</button><button id="startCaseBtn" data-i18n="startCase">▶ Start</button></div><button id="dashIntroBtn">◆ Community verdict — see the live split</button></div></div>
+<div id="introCard"><div class="introBox"><div class="introEyebrow" data-i18n="introEyebrow">CASE 45+2 / INTERACTIVE RECONSTRUCTION</div><h2 data-i18n="introTitle">Hit the cable. Check the verdict.</h2><p data-i18n="introText">Recreate Nyland’s kick, compare your trajectory with the canonical one and see why one metre changes the whole match.</p><div class="introSteps"><div><b>1</b><span data-i18n="introStep1">Choose power, angle and direction.</span></div><div><b>2</b><span data-i18n="introStep2">Watch the cable and the second ball.</span></div><div><b>3</b><span data-i18n="introStep3">Compare the outcome with the IFAB law.</span></div></div><div class="introActions"><button id="startCaseBtn" data-i18n="startCase">▶ Start</button></div><button id="dashIntroBtn">◆ Community verdict — see the live split</button></div></div>
 <div id="perfToast" data-i18n="perfToast">Graphics adapted for smoothness</div>
 <!-- v3.0: public forensic edition; exact flight physics retained -->
 <div id="loading"><div class="loadCard" id="loadCard"><div class="loadTitle">FORENSIC 3D</div><div class="loadStatus" id="loadStatus">Preparing the offline 3D engine…</div><div class="loadTrack"><div class="loadBar" id="loadBar"></div></div><div class="loadMeta"><span id="loadStage">STARTUP</span><span id="loadPct">8%</span></div><div class="loadError" id="loadError"></div><button class="loadRetry" id="loadRetry" type="button">Restart</button></div></div>
@@ -484,7 +484,6 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   <div class="telemetryBody"><div class="stat"><span data-i18n="speed">Speed</span><span id="tSpeed">0.0 m/s</span></div><div class="stat"><span data-i18n="apex">Apex</span><span id="tApex">0.0 m</span></div><div class="stat"><span data-i18n="atCable">Height at the cable</span><span id="tAtCable">– m</span></div><div class="stat"><span data-i18n="cableAt">Cable hangs at</span><span id="tCableH">17.0 m</span></div><canvas id="imuCanvas" width="250" height="46"></canvas><div id="log">Default = the canonical match moment.</div><div id="disclaimer" data-i18n="disclaimer">Schematic physics model, not a FIFA data reconstruction. IMU graph is illustrative.</div></div>
 </div>
 <div class="hud" id="settings"><h4 data-i18n="settings">Settings</h4>
-  <div class="langRow"><button data-lang="no">NO</button><button data-lang="en" class="active">EN</button></div>
   <div class="toggle"><span data-i18n="telemetry">Telemetry</span><div class="sw on" data-t="telemetry"></div></div><div class="toggle"><span data-i18n="score">Scoreboard</span><div class="sw on" data-t="score"></div></div><div class="toggle"><span data-i18n="cameras">Cameras</span><div class="sw on" data-t="camsel"></div></div><div class="toggle"><span data-i18n="stadium">Stadium and crowd</span><div class="sw on" data-t="crowd"></div></div><div class="toggle"><span data-i18n="trail">Trajectory</span><div class="sw on" data-t="trail"></div></div><div class="toggle"><span data-i18n="ghost">Canonical ghost</span><div class="sw on" data-t="ghost"></div></div><div class="toggle"><span data-i18n="labels">Player labels</span><div class="sw on" data-t="labels"></div></div><div class="toggle"><span data-i18n="players">Players</span><div class="sw on" data-t="players"></div></div>
   <button id="presetBtn" data-i18n="resetMatch">Reset to the match moment</button><button id="recBtn" data-i18n="recordMode">Recording mode</button>
 </div>
@@ -578,7 +577,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #voteDash .mf-swe{background:linear-gradient(#fecc00,#fecc00) 38% 0/15% 100% no-repeat,linear-gradient(#fecc00,#fecc00) 0 50%/100% 28% no-repeat,#006aa7}
 #voteDash .mf-sui{background:linear-gradient(#fff,#fff) center/42% 13% no-repeat,linear-gradient(#fff,#fff) center/13% 42% no-repeat,#d52b1e}
 /* glowing community CTAs */
-#dashIntroBtn{width:100%;margin-top:14px;padding:14px 18px;border:0;border-radius:12px;cursor:pointer;color:#08131f!important;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:15px;background:linear-gradient(100deg,#ECD080,#fff2c8,#1B9ED3,#6DCF3C,#ECD080);background-size:320% 100%;animation:dashShimmer 4s linear infinite,dashGlow 2.2s ease-in-out infinite;position:relative}
+#dashIntroBtn{width:100%;margin-top:14px;padding:14px 18px;border:0;border-radius:12px;cursor:pointer;color:#08131f!important;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:15px;background:linear-gradient(100deg,#ECD080,#fff2c8,#1B9ED3,#ECD080);background-size:320% 100%;animation:dashShimmer 4s linear infinite,dashGlow 2.2s ease-in-out infinite;position:relative}
 #dashIntroBtn:hover{filter:brightness(1.06)}
 @keyframes dashShimmer{0%{background-position:0% 50%}100%{background-position:320% 50%}}
 @keyframes dashGlow{0%,100%{box-shadow:0 0 14px 2px rgba(236,208,128,.45),0 6px 18px rgba(27,158,211,.25);transform:translateY(0)}50%{box-shadow:0 0 26px 7px rgba(236,208,128,.75),0 8px 24px rgba(27,158,211,.5);transform:translateY(-1px)}}
@@ -587,6 +586,36 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 .vdShareBtn{display:block;width:100%;margin-top:12px;padding:12px;border:0;border-radius:11px;cursor:pointer;color:#08131f;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:14px;background:linear-gradient(100deg,#ECD080,#6DCF3C,#1B9ED3,#ECD080);background-size:300% 100%;animation:dashShimmer 4.5s linear infinite;box-shadow:0 4px 16px rgba(27,158,211,.3)}
 .vdShareBtn:hover{filter:brightness(1.07)}
 @media(prefers-reduced-motion:reduce){#dashIntroBtn,.quickActions #dashHudBtn,.vdShareBtn{animation:none!important}}
+
+/* ── v14: dashboard responsive / mobile ── */
+@media(max-width:600px){
+  #voteDash{padding:14px 8px}
+  #voteDash .vdClose{top:2px;right:2px}
+  #voteDash h1{font-size:23px}
+  #voteDash .vdSub{font-size:11.5px}
+  #voteDash .vdSplit,#voteDash .vdCast{padding:13px}
+  #voteDash .vdSide .pct{font-size:32px}
+  #voteDash .vdSide .lab{font-size:11px}
+  #voteDash .vdSide .cnt{font-size:10px}
+  #voteDash .vdFields{gap:8px}
+  #voteDash .vdFields input,#voteDash .vdFields select{min-width:100%;font-size:16px;padding:12px}
+  #voteDash .vdReadout{flex-direction:column;align-items:stretch;gap:11px}
+  #voteDash .vdReadout .vdCastBtn{width:100%;padding:14px}
+  #voteDash .vdYoulean{font-size:15px;text-align:center}
+  #voteDash .vdLbhead{flex-direction:column;gap:2px}
+  #voteDash .vdFchip{font-size:11px;padding:6px 10px}
+  #voteDash th,#voteDash td{padding:8px 5px;font-size:12px}
+  #voteDash .u b{font-size:12px}
+  #voteDash .u small{display:none}
+  #voteDash .vdWhen{display:none}
+  #voteDash .chip{font-size:9.5px;padding:3px 7px}
+  #voteDash .rg{font-size:9px;padding:2px 5px}
+  #voteDash .rg .mf{width:13px;height:9px;margin-right:3px}
+}
+@media(max-width:380px){
+  #voteDash .vdSide .pct{font-size:27px}
+  #voteDash h1{font-size:20px}
+}
 </style>
 <div id="caseFile" role="dialog" aria-modal="true" aria-label="Case file 45+2">
   <div class="cfTop"><b id="cfKicker">Case file · 45+2</b><div class="cfTopR"><div class="cfLang" id="cfLang"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button class="cfClose" id="cfClose" aria-label="Close">×</button></div></div>
@@ -867,7 +896,7 @@ function setScore(nor=1,eng=1,clock="45+2'"){el('scoreBox').innerHTML=`<span cla
 function preview(){const r=simulate(+pw.value,+an.value,+am.value);el('tApex').textContent=r.peak.toFixed(1)+' m';const judge=el('judgeVerdict');if(r.yc===null){el('tAtCable').textContent='– m';el('verdict').className='verdict';el('verdict').textContent=lang==='no'?'når ikke vaieren':'does not reach cable';el('clearance').textContent='—';judge.className='judgeVerdict clean';judge.querySelector('strong').textContent=tr('cleanVerdict')}else{const d=r.yc-CABLE_Y,hit=Math.abs(d)<=HIT_TOL;el('tAtCable').textContent=r.yc.toFixed(1)+' m';el('verdict').className='verdict '+(hit?'hit':'miss');el('verdict').textContent=hit?(lang==='no'?'TREFFER VAIEREN':'CABLE CONTACT'):(lang==='no'?'forbi vaieren':'misses cable');el('clearance').textContent=hit?`Δ ${d>=0?'+':''}${d.toFixed(1)} m`:`${d>0?'+':''}${d.toFixed(1)} m`;judge.className='judgeVerdict '+(hit?'':'clean');judge.querySelector('strong').textContent=tr(hit?'hitVerdict':'cleanVerdict')}const diff=Math.abs(+pw.value-30)/16+Math.abs(+an.value-49)/42+Math.abs(+am.value-2)/32;el('matchScore').textContent=(lang==='no'?'likhet med kampøyeblikket: ':'match-moment similarity: ')+Math.max(0,Math.round(100-diff*100))+'%'}
 [pw,an,am].forEach(s=>s.addEventListener('input',()=>{el('vPower').textContent=pw.value;el('vAngle').textContent=an.value;el('vAim').textContent=am.value;preview();updateCaseScore()}));
 document.querySelectorAll('.camsel button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.camsel button').forEach(x=>x.classList.remove('active'));b.classList.add('active');camMode=b.dataset.cam;if(camMode==='orbit')syncOrbitFromCamera();el('orbitHint').classList.add('hide')});el('gearBtn').onclick=()=>el('settings').classList.toggle('open');
-function hideIntro(){el('introCard').classList.add('hide');safeStore.set('wireIntroSeen','1');setTimeout(()=>el('introCard').style.display='none',320)}el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};el('skipIntroBtn').onclick=hideIntro;/* intro start gate always shown */
+function hideIntro(){el('introCard').classList.add('hide');safeStore.set('wireIntroSeen','1');setTimeout(()=>el('introCard').style.display='none',320)}el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};/* intro start gate always shown */
 function caseScore(power=+pw.value,angle=+an.value,aim=+am.value,yc=null){const dv=Math.abs(power-DEFAULTS.power)/6,da=Math.abs(angle-DEFAULTS.angle)/12,di=Math.abs(aim-DEFAULTS.aim)/12;let score=1000-Math.round((dv*.28+da*.46+di*.26)*1000);if(yc!==null)score-=Math.min(220,Math.round(Math.abs((yc-CABLE_Y)-(canonical.yc-CABLE_Y))*58));return Math.max(0,Math.min(1000,score))}
 function updateCaseScore(yc=null){currentCaseScore=caseScore(+pw.value,+an.value,+am.value,yc);el('caseScoreValue').textContent=currentCaseScore;el('bestScoreValue').textContent=Math.max(bestCaseScore,currentCaseScore);const _csb=el('caseScoreBar');if(_csb)_csb.style.width=Math.max(0,Math.min(100,currentCaseScore/1000*100))+'%';return currentCaseScore}
 function haptic(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(e){}}
@@ -928,7 +957,7 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
       '<td><span class="chip '+s+'">'+(s==='hit'?T().hit:T().noc)+'</span></td>'+
       '<td><span class="rg '+rg+'"><span class="mf mf-'+cls+'"></span>'+code+'</span></td>'+
       '<td class="num"><span class="conf">'+c+'%</span></td>'+
-      '<td class="num">'+when+'</td>';
+      '<td class="num vdWhen">'+when+'</td>';
   }
   function addRow(nick,handle,s,code,c,when,you,isNew){
     var tr=document.createElement('tr'); if(isNew)tr.className='new'; tr.dataset.c=code;
@@ -997,7 +1026,7 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
   var _rt=renderTally;
   renderTally=function(t){_rt(t); if(t){window.__voteSplit=window.__voteSplit||{}; window.__voteSplit.hitN=t.hit|0; window.__voteSplit.cleanN=t.no|0; var tot=(t.hit|0)+(t.no|0); if(tot){window.__voteSplit.hit=Math.round((t.hit|0)/tot*100); window.__voteSplit.clean=100-window.__voteSplit.hit;} if(dash.classList.contains('open'))renderSplit();}};
   var _al=applyLanguage;
-  applyLanguage=function(l){_al(l); var _d=el('dashHudLabel');if(_d)_d.textContent=lang==='no'?'Dommen':'Verdict'; var _vs=el('vdShare');if(_vs)_vs.textContent=lang==='no'?'◆ Del din dom':'◆ Share my verdict'; if(built)applyLang();};
+  applyLanguage=function(l){_al(l); var _d=el('dashHudLabel');if(_d)_d.textContent=lang==='no'?'Dommen':'Verdict'; var _vs=el('vdShare');if(_vs)_vs.textContent=lang==='no'?'◆ Del din dom':'◆ Share my verdict'; var _di=el('dashIntroBtn');if(_di)_di.textContent=lang==='no'?'◆ Folkets dom — se fordelingen live':'◆ Community verdict — see the live split'; if(built)applyLang();};
   window.__openDash=openDash;
 })();
 // Live community tally ("did it hit the cable?") backed by the Netlify vote function; degrades silently offline.
@@ -1023,10 +1052,46 @@ function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 function ballArc(from,to,t,arc,dt){const e=ease(Math.min(1,t));setBallPosition(from.x+(to.x-from.x)*e,from.y+(to.y-from.y)*e+Math.sin(Math.PI*e)*arc,from.z+(to.z-from.z)*e,dt)}
 function enterPhase(name,log){phase=name;sequenceTime=0;sequenceStart={x:pos.x,y:pos.y,z:pos.z};if(name.includes('_to_')||name==='eng_shot'||name==='nor_shot')audio.pass();if(log)setLogText(log)}
 function chooseLooseReceiver(){activeTeam=clipped?'eng':'nor';if(activeTeam==='eng')return collector;const candidates=[norLB,norCB1,norCB2,norRB,norMidL,norMidC,norMidR,norwayReceiver,schjelderup];return candidates.reduce((best,p)=>Math.hypot(p.root.position.x-pos.x,p.root.position.z-pos.z)<Math.hypot(best.root.position.x-pos.x,best.root.position.z-pos.z)?p:best,candidates[0])}
-function beginLooseBall(){phase='loose_ball';sequenceTime=0;looseElapsed=0;looseReceiver=chooseLooseReceiver();if(pos.y<.34)pos.y=.34;if(vel.y<0)vel.y=Math.abs(vel.y)*.2;setLogText(activeTeam==='eng'?seq('engCollect'):seq('norCollect'))}
+function beginLooseBall(){phase='loose_ball';sequenceTime=0;looseElapsed=0;looseReceiver=chooseLooseReceiver();if(pos.y<.34)pos.y=.34;if(vel.y<0)vel.y=Math.abs(vel.y)*.2;players.forEach(p=>{if(p!==looseReceiver&&p.state==='run')p.state='idle'});setLogText(activeTeam==='eng'?seq('engCollect'):seq('norCollect'))}
 function looseBallStep(dt){looseElapsed+=dt;const air=pos.y>.341||Math.abs(vel.y)>.08;if(air){const sp=Math.hypot(vel.x,vel.y,vel.z);vel.x+=(-K*sp*vel.x)*dt;vel.y+=(-G-K*sp*vel.y)*dt;vel.z+=(-K*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;if(pos.y<=.34&&vel.y<0){pos.y=.34;vel.y=-vel.y*.18;if(Math.abs(vel.y)<.75)vel.y=0;audio.noise(.045,.035,180)}}else{pos.y=.34;const hs=Math.hypot(vel.x,vel.z);if(hs>0){const decel=Math.min(hs,2.35*dt);vel.x-=vel.x/hs*decel;vel.z-=vel.z/hs*decel;pos.x+=vel.x*dt;pos.z+=vel.z*dt}vel.y=0}ballSpeed=Math.hypot(vel.x,vel.y,vel.z);const lead=Math.min(.42,Math.max(.08,Math.hypot(vel.x,vel.z)/18));const ix=pos.x+vel.x*lead,iz=pos.z+vel.z*lead;const reached=movePlayer(looseReceiver,ix,iz,activeTeam==='eng'?9.4:9.1,dt);if(activeTeam==='eng'){movePlayer(norMidL,pos.x-2.3,pos.z+1.4,7.1,dt)}else{movePlayer(collector,pos.x+2.5,pos.z-1.2,7.2,dt)}const d=Math.hypot(looseReceiver.root.position.x-pos.x,looseReceiver.root.position.z-pos.z);if((reached||d<.78)&&(ballSpeed<7.5||looseElapsed>1.4)){vel={x:0,y:0,z:0};if(activeTeam==='eng'){enterPhase('eng_collect',seq('engDrive'))}else{norPossessor=looseReceiver;const sx=norPossessor.root.position.x,sz=norPossessor.root.position.z;const breakX=Math.max(sx+3,Math.min(80,sx+11));const recvX=Math.min(95,Math.max(breakX+5,86));const shootX=Math.min(96,Math.max(recvX+3,92));norPlan={breakX,breakZ:Math.max(24,Math.min(44,sz)),recvX,recvZ:34.6,shootX,shootZ:34.8};norBreakTarget={x:breakX,z:norPlan.breakZ};enterPhase('nor_collect',seq('norBreak'))}}}
 function showGoal(team){phase='done';shotScored=true;kickBtn.disabled=false;crowdRoar=1.7;flash=1;try{window.__goalFX&&window.__goalFX(team)}catch(_){}const england=team==='eng';currentCaseScore=updateCaseScore(yAtCable);if(currentCaseScore>bestCaseScore){bestCaseScore=currentCaseScore;safeStore.set('wireCaseBest',bestCaseScore)}el('bestScoreValue').textContent=bestCaseScore;el('resultScoreValue').textContent=currentCaseScore;el('resultDeltaValue').textContent=yAtCable===null?'—':`${yAtCable-CABLE_Y>=0?'+':''}${(yAtCable-CABLE_Y).toFixed(2)} m`;haptic(team==='nor'?[70,40,90,40,120]:[45,55,45]);audio.goal(team);audio.playAnthem&&audio.playAnthem(team);setScore(england?1:2,england?2:1,england?"45+3'":"45+3'");const t=el('bannerTitle');t.className='goal';t.textContent=england?seq('goalEngTitle'):seq('goalNorTitle');el('bannerSub').textContent=england?seq('goalEngSub'):seq('goalNorSub');el('banner').classList.add('show');setLog(england?'engGoal':'norGoal');clearTimeout(window.__resultTO);window.__resultTO=setTimeout(function(){showResult(team)},3400);const scorer=england?bellingham:haaland,winSide=england?'eng':'nor';players.forEach(p=>{if(p.team==='ref'){p.state='idle';return}if(p.team===winSide){p.state='celebrate';p.celebStyle=Math.floor(Math.random()*3);p.celebFace=p.root.rotation.y+(Math.random()-.5)*.6}else{p.state='dejected';p.dejStyle=Math.floor(Math.random()*3)}});scorer.state='celebrate';scorer.celebStyle=1;scorer.celebFace=scorer.root.rotation.y}
-function flightStep(dt){const px=pos.x;const sp=Math.hypot(vel.x,vel.y,vel.z);vel.x+=(-K*sp*vel.x)*dt;vel.y+=(-G-K*sp*vel.y)*dt;vel.z+=(-K*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;ballSpeed=Math.hypot(vel.x,vel.y,vel.z);apexH=Math.max(apexH,pos.y);const ra=Math.abs(vel.y-prevVy)/dt/G;prevVy=vel.y;if((imuStepCounter++&1)===0){imu.push(Math.min(ra*.1,1));imu.shift()}if(!clipped&&px<CABLE_X&&pos.x>=CABLE_X){yAtCable=pos.y;if(Math.abs(pos.y-CABLE_Y)<=HIT_TOL){clipped=true;vel.y=-Math.abs(vel.y)*.34-2.6;vel.x*=.3;vel.z+=(Math.random()-.5)*2;const spike=sensorDetects?1:.13;for(let k=0;k<5;k++){imu.push(spike);imu.shift()}el('log').textContent=sensorDetects?seq('contactStrong'):seq('contactLight');haptic([22,35,45]);audio.cable();hitCableMat.emissive.setHex(0xff3b30);hitCableMat.emissiveIntensity=2.2;setTimeout(()=>hitCableMat.emissiveIntensity=0,450)}}pod.position.z+=(pos.z-pod.position.z)*.05;if(pos.y<5&&pos.x>48&&clipped)movePlayer(collector,pos.x,pos.z,8.5,dt);if(pos.y<=.34&&vel.y<0){pos.y=.34;beginLooseBall()}else if((pos.x>FIELD_L+9||pos.x<-9||pos.z<-9||pos.z>FIELD_W+9)&&pos.y<1.2){beginLooseBall()}}
+// ── Flight-phase choreography ─────────────────────────────────────────────
+// During the ~2.6 s ball flight EVERY player is alive, not frozen. Motion
+// character follows the forensic report (Anderson reads the drop, England set
+// up the counter, Norway are caught pushed-up on their own goal kick, Nyland
+// steps off his line ~5→9 m), but every target is anchored to the sim's real
+// ball so the verdict/casting stay correct for any kick. The report's absolute
+// a/b coords are internally inconsistent, so we use its motion, not its numbers.
+const CLXV11=(x)=>Math.max(2,Math.min(FIELD_L-2,x)),CLZV11=(z)=>Math.max(2,Math.min(FIELD_W-2,z));
+function runV11(p,tx,tz,sp,dt){movePlayer(p,CLXV11(tx),CLZV11(tz),sp,dt,'run')}
+function flightChoreo(dt){
+  const lx=pos.x+vel.x*.42,lz=pos.z+vel.z*.42;                 // where the ball is heading
+  runV11(collector,lx,lz,8.7,dt);                             // Anderson #8 attacks the drop
+  const ax=collector.root.position.x,az=collector.root.position.z;
+  runV11(gordon,ax-11,az+8,7.2,dt);                           // left channel, wide
+  runV11(bellingham,ax-15,az-2,6.8,dt);                       // central support
+  runV11(kane,ax-19,az-7,6.1,dt);                             // pulls a defender
+  runV11(madueke,ax-7,az-13,6.9,dt);                          // right channel
+  runV11(rice,ax-6,az+3,6.4,dt);                              // trailing pivot
+  runV11(stones,stones.base.x+3,(stones.base.z*2+lz)/3,4.6,dt);
+  runV11(guehi,guehi.base.x+3,(guehi.base.z*2+lz)/3,4.6,dt);
+  runV11(konsa,konsa.base.x+3,(konsa.base.z*2+lz)/3,4.4,dt);
+  runV11(oreilly,oreilly.base.x+3,(oreilly.base.z*2+lz)/3,4.6,dt);
+  runV11(engKeeper,Math.min(97,engKeeper.base.x-3.5),engKeeper.base.z,2.2,dt); // off his line
+  runV11(haaland,Math.min(lx+2,80),(haaland.base.z+lz)/2,7.0,dt);             // chasing flick-on
+  runV11(norwayReceiver,Math.min(lx-2,74),(norwayReceiver.base.z+lz)/2,6.7,dt); // Sørloth
+  runV11(schjelderup,Math.min(lx-6,66),schjelderup.base.z-2,6.5,dt);
+  runV11(norMidL,norMidL.base.x+9,norMidL.base.z-1,5.8,dt);   // Berge pushes up
+  runV11(norMidC,norMidC.base.x+9,norMidC.base.z,5.6,dt);     // Berg
+  runV11(norMidR,norMidR.base.x+9,norMidR.base.z+1,5.8,dt);   // Ødegaard
+  runV11(norLB,norLB.base.x+6,norLB.base.z,5.0,dt);
+  runV11(norCB1,norCB1.base.x+7,norCB1.base.z,5.2,dt);        // Heggem tracks up
+  runV11(norCB2,norCB2.base.x+7,norCB2.base.z,5.0,dt);
+  runV11(norRB,norRB.base.x+6,norRB.base.z,5.0,dt);
+  if(performance.now()-kickStarted>620)runV11(gk,Math.min(9.5,gk.base.x+3.6),34,2.0,dt); // Nyland steps off
+  runV11(referee,referee.base.x+2,referee.base.z-4,4.6,dt);   // ref follows play
+}
+function flightStep(dt){const px=pos.x;const sp=Math.hypot(vel.x,vel.y,vel.z);vel.x+=(-K*sp*vel.x)*dt;vel.y+=(-G-K*sp*vel.y)*dt;vel.z+=(-K*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;ballSpeed=Math.hypot(vel.x,vel.y,vel.z);apexH=Math.max(apexH,pos.y);const ra=Math.abs(vel.y-prevVy)/dt/G;prevVy=vel.y;if((imuStepCounter++&1)===0){imu.push(Math.min(ra*.1,1));imu.shift()}if(!clipped&&px<CABLE_X&&pos.x>=CABLE_X){yAtCable=pos.y;if(Math.abs(pos.y-CABLE_Y)<=HIT_TOL){clipped=true;vel.y=-Math.abs(vel.y)*.34-2.6;vel.x*=.3;vel.z+=(Math.random()-.5)*2;const spike=sensorDetects?1:.13;for(let k=0;k<5;k++){imu.push(spike);imu.shift()}el('log').textContent=sensorDetects?seq('contactStrong'):seq('contactLight');haptic([22,35,45]);audio.cable();hitCableMat.emissive.setHex(0xff3b30);hitCableMat.emissiveIntensity=2.2;setTimeout(()=>hitCableMat.emissiveIntensity=0,450)}}pod.position.z+=(pos.z-pod.position.z)*.05;flightChoreo(dt);if(pos.y<=.34&&vel.y<0){pos.y=.34;beginLooseBall()}else if((pos.x>FIELD_L+9||pos.x<-9||pos.z<-9||pos.z>FIELD_W+9)&&pos.y<1.2){beginLooseBall()}}
 function sequenceStep(dt){sequenceTime+=dt;
   if(phase==='eng_collect'){collector.state='dribble';const fx=collector.root.position.x-.48,fz=collector.root.position.z;setBallPosition(pos.x+(fx-pos.x)*.22,.34+.035*Math.abs(Math.sin(sequenceTime*10)),pos.z+(fz-pos.z)*.22,dt);if(sequenceTime>=.34)enterPhase('eng_drive',seq('engDrive'))}
   else if(phase==='eng_drive'){movePlayer(collector,50,46,8.3,dt,'dribble');movePlayer(gordon,36,48,7.2,dt);movePlayer(bellingham,27,36,6.7,dt);movePlayer(norMidL,34,44,6,dt);movePlayer(norCB1,18,39,5,dt);setBallPosition(collector.root.position.x-.62,.34+.08*Math.abs(Math.sin(sequenceTime*11)),collector.root.position.z-.05,dt);if(sequenceTime>=1.45)enterPhase('eng_to_gordon',seq('engPass'))}
@@ -1195,7 +1260,7 @@ const gestureModesV72=new Set(['auto','wide','chase','cable']);
 if(window.PointerEvent){orbitCanvas.addEventListener('pointerdown',e=>{if((e.button===undefined||e.button===0)&&gestureModesV72.has(camMode))activateOrbit()},true)}else{orbitCanvas.addEventListener('touchstart',()=>{if(gestureModesV72.has(camMode))activateOrbit()},{passive:true,capture:true})}
 orbitCanvas.addEventListener('wheel',()=>{if(gestureModesV72.has(camMode))activateOrbit()},{passive:true,capture:true});
 function showOrbitHintV72(){const h=el('orbitHint');h.classList.remove('hide');clearTimeout(showOrbitHintV72.t);showOrbitHintV72.t=setTimeout(()=>h.classList.add('hide'),8500)}
-const hideIntroV72Base=hideIntro;hideIntro=function(){hideIntroV72Base();setTimeout(showOrbitHintV72,360)};el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};el('skipIntroBtn').onclick=hideIntro;if(el('introCard').style.display==='none')setTimeout(showOrbitHintV72,550);
+const hideIntroV72Base=hideIntro;hideIntro=function(){hideIntroV72Base();setTimeout(showOrbitHintV72,360)};el('startCaseBtn').onclick=()=>{audio.resume();hideIntro()};if(el('introCard').style.display==='none')setTimeout(showOrbitHintV72,550);
 
 // r128 can cull scattered InstancedMesh crowds using the base geometry bounds. Disable that culling explicitly.
 [crowd,activeFans,activeFanHeads,heroBodyV7,heroHeadV7,heroArmLV7,heroArmRV7,heroScarfV7].forEach(o=>{if(o)o.frustumCulled=false});crowdHeads.frustumCulled=false;
@@ -3671,7 +3736,7 @@ var qrcode = function() {
     var sb=await toBlob(sq);
     var file=new File([sb],'cablegoal-verdict.png',{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{await navigator.share({files:[file],title:'Cable Goal',text:stance==='hit'?'Den traff kabelen. Spill selv:':'No contact. Play the sim:'});return;}catch(e){if(e&&e.name==='AbortError')return;}
+      try{await navigator.share({files:[file],title:'Cable Goal',text:(lang==='no'?(stance==='hit'?'Den traff kabelen. 45+2 — spill selv på cablegoal.com':'Ren bane. 45+2 — spill selv på cablegoal.com'):(stance==='hit'?'It hit the cable. 45+2 — play it yourself at cablegoal.com':'No contact. 45+2 — play it yourself at cablegoal.com')),url:'https://cablegoal.com'});return;}catch(e){if(e&&e.name==='AbortError')return;}
     }
     // download fallback (square + story)
     var st=drawCard(stance,1080,1920);
@@ -3719,8 +3784,184 @@ var qrcode = function() {
     <button class="vdFchip" data-f="USA"><span class="mf fchipMf mf-usa"></span>USA</button>
     <button class="vdFchip" data-f="OTH"><span class="mf fchipMf mf-oth"></span>Other</button>
   </div>
-  <table><thead><tr><th id="vdThVoter">Voter</th><th id="vdThSide">Side</th><th id="vdThRegion">Region</th><th class="num" id="vdThSure">Sure</th><th class="num" id="vdThWhen">When</th></tr></thead><tbody id="vdRows"></tbody></table>
+  <table><thead><tr><th id="vdThVoter">Voter</th><th id="vdThSide">Side</th><th id="vdThRegion">Region</th><th class="num" id="vdThSure">Sure</th><th class="num vdWhen" id="vdThWhen">When</th></tr></thead><tbody id="vdRows"></tbody></table>
   <p class="vdNote" id="vdNote"></p>
 </div></div>
+<script>
+/* ── Case File 45+2 — full-screen forensic wiki (bilingual, self-contained) ── */
+(function(){
+var CASE_WIKI={
+ en:{
+  kicker:'Case file · 45+2',
+  eyebrow:'CASE 45+2 · FORENSIC BREAKDOWN',
+  title:'The Cable Goal <span class="u">that split the World Cup</span>',
+  dek:'Did Ørjan Nyland’s goal kick clip a TV-camera cable in first-half stoppage time — and should Bellingham’s equaliser have been disallowed? Here is everything we know, everything that is disputed, and everything we don’t.',
+  meta:[['1–2','Norway–England a.e.t.'],['45+2','the disputed goal'],['64,478','attendance'],['Quarter-final','World Cup 2026, Miami']],
+  h_what:'What happened',
+  p_what:[
+   'In the second minute of first-half stoppage time, Norway goalkeeper Ørjan Nyland took a routine goal kick. On the broadcast replay the ball appeared to clip an overhead television-camera cable and dropped almost vertically to Elliot Anderson.',
+   'Anderson fed Anthony Gordon down the left; Gordon found Jude Bellingham, who finished to make it 1–1. England went on to win 2–1 after extra time, with Bellingham scoring again on 93 minutes.',
+   'Norway protested immediately. FIFA said the sensor inside the match ball showed no peak in the air and therefore no evidence of contact — so the goal stood.'
+  ],
+  h_time:'Timeline',
+  timeline:[
+   {m:'Pre',t:'Norway’s fairytale run',p:'Norway reached their first men’s World Cup quarter-final, having knocked out Côte d’Ivoire and Brazil. England won Group L and beat DR Congo and Mexico in the knockouts.'},
+   {m:'36’',t:'Norway 1–0',p:'Andreas Schjelderup scores from an Ødegaard pass. England trail at the break.'},
+   {m:'45+2',t:'The disputed goal',p:'Nyland’s goal kick appears to clip the cable; the ball drops to Anderson → Gordon → Bellingham. 1–1.'},
+   {m:'HT',t:'“No indication”',p:'Solbakken says he asked referee Clément Turpin at half-time and was told there was no indication of interference.'},
+   {m:'~50’',t:'FIFA goes public',p:'During the second half FIFA’s position is relayed pitchside: the connected ball showed no “peak”.'},
+   {m:'55’',t:'Norway goal ruled out',p:'Norway score again, but it is disallowed for a Haaland foul on Anderson — sharpening the sense of asymmetry.'},
+   {m:'93’',t:'England 2–1',p:'In extra time Morgan Rogers shoots, Nyland parries, and Bellingham buries the rebound. England reach the semi-final.'},
+   {m:'After',t:'Fallout',p:'Solbakken says the wires “deserve an assist”. Striker Alexander Sørloth faces online abuse. The episode becomes a flashpoint in the wider VAR debate.'}
+  ],
+  h_disp:'The dispute — two questions',
+  dispute:[
+   {h:'1 · Was there contact?',p:'Did the ball physically touch the cable? Norway, several pundits and the AP/Fox replays say it looks that way. FIFA and some analysts say the sensor and the trajectory do not confirm it.'},
+   {h:'2 · An outside agent?',p:'If it did touch, a camera cable is an “outside agent”. By the Laws of the Game that means play should stop and restart with a dropped ball — not a continued England attack.'}
+  ],
+  h_camp:'Three camps',
+  camps:[
+   {cls:'nor',h:'🇳🇴 Norway & critics',p:'Solbakken was “convinced” the ball hit the cable and said the overhead wires “deserve an assist”. The strongest evidence is the players’ instant, unanimous protest — before any FIFA explanation.'},
+   {cls:'eng',h:'🏴 FIFA & England',p:'FIFA: no peak in the ball’s “heartbeat”, so no evidence of contact. Tuchel argued the chip can detect “a hair” — yet admitted England “got lucky”. TV analyst Christina Unkel saw no clear change of trajectory.'},
+   {cls:'neu',h:'🌍 Neutral analysts',p:'Ex-referee Mark Clattenburg argued that if contact was part of a reviewable incident, VAR could and should have intervened. AP chose the careful middle: the ball “appeared to clip a cable”.'}
+  ],
+  h_tech:'The technology — and the physics',
+  p_tech:[
+   'FIFA’s public case rests on data, not video. The adidas Trionda match ball carries a KINEXON motion sensor sampling 500 times per second; combined with the cameras it computes touch points and supports semi-automated offside. Earlier in the same tournament the system flagged a barely-visible touch in Portugal–Croatia — so FIFA presents it as sensitive enough to catch a hair.',
+   'Critics answer that FIFA never published a cable-specific validation, a sensitivity threshold, or an independent audit for the exact scenario of a glancing cable graze in flight — so “no peak” does not automatically close the question.',
+   'There is also a purely aerodynamic reading: the Trionda has a drag crisis below about 12 m/s, where the airflow separates and the ball can drop almost vertically on its own. This simulator models that effect — which is why the drop alone does not prove a cable hit.'
+  ],
+  h_law:'What the law says',
+  p_law:[
+   'IFAB Law 8: the ball is dropped where play stopped, unless it hit a match official or outside agent — then it is dropped at the point of contact. Law 3 adds that interference by an outside agent means a stoppage and a dropped ball.',
+   'The nuance most people miss: even a confirmed cable contact would not have handed Norway the ball or England the goal. It would have meant a dropped ball at the point of contact — the England attack would never have existed. No public IFAB text names an overhead camera cable as an outside agent by name, but essentially every rules analyst treated it as one.'
+  ],
+  h_verd:'Verified, disputed & unknown',
+  cols:[
+   {cls:'fact',h:'✓ Verified',items:['1–2 to England after extra time; 64,478 in attendance.','Scorers: Schjelderup 36’; Bellingham 45+2’ and 93’.','Norway protested on the pitch immediately, before any explanation.','FIFA publicly stated the connected ball showed “no peak”.','The Laws provide for a dropped ball on outside-agent interference.','The connected ball uses a 500 Hz IMU sensor.']},
+   {cls:'disp',h:'⚖ Disputed',items:['Whether the ball physically touched the cable.','Whether VAR should have intervened by protocol.','Whether “no peak” is enough to close the contact question.','Whether a camera cable is strictly an outside agent under IFAB.']},
+   {cls:'unk',h:'? Unknown / unreported',items:['No public VAR audio for the 45+2 review.','No verified per-touch broadcast timestamps for the move.','No independent engineering audit of the sensor graph.','Whether Norway filed a formal written protest.']}
+  ],
+  h_quo:'In their words',
+  quotes:[
+   {q:'…showed no peak in the “heartbeat of the ball” … no evidence that the ball touched the overhead wire.',cite:'FIFA Media — 11 Jul 2026'},
+   {q:'The overhead wires deserve an assist.',cite:'Ståle Solbakken (Norway) — ESPN, 12 Jul 2026'},
+   {q:'It can tell you if a hair touches it … we got lucky today.',cite:'Thomas Tuchel (England) — Reuters / ITV, 12 Jul 2026'},
+   {q:'I didn’t see a clear change in trajectory.',cite:'Christina Unkel, TV rules analyst — 12 Jul 2026'},
+   {q:'VAR can interfere … if that contact is part of a reviewable incident.',cite:'Mark Clattenburg — Fox / The Independent, 12 Jul 2026'},
+   {q:'The ball appeared to clip a cable over the field.',cite:'Associated Press — 11 Jul 2026'}
+  ],
+  note:'This page is a neutral reconstruction built for public debate. Facts are kept separate from disputed points and open questions. It is not affiliated with FIFA, IFAB or any federation, and it does not assert that contact did or did not occur.',
+  srcLabel:'Sources ▾',
+  sources:[
+   {h:'Official',links:['https://inside.fifa.com/innovation/innovating-the-game/connected-ball-technology','https://www.theifab.com/laws/latest/the-start-and-restart-of-play/','https://www.theifab.com/laws/latest/the-ball-in-and-out-of-play/','https://x.com/fifamedia/status/2076088395147723022']},
+   {h:'Media & wire',links:['https://www.theguardian.com/football/2026/jul/12/cablegate-should-jude-bellingham-first-goal-against-norway-have-been-disallowed-england-world-cup-2026','https://www.reuters.com/sports/soccer/norway-coach-convinced-ball-hit-cable-before-england-goal-quarter-final-2026-07-12/','https://apnews.com/article/world-cup-norway-england-goal-cable-0fe2f671f577d1692191a1f83f80ec4d','https://www.independent.co.uk/sport/football/jude-bellingham-england-world-cup-norway-goal-cable-var-b3013298.html','https://www.skysports.com/football/video/30998/13562727/world-cup-did-the-ball-hit-the-cable-camera-before-englands-equalising-goal']}
+  ],
+  cta:{b:'Now test it yourself',span:'Re-kick Nyland’s ball, see if it clips the cable — then cast your verdict.',primary:'← Back to the simulator'}
+ },
+ no:{
+  kicker:'Saksmappe · 45+2',
+  eyebrow:'SAKEN 45+2 · FORENSISK GJENNOMGANG',
+  title:'Vaiermålet <span class="u">som delte VM</span>',
+  dek:'Traff Ørjan Nylands utspark en TV-kameravaier på overtid i første omgang — og skulle Bellinghams utligning vært annullert? Her er alt vi vet, alt som er omstridt, og alt vi ikke vet.',
+  meta:[['1–2','Norge–England e.o.'],['45+2','det omstridte målet'],['64 478','tilskuere'],['Kvartfinale','VM 2026, Miami']],
+  h_what:'Hva skjedde',
+  p_what:[
+   'På overtid i første omgang tok Norges keeper Ørjan Nyland et helt vanlig utspark. På TV-reprisen så ballen ut til å streife en vaier til et TV-kamera og falle nesten loddrett ned til Elliot Anderson.',
+   'Anderson spilte Anthony Gordon på venstre; Gordon fant Jude Bellingham, som satte inn 1–1. England vant til slutt 2–1 etter ekstraomganger, der Bellingham scoret igjen på 93 minutter.',
+   'Norge protesterte umiddelbart. FIFA sa at sensoren inni kampballen ikke viste noen topp i lufta, og dermed ingen bevis for kontakt — så målet ble stående.'
+  ],
+  h_time:'Tidslinje',
+  timeline:[
+   {m:'Før',t:'Norges eventyr',p:'Norge var i sin første VM-kvartfinale for menn og hadde slått ut blant andre Elfenbenskysten og Brasil. England vant gruppe L og slo DR Kongo og Mexico i utslagsrundene.'},
+   {m:'36’',t:'Norge 1–0',p:'Andreas Schjelderup scorer på pasning fra Ødegaard. England ligger under til pause.'},
+   {m:'45+2',t:'Det omstridte målet',p:'Nylands utspark ser ut til å streife vaieren; ballen faller til Anderson → Gordon → Bellingham. 1–1.'},
+   {m:'Pause',t:'«Ingen indikasjon»',p:'Solbakken sier han spurte dommer Clément Turpin i pausen og fikk til svar at det ikke var noen indikasjon på innblanding.'},
+   {m:'~50’',t:'FIFA går ut',p:'I andre omgang formidles FIFAs posisjon fra sidelinjen: den tilkoblede ballen viste ingen «topp».'},
+   {m:'55’',t:'Norsk mål annullert',p:'Norge scorer igjen, men målet annulleres for en Haaland-forseelse på Anderson — som forsterker følelsen av skjevhet.'},
+   {m:'93’',t:'England 2–1',p:'I ekstraomgangene skyter Morgan Rogers, Nyland returnerer, og Bellingham setter inn returen. England er i semifinalen.'},
+   {m:'Etter',t:'Etterspillet',p:'Solbakken sier vaierne «fortjener en målgivende». Spissen Alexander Sørloth møter netthets. Episoden blir et symbol i den større VAR-debatten.'}
+  ],
+  h_disp:'Striden — to spørsmål',
+  dispute:[
+   {h:'1 · Var det kontakt?',p:'Traff ballen fysisk vaieren? Norge, flere eksperter og AP/Fox-bildene mener det ser slik ut. FIFA og enkelte analytikere mener sensoren og banen ikke bekrefter det.'},
+   {h:'2 · Et fremmedlegeme?',p:'Hvis den traff, er en kameravaier et «fremmedlegeme». Etter spillereglene skal spillet da stoppes og gjenopptas med droppball — ikke et fortsatt England-angrep.'}
+  ],
+  h_camp:'Tre leire',
+  camps:[
+   {cls:'nor',h:'🇳🇴 Norge og kritikerne',p:'Solbakken var «overbevist» om at ballen traff vaieren og sa at vaierne «fortjener en målgivende». Det sterkeste beviset er spillernes umiddelbare, samstemte protest — før noen FIFA-forklaring.'},
+   {cls:'eng',h:'🏴 FIFA og England',p:'FIFA: ingen «topp» i ballens «hjerteslag», altså ingen bevis for kontakt. Tuchel hevdet chipen kan merke «et hårstrå» — men innrømmet at England «var heldige». TV-analytiker Christina Unkel så ingen tydelig baneendring.'},
+   {cls:'neu',h:'🌍 Nøytrale analytikere',p:'Eks-dommer Mark Clattenburg mente at hvis kontakten var del av en reviewbar situasjon, kunne og burde VAR grepet inn. AP valgte den forsiktige midten: ballen «så ut til å streife en vaier».'}
+  ],
+  h_tech:'Teknologien — og fysikken',
+  p_tech:[
+   'FIFAs offentlige sak bygger på data, ikke video. Kampballen adidas Trionda har en KINEXON-sensor som måler 500 ganger i sekundet; sammen med kameraene beregner den berøringspunkter og støtter halvautomatisk offside. Tidligere i samme mesterskap fanget systemet en knapt synlig berøring i Portugal–Kroatia — så FIFA presenterer den som følsom nok til å merke et hårstrå.',
+   'Kritikerne svarer at FIFA aldri publiserte en vaier-spesifikk validering, en følsomhetsgrense eller en uavhengig revisjon for akkurat scenariet «streifende vaierkontakt i lufta» — så «ingen topp» lukker ikke automatisk spørsmålet.',
+   'Det finnes også en rent aerodynamisk forklaring: Trionda-ballen har en luftmotstandskrise under omtrent 12 m/s, der luftstrømmen løsner og ballen kan falle nesten loddrett av seg selv. Denne simulatoren modellerer effekten — derfor beviser ikke fallet alene en vaierkontakt.'
+  ],
+  h_law:'Hva regelen sier',
+  p_law:[
+   'IFAB-regel 8: ballen droppes der spillet ble stoppet, med mindre den traff en dommer eller et fremmedlegeme — da droppes den på kontaktstedet. Regel 3 legger til at innblanding fra et fremmedlegeme gir stopp og droppball.',
+   'Nyansen de fleste overser: selv en bekreftet vaierkontakt ville ikke gitt Norge ballen eller England målet. Det ville betydd droppball på kontaktstedet — England-angrepet ville aldri eksistert. Ingen offentlig IFAB-tekst navngir en kameravaier som fremmedlegeme, men praktisk talt alle regelanalytikere behandlet den som ett.'
+  ],
+  h_verd:'Fakta, omstridt og ukjent',
+  cols:[
+   {cls:'fact',h:'✓ Bekreftet',items:['1–2 til England etter ekstraomganger; 64 478 tilskuere.','Målscorere: Schjelderup 36’; Bellingham 45+2’ og 93’.','Norge protesterte umiddelbart på banen, før noen forklaring.','FIFA uttalte offentlig at den tilkoblede ballen viste «ingen topp».','Reglene åpner for droppball ved innblanding fra fremmedlegeme.','Den tilkoblede ballen bruker en IMU-sensor på 500 Hz.']},
+   {cls:'disp',h:'⚖ Omstridt',items:['Om ballen fysisk traff vaieren.','Om VAR burde grepet inn etter protokollen.','Om «ingen topp» er nok til å lukke kontaktspørsmålet.','Om en kameravaier strengt tatt er et fremmedlegeme etter IFAB.']},
+   {cls:'unk',h:'? Ukjent / ikke offentliggjort',items:['Ingen offentlig VAR-lyd fra gjennomgangen på 45+2.','Ingen verifiserte tidsstempler per berøring i angrepet.','Ingen uavhengig teknisk revisjon av sensorgrafen.','Om Norge leverte en formell skriftlig protest.']}
+  ],
+  h_quo:'Sitatene',
+  quotes:[
+   {q:'Viste ingen topp i ballens «hjerteslag» … ingen bevis for at ballen berørte vaieren.',cite:'FIFA Media — 11. juli 2026'},
+   {q:'Vaierne over banen fortjener en målgivende.',cite:'Ståle Solbakken (Norge) — ESPN, 12. juli 2026'},
+   {q:'Den kan fortelle deg om et hårstrå berører den … vi var heldige i dag.',cite:'Thomas Tuchel (England) — Reuters / ITV, 12. juli 2026'},
+   {q:'Jeg så ingen tydelig endring i ballbanen.',cite:'Christina Unkel, TV-regelanalytiker — 12. juli 2026'},
+   {q:'VAR kan gripe inn … hvis kontakten er del av en reviewbar situasjon.',cite:'Mark Clattenburg — Fox / The Independent, 12. juli 2026'},
+   {q:'Ballen så ut til å streife en vaier over banen.',cite:'Associated Press — 11. juli 2026'}
+  ],
+  note:'Denne siden er en nøytral rekonstruksjon laget for offentlig debatt. Fakta holdes atskilt fra det omstridte og de åpne spørsmålene. Siden er ikke tilknyttet FIFA, IFAB eller noe forbund, og påstår ikke at kontakt fant sted eller ikke.',
+  srcLabel:'Kilder ▾',
+  sources:[
+   {h:'Offisielt',links:['https://inside.fifa.com/innovation/innovating-the-game/connected-ball-technology','https://www.theifab.com/laws/latest/the-start-and-restart-of-play/','https://www.theifab.com/laws/latest/the-ball-in-and-out-of-play/','https://x.com/fifamedia/status/2076088395147723022']},
+   {h:'Media og nyhetsbyrå',links:['https://www.theguardian.com/football/2026/jul/12/cablegate-should-jude-bellingham-first-goal-against-norway-have-been-disallowed-england-world-cup-2026','https://www.reuters.com/sports/soccer/norway-coach-convinced-ball-hit-cable-before-england-goal-quarter-final-2026-07-12/','https://apnews.com/article/world-cup-norway-england-goal-cable-0fe2f671f577d1692191a1f83f80ec4d','https://www.independent.co.uk/sport/football/jude-bellingham-england-world-cup-norway-goal-cable-var-b3013298.html','https://www.skysports.com/football/video/30998/13562727/world-cup-did-the-ball-hit-the-cable-camera-before-englands-equalising-goal']}
+  ],
+  cta:{b:'Test det selv',span:'Spark Nylands ball på nytt, se om den treffer vaieren — og avgi din dom.',primary:'← Tilbake til simulatoren'}
+ }
+};
+var panel=document.getElementById('caseFile'),body=document.getElementById('cfBody'),kick=document.getElementById('cfKicker'),cfLang=document.getElementById('cfLang');
+function curLang(){try{var s=localStorage.getItem('wiregoal_lang');if(s==='no'||s==='en')return s}catch(e){}return (document.documentElement.lang||'').indexOf('n')===0?'no':'en';}
+function sec(t,c){return '<h2 class="cfH2" style="--tick:'+c+'">'+t+'</h2>';}
+function prose(a){return '<div class="cfProse">'+a.map(function(p){return '<p>'+p+'</p>';}).join('')+'</div>';}
+function render(l){
+ var d=CASE_WIKI[l]||CASE_WIKI.en;
+ kick.textContent=d.kicker;
+ var h='';
+ h+='<p class="cfEyebrow">'+d.eyebrow+'</p><h1 class="cfTitle">'+d.title+'</h1><p class="cfDek">'+d.dek+'</p>';
+ h+='<div class="cfMeta">'+d.meta.map(function(m){return '<span>'+m[0]+' <em>'+m[1]+'</em></span>';}).join('')+'</div>';
+ h+=sec(d.h_what,'var(--gold)')+prose(d.p_what);
+ h+=sec(d.h_time,'var(--teal)')+'<ul class="cfTl">'+d.timeline.map(function(t){return '<li><div class="m">'+t.m+'</div><div class="d"><b>'+t.t+'</b><p>'+t.p+'</p></div></li>';}).join('')+'</ul>';
+ h+=sec(d.h_disp,'var(--coral)')+'<div class="cfGrid2">'+d.dispute.map(function(c){return '<div class="cfCard neu"><h4>'+c.h+'</h4><p>'+c.p+'</p></div>';}).join('')+'</div>';
+ h+=sec(d.h_camp,'var(--purple)')+'<div class="cfGrid3">'+d.camps.map(function(c){return '<div class="cfCard '+c.cls+'"><h4>'+c.h+'</h4><p>'+c.p+'</p></div>';}).join('')+'</div>';
+ h+=sec(d.h_tech,'var(--teal)')+prose(d.p_tech);
+ h+=sec(d.h_law,'var(--gold)')+prose(d.p_law);
+ h+=sec(d.h_verd,'var(--lime)')+'<div class="cfGrid3">'+d.cols.map(function(c){return '<div class="cfCard '+c.cls+'"><h4>'+c.h+'</h4><ul>'+c.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';}).join('')+'</div>';
+ h+=sec(d.h_quo,'var(--teal)')+d.quotes.map(function(q){return '<div class="cfQ"><p>“'+q.q+'”</p><cite>— '+q.cite+'</cite></div>';}).join('');
+ h+='<p class="cfNote">'+d.note+'</p>';
+ h+='<details class="cfSources"><summary>'+d.srcLabel+'</summary>'+d.sources.map(function(g){return '<h5>'+g.h+'</h5>'+g.links.map(function(u){return '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>';}).join('');}).join('')+'</details>';
+ h+='<div class="cfCta"><div class="t"><b>'+d.cta.b+'</b><span>'+d.cta.span+'</span></div><button id="cfBack">'+d.cta.primary+'</button></div>';
+ body.innerHTML=h;
+ var bk=document.getElementById('cfBack');if(bk)bk.onclick=close;
+ Array.prototype.forEach.call(cfLang.querySelectorAll('button'),function(b){b.classList.toggle('active',b.dataset.lang===l);});
+}
+function open(){render(curLang());panel.classList.add('open');panel.scrollTop=0;var ev=document.getElementById('evidencePanel');if(ev)ev.classList.remove('open');}
+function close(){panel.classList.remove('open');}
+var ob=document.getElementById('caseFileBtn');if(ob)ob.onclick=open;
+var el2=document.getElementById('evStoryLink');if(el2)el2.onclick=open;
+var cc=document.getElementById('cfClose');if(cc)cc.onclick=close;
+cfLang.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var l=b.dataset.lang;var appBtn=document.querySelector('#langToggle button[data-lang="'+l+'"]')||document.querySelector('.langRow button[data-lang="'+l+'"]');if(appBtn){appBtn.click();}else{try{localStorage.setItem('wiregoal_lang',l)}catch(x){}}render(l);});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(b&&panel.classList.contains('open')&&!cfLang.contains(b)){render(b.dataset.lang);}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))close();});
+})();
+</script>
 </body>
 </html>
