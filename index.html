@@ -3699,6 +3699,21 @@ var qrcode = function() {
 
   function drawCard(stance,W,H){
     var hit=stance==='hit';
+    // words follow the interface language; colours/score/cross stay driven by the verdict (stance)
+    var no=(typeof lang!=='undefined'&&lang==='no');
+    var L=no?{
+      verd:'KJENNELSEN',pillHit:'KABELKONTAKT',pillClean:'REN BANE',
+      hlHit:['DEN','TRAFF'],hlClean:['INGEN','KONTAKT'],
+      ledeHit:'Bellinghams mål på overtid burde vært annullert.',
+      ledeClean:'Klar med 9,8 m. Bellinghams mål står.',
+      campHit:'DEN TRAFF',campClean:'REN BANE',cta:'SPILL SELV'
+    }:{
+      verd:'FORENSIC VERDICT',pillHit:'CABLE CONTACT',pillClean:'CLEAN FLIGHT',
+      hlHit:['IT','HIT'],hlClean:['NO','CONTACT'],
+      ledeHit:"Bellingham's stoppage-time goal should have been ruled out.",
+      ledeClean:"Clear by 9.8 m. Bellingham's goal stands.",
+      campHit:'IT HIT',campClean:'NO CONTACT',cta:'PLAY THE SIM'
+    };
     var c=document.createElement('canvas');c.width=W;c.height=H;var q=c.getContext('2d');
     var s=W/1080; // scale to 1080-design
     // background
@@ -3712,7 +3727,7 @@ var qrcode = function() {
     diamond(q,pad+17*s,hy+17*s,34*s,GOLD);
     q.textAlign='left';q.textBaseline='alphabetic';
     q.fillStyle=fg;q.font='900 '+(42*s)+'px "Barlow Condensed"';q.fillText('CABLE GOAL',pad+46*s,hy+26*s);
-    q.fillStyle=sub;q.font='700 '+(15*s)+'px "Noto Sans"';q.fillText((hit?'KJENNELSEN':'FORENSIC VERDICT').toUpperCase(),pad+46*s,hy+50*s);
+    q.fillStyle=sub;q.font='700 '+(15*s)+'px "Noto Sans"';q.fillText(L.verd.toUpperCase(),pad+46*s,hy+50*s);
     // score pill (outline)
     var score=hit?'NOR 2–1 ENG':'NOR 1–2 ENG';
     q.font='900 '+(30*s)+'px "Barlow Condensed"';var sw=q.measureText(score).width, sph=54*s, spw=sw+44*s, spx=W-pad-spw, spy=hy-12*s;
@@ -3721,13 +3736,13 @@ var qrcode = function() {
     // ---- hero ----
     var heroY=top+bandH*0.26;
     // verdict pill
-    q.textAlign='center';var vp=hit?'KABELKONTAKT':'CLEAN FLIGHT';q.font='900 '+(38*s)+'px "Barlow Condensed"';
+    q.textAlign='center';var vp=hit?L.pillHit:L.pillClean;q.font='900 '+(38*s)+'px "Barlow Condensed"';
     var vpw=q.measureText(vp).width+96*s, vph=74*s, vpx=cx-vpw/2;
     q.fillStyle=hit?CORAL:TEAL;rr(q,vpx,heroY,vpw,vph,14*s);q.fill();
     diamond(q,vpx+40*s,heroY+vph/2,26*s,hit?'#210707':'#04121c');
     q.fillStyle=hit?'#210707':'#04121c';q.fillText(vp,cx+18*s,heroY+vph*0.68);
     // headline (two lines, giant italic)
-    var l1=hit?'DEN':'NO', l2=hit?'TRAFF':'CONTACT';
+    var hl=hit?L.hlHit:L.hlClean, l1=hl[0], l2=hl[1];
     var hpx=fitFont(q,l2,900,true,W-pad*2, 148*s, 80*s);
     q.textAlign='center';
     if(hit){q.fillStyle='#fff';q.save();q.shadowColor='#7a1414';q.shadowOffsetY=8*s;}
@@ -3738,7 +3753,7 @@ var qrcode = function() {
     if(hit)q.restore();
     // lede
     q.fillStyle=lede;q.font='700 '+(30*s)+'px "Noto Sans"';q.textAlign='center';
-    var ledeTxt=hit?'Bellinghams mål på overtid burde vært annullert.':"Clear by 9.8 m. Bellingham's goal stands.";
+    var ledeTxt=hit?L.ledeHit:L.ledeClean;
     wrap(q,ledeTxt,cx,top+bandH-352*s,W-pad*2.2,37*s);
     // ---- proof split bar ----
     var split=(window.__voteSplit&&window.__voteSplit.hit)?window.__voteSplit:{hit:63,clean:37};
@@ -3749,9 +3764,9 @@ var qrcode = function() {
     q.fillText(split.hit+'%',barX+wH/2,barY+barH/2);q.fillStyle='#04121c';q.fillText(split.clean+'%',barX+wH+(barW-wH)/2,barY+barH/2);
     q.restore();q.textBaseline='alphabetic';
     q.font='800 '+(20*s)+'px "Barlow Condensed"';q.textAlign='left';q.fillStyle=hit?CORAL:'#8792a4';
-    q.fillText(hit?'◆ DU: DEN TRAFF':'IT HIT 63%',barX,barY+barH+30*s);
+    q.fillText((hit?'◆ ':'')+L.campHit+' '+split.hit+'%',barX,barY+barH+30*s);
     q.textAlign='right';q.fillStyle=hit?'#8a7f80':TEAL;
-    q.fillText(hit?'REN BANE 37%':'YOU: NO CONTACT ◆',barX+barW,barY+barH+30*s);
+    q.fillText(L.campClean+' '+split.clean+'%'+(hit?'':' ◆'),barX+barW,barY+barH+30*s);
     // ---- CTA + QR ----
     var ctaY=top+bandH-150*s, qrS=104*s, ctaH=96*s, qx=W-pad-qrS, cw=(qx-24*s)-pad;
     // QR
@@ -3760,7 +3775,7 @@ var qrcode = function() {
     q.fillStyle=TEAL;rr(q,pad+9*s,ctaY+9*s,cw,ctaH,15*s);q.fill();
     q.fillStyle=hit?GOLD:ENGNAVY;rr(q,pad,ctaY,cw,ctaH,15*s);q.fill();
     q.fillStyle=hit?'#07111b':GOLD;q.textAlign='left';q.textBaseline='middle';
-    q.font='900 '+(40*s)+'px "Barlow Condensed"';q.fillText(hit?'SPILL SELV':'PLAY THE SIM',pad+30*s,ctaY+ctaH*0.44);
+    q.font='900 '+(40*s)+'px "Barlow Condensed"';q.fillText(L.cta,pad+30*s,ctaY+ctaH*0.44);
     q.font='700 '+(20*s)+'px "Noto Sans"';q.globalAlpha=.85;q.fillText(URL,pad+30*s,ctaY+ctaH*0.74);q.globalAlpha=1;
     return c;
   }
