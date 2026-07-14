@@ -354,7 +354,10 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 .presetChips{position:relative;margin-top:15px}
 .presetChips button{white-space:nowrap;border:1px solid transparent!important;background:transparent!important;color:#cbd4de!important;padding:8px 15px!important;border-radius:9px!important;font:800 12.5px "Barlow Condensed"!important;letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:background .12s,color .12s,box-shadow .12s}
 .presetChips button:hover{color:#fff!important;background:rgba(255,255,255,.07)!important}
-.presetChips button.active{background:var(--gold)!important;border-color:var(--gold)!important;color:#0a0a0a!important;box-shadow:0 0 0 1px var(--gold)}
+.presetChips button.active{position:relative;overflow:hidden;background:var(--purple)!important;border-color:var(--purple)!important;color:#fff!important;box-shadow:0 0 0 1px var(--purple);animation:presetPulse 1.6s ease-in-out infinite}
+.presetChips button.active::after{content:'';position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.7) 50%,transparent 80%);transform:translateX(-160%) skewX(-16deg);animation:kickSheen 2.8s ease-in-out infinite;pointer-events:none}
+@keyframes presetPulse{0%,100%{box-shadow:0 0 0 1px var(--purple),0 0 0 0 rgba(139,92,246,0)}50%{box-shadow:0 0 0 1px var(--purple),0 0 18px 4px rgba(139,92,246,.85)}}
+@media(prefers-reduced-motion:reduce){.presetChips button.active{animation:none}.presetChips button.active::after{display:none}}
 
 /* ── v11d: real-match teal scorebox · light result modal ── */
 .score .scoreT{display:inline-flex;align-items:center;background:linear-gradient(180deg,#4fccbb,#2fb3a0);border-radius:8px;padding:2px 3px;margin:0 1px;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 2px 7px rgba(0,0,0,.35)}
