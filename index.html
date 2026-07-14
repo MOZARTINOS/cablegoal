@@ -376,6 +376,15 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 #resultPanel .yourVerdict:not(:has(.selected)) #voteHit{animation:votePulseHit 1.25s ease-in-out infinite}
 #resultPanel .yourVerdict:not(:has(.selected)) #voteNo{animation:votePulseNo 1.25s ease-in-out infinite .62s}
 @media(prefers-reduced-motion:reduce){#resultPanel .yourVerdict #voteHit,#resultPanel .yourVerdict #voteNo{animation:none!important}}
+
+/* ── v11g: scorebox breathing (tuck teal, separate digits) + visible language toggle ── */
+.score .scoreT{padding:1px 3px!important;margin:0 5px!important}
+.score .scoreT .sc{padding:1px 12px!important;font-size:21px!important}
+.score .scoreT .scoreDiv{margin:3px 0!important;background:rgba(6,32,28,.42)!important}
+.langToggle{display:inline-flex;gap:2px;background:rgba(10,16,24,.6);border:1px solid #ffffff1c;border-radius:9px;padding:3px;vertical-align:middle}
+.langToggle button{border:0;background:transparent;color:#9aa6b2;font:800 11px 'Barlow Condensed';letter-spacing:.6px;padding:5px 9px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:background .12s,color .12s}
+.langToggle button:hover{color:#fff}
+.langToggle button.active{background:var(--gold);color:#08131f}
 </style>
 </head>
 <body>
@@ -387,7 +396,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 <div class="hud" id="topbar">
   <div class="score" id="scoreBox"><span class="dotN"></span>NOR 1–1 ENG<span class="dotE"></span><span class="clock">45+2'</span></div>
   <div class="camsel"><button data-cam="auto" class="active" data-i18n="camCinema">Cinema</button><button data-cam="wide" data-i18n="camStand">Stand</button><button data-cam="chase" data-i18n="camBall">Ball cam</button><button data-cam="cable" data-i18n="camCable">Wire cam</button><button data-cam="top" data-i18n="camTop">Top</button><button data-cam="orbit" data-i18n="camOrbit">360° view</button></div>
-  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><button id="gearBtn" aria-label="Settings">⚙</button></div>
+  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><div class="langToggle" id="langToggle" aria-label="Language"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button id="gearBtn" aria-label="Settings">⚙</button></div>
 </div>
 <div class="hud" id="forensicBadge">● forensic overlay / canonical ghost</div><div class="hud" id="orbitHint" data-i18n="orbitHint">Drag on the pitch to enter 360° view · pinch / wheel to zoom</div><div class="hud" id="caseScoreStrip"><div class="csTop"><span class="csLabel" data-i18n="accuracyLabel">reconstruction accuracy</span><span class="csBest"><span data-i18n="bestLabel">best</span> <em id="bestScoreValue">1000</em></span></div><div class="csVal"><b id="caseScoreValue">1000</b><span>/ 1000</span></div><div class="csBar"><i id="caseScoreBar"></i></div></div>
 <div class="hud" id="telemetry">
@@ -551,7 +560,7 @@ const players=[];
 // Formation: Norway 4-3-3 / England 4-2-3-1.
 // Coordinates approximately reconstructed from the wide broadcast replay;
 // ball physics and the canonical trajectory do not depend on these visual positions.
-const gk=createPlayer(5.4,35.4,NOR_GK,NOR_GK,'gk',1,1);
+const gk=createPlayer(5.4,35.4,NOR_GK,NOR_GK,'gk',1,1);gk.root.scale.setScalar(.78);// keeper model is ~2.5m tall vs GOAL_H 2.44 → head cleared the bar; scale to realistic keeper/goal ratio
 const norLB=createPlayer(18,50,NOR_SHIRT,NOR_SHORTS,'wolfe',5,0);
 const norCB1=createPlayer(17,39.5,NOR_SHIRT,NOR_SHORTS,'heggem',17,2);
 const norCB2=createPlayer(17,29,NOR_SHIRT,NOR_SHORTS,'ajer',3,3);
@@ -563,7 +572,7 @@ const schjelderup=createPlayer(61.5,49,NOR_SHIRT,NOR_SHORTS,'schjelderup',21,2);
 const norwayReceiver=createPlayer(65,20.5,NOR_SHIRT,NOR_SHORTS,'sorloth',7,2);
 const haaland=createPlayer(72.5,33.5,NOR_SHIRT,NOR_SHORTS,'haaland',9,0);
 
-const engKeeper=createPlayer(100.3,34,ENG_GK,ENG_GK_SH,'pickford',1,2);
+const engKeeper=createPlayer(100.3,34,ENG_GK,ENG_GK_SH,'pickford',1,2);engKeeper.root.scale.setScalar(.78);// same fix as Nyland — head below the crossbar
 const konsa=createPlayer(73,18,ENG,ENG,'konsa',2,1);
 const stones=createPlayer(76,29,ENG,ENG,'stones',5,0);
 const guehi=createPlayer(76,40,ENG,ENG,'guehi',6,3);
