@@ -5105,7 +5105,7 @@ const players=[];
 // Formation: Norway 4-3-3 / England 4-2-3-1.
 // Coordinates approximately reconstructed from the wide broadcast replay;
 // ball physics and the canonical trajectory do not depend on these visual positions.
-const gk=createPlayer(5.0,34,NOR_GK,NOR_GK,'gk',1,1);gk.root.scale.setScalar(.78);// stands right behind the ball (ORIGIN z=34) so the strike reads off his foot// keeper model is ~2.5m tall vs GOAL_H 2.44 → head cleared the bar; scale to realistic keeper/goal ratio
+const gk=createPlayer(5.0,34,NOR_GK,NOR_GK,'gk',1,1);gk.root.scale.setScalar(.95);// stands right behind the ball (ORIGIN z=34) so the strike reads off his foot// keeper model is ~2.5m tall vs GOAL_H 2.44 → head cleared the bar; scale to realistic keeper/goal ratio
 const norLB=createPlayer(18,50,NOR_SHIRT,NOR_SHORTS,'wolfe',5,0);
 const norCB1=createPlayer(17,39.5,NOR_SHIRT,NOR_SHORTS,'heggem',17,2);
 const norCB2=createPlayer(17,29,NOR_SHIRT,NOR_SHORTS,'ajer',3,3);
@@ -5117,7 +5117,7 @@ const schjelderup=createPlayer(61.5,49,NOR_SHIRT,NOR_SHORTS,'schjelderup',21,2);
 const norwayReceiver=createPlayer(65,20.5,NOR_SHIRT,NOR_SHORTS,'sorloth',7,2);
 const haaland=createPlayer(72.5,33.5,NOR_SHIRT,NOR_SHORTS,'haaland',9,0);
 
-const engKeeper=createPlayer(97.2,34,ENG_GK,ENG_GK_SH,'pickford',1,2);engKeeper.root.scale.setScalar(.78);// stands ON his line (GOAL_X 99), in front of the net — was 100.3, i.e. inside the goal// same fix as Nyland — head below the crossbar
+const engKeeper=createPlayer(97.2,34,ENG_GK,ENG_GK_SH,'pickford',1,2);engKeeper.root.scale.setScalar(.95);// stands ON his line (GOAL_X 99), in front of the net — was 100.3, i.e. inside the goal// same fix as Nyland — head below the crossbar
 const konsa=createPlayer(73,18,ENG,ENG,'konsa',2,1);
 const stones=createPlayer(76,29,ENG,ENG,'stones',5,0);
 const guehi=createPlayer(76,40,ENG,ENG,'guehi',6,3);
