@@ -360,6 +360,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 
 /* ── v11e: result-modal emphasis — red 'play should stop', split the two texts, loud verdict CTAs ── */
 #resultPanel .titleStop{color:#d81f2b!important;font-weight:900}
+#resultPanel .titleBranch{color:#12b34d!important;font-weight:900}
 #resultPanel #resultWhy{background:#fbe9e7!important;border:1px solid rgba(214,40,45,.28)!important;border-radius:11px!important;padding:10px 13px!important;color:#7c2622!important;margin:8px 0 6px!important;font-weight:600}
 #resultPanel .resultHint{background:#e9f2f6!important;border:1px solid rgba(27,158,211,.40)!important;color:#1f5068!important}
 #resultPanel .yourVerdict{margin-top:15px!important;gap:9px!important;align-items:center}
@@ -384,11 +385,89 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 .langToggle{display:inline-flex;gap:2px;background:rgba(10,16,24,.6);border:1px solid #ffffff1c;border-radius:9px;padding:3px;vertical-align:middle}
 .langToggle button{border:0;background:transparent;color:#9aa6b2;font:800 11px 'Barlow Condensed';letter-spacing:.6px;padding:5px 9px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:background .12s,color .12s}
 .langToggle button:hover{color:#fff}
-.langToggle button.active{background:var(--gold);color:#08131f}
+.langToggle button.active{background:var(--teal);color:#08131f}
+
+/* ── v12: community voting dashboard (ported from DS vote-dashboard) ── */
+#voteDash{position:fixed;inset:0;z-index:120;display:none;background:rgba(4,6,12,.82);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);overflow-y:auto;padding:26px 14px}
+#voteDash.open{display:block}
+#voteDash .vdWrap{max-width:680px;margin:0 auto;position:relative}
+#voteDash .vdClose{position:absolute;top:-6px;right:-2px;width:38px;height:38px;border-radius:50%;border:0;background:#141b2b;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+#voteDash .vdKick{font-family:'Barlow Condensed';font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:11px;color:var(--gold)}
+#voteDash h1{font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:.5px;font-size:30px;margin:3px 0 4px;color:#fff}
+#voteDash .vdSub{color:#9aa6b2;font-size:12.5px;margin:0 0 18px;line-height:1.45;font-family:'Noto Sans'}
+#voteDash .vdSub b{color:#d3dbe4;font-variant-numeric:tabular-nums}
+#voteDash .vdSplit{background:#0d1420;border:1px solid #ffffff12;border-radius:14px;padding:18px}
+#voteDash .vdSplitTop{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+#voteDash .vdSide{display:flex;flex-direction:column}
+#voteDash .vdSide.r{text-align:right}
+#voteDash .vdSide .lab{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+#voteDash .vdSide.h .lab{color:#ff8f88}
+#voteDash .vdSide.c .lab{color:#8fd6f5}
+#voteDash .vdSide .pct{font-family:'Barlow Condensed';font-weight:900;font-size:46px;line-height:.9;font-variant-numeric:tabular-nums}
+#voteDash .vdSide.h .pct{color:var(--coral)}
+#voteDash .vdSide.c .pct{color:var(--teal)}
+#voteDash .vdSide .cnt{font-family:'Noto Sans';font-weight:700;font-size:11px;color:#8a94a0;font-variant-numeric:tabular-nums;margin-top:2px}
+#voteDash .vdTrack{position:relative;height:30px;border-radius:999px;overflow:hidden;display:flex;background:#0b0f18}
+#voteDash .vdTrack .h{background:var(--coral);transition:width .5s cubic-bezier(.3,1,.4,1)}
+#voteDash .vdTrack .c{background:var(--teal);transition:width .5s cubic-bezier(.3,1,.4,1)}
+#voteDash .vdTrack .mk{position:absolute;top:50%;width:16px;height:16px;transform:translate(-50%,-50%) rotate(45deg);background:var(--gold);box-shadow:0 0 0 3px #0d1420;transition:left .5s cubic-bezier(.3,1,.4,1);z-index:2}
+#voteDash .vdTotal{text-align:center;font-family:'Noto Sans';font-weight:700;font-size:11.5px;color:#9aa6b2;margin-top:11px}
+#voteDash .vdCast{background:#141b2b;border:1px solid #ffffff12;border-radius:14px;padding:16px;margin-top:16px}
+#voteDash .vdCast h2{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:1px;font-size:14px;color:var(--gold);margin:0 0 12px}
+#voteDash .vdFields{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+#voteDash .vdFields input,#voteDash .vdFields select{flex:1;min-width:150px;background:#0a0f18;border:1px solid #ffffff1c;border-radius:9px;padding:11px 13px;color:#fff;font-family:'Noto Sans';font-weight:500;font-size:13px}
+#voteDash .vdFields input::placeholder{color:#68727e}
+#voteDash .vdFields input:focus,#voteDash .vdFields select:focus{outline:none;border-color:var(--gold)}
+#voteDash .vdLeanhead{display:flex;justify-content:space-between;font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:11px;margin-bottom:7px}
+#voteDash .vdLeanhead .l{color:#ff8f88}
+#voteDash .vdLeanhead .r{color:#8fd6f5}
+#voteDash .vdLean{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--coral),#2a2f3a 48% 52%,var(--teal));outline:none}
+#voteDash .vdLean::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--gold);border:3px solid #0a0f18;box-shadow:0 0 0 3px #ecd08033;cursor:pointer}
+#voteDash .vdLean::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--gold);border:3px solid #0a0f18;cursor:pointer}
+#voteDash .vdReadout{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:12px}
+#voteDash .vdYoulean{font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:16px;color:#fff}
+#voteDash .vdYoulean b{font-variant-numeric:tabular-nums}
+#voteDash .vdCastBtn{position:relative;border:0;border-radius:10px;background:var(--gold);color:#07111b;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1.2px;font-size:15px;padding:13px 24px;cursor:pointer;transition:transform .12s}
+#voteDash .vdCastBtn::after{content:"";position:absolute;inset:0;border-radius:10px;background:var(--teal);z-index:-1;transform:translate(5px,5px);transition:transform .12s}
+#voteDash .vdCastBtn:hover{transform:translate(-1px,-1px)}
+#voteDash .vdCastBtn:active{transform:translate(2px,2px)}
+#voteDash .vdLbhead{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 10px}
+#voteDash .vdLbhead h2{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:1px;font-size:14px;color:var(--gold);margin:0}
+#voteDash .vdLbhead span{font-size:10.5px;color:#8a94a0;text-transform:uppercase;letter-spacing:.5px;font-family:'Barlow Condensed';font-weight:700}
+#voteDash .vdFilters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:11px}
+#voteDash .vdFchip{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-size:12px;padding:7px 12px;border-radius:999px;border:1px solid #ffffff1c;background:#0a121b;color:#9aa6b2;cursor:pointer}
+#voteDash .vdFchip.on{background:var(--gold);color:#08131f;border-color:var(--gold)}
+#voteDash table{width:100%;border-collapse:collapse}
+#voteDash th{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:10px;color:#7f8996;text-align:left;padding:0 8px 8px}
+#voteDash th.num,#voteDash td.num{text-align:right;font-variant-numeric:tabular-nums}
+#voteDash td{padding:9px 8px;border-top:1px solid #ffffff10;font-size:12.5px;vertical-align:middle;color:#e7ecf1;font-family:'Noto Sans'}
+#voteDash .u{display:flex;flex-direction:column;line-height:1.2}
+#voteDash .u b{font-family:'Noto Sans';font-weight:700;font-size:13px}
+#voteDash .u small{color:#7f8996;font-size:10.5px}
+#voteDash .rg{font-family:'Barlow Condensed';font-weight:800;font-size:10px;letter-spacing:.5px;padding:3px 7px;border-radius:5px;white-space:nowrap}
+#voteDash .rg.nor{background:#c8102e22;color:#ff9a92}
+#voteDash .rg.eng{background:#ffffff14;color:#dfe6ee}
+#voteDash .rg.neu{background:#ffffff0d;color:#9aa6b2}
+#voteDash .rg.you{background:var(--gold);color:#08131f}
+#voteDash .chip{font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-size:11px;padding:4px 9px;border-radius:999px;white-space:nowrap}
+#voteDash .chip.hit{background:var(--coral);color:#210707}
+#voteDash .chip.clean{background:var(--teal);color:#04121c}
+#voteDash .mf{display:inline-block;width:15px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;box-shadow:0 0 0 1px #00000038}
+#voteDash .fchipMf{width:16px;height:11px;margin-right:6px}
+#voteDash .mf-nor{background:linear-gradient(90deg,transparent 0 34%,#172442 34% 44%,transparent 44%),linear-gradient(180deg,transparent 0 34%,#172442 34% 60%,transparent 60%),linear-gradient(90deg,transparent 0 28%,#fff 28% 50%,transparent 50%),linear-gradient(180deg,transparent 0 26%,#fff 26% 68%,transparent 68%),#c8102e}
+#voteDash .mf-eng{background:linear-gradient(90deg,transparent 0 42%,#c8102e 42% 58%,transparent 58%),linear-gradient(180deg,transparent 0 38%,#c8102e 38% 62%,transparent 62%),#fff}
+#voteDash .mf-usa{position:relative;background:repeating-linear-gradient(180deg,#b22234 0 14.3%,#fff 14.3% 28.6%)}
+#voteDash .mf-usa::before{content:"";position:absolute;left:0;top:0;width:42%;height:54%;background:#3c3b6e;border-radius:2px 0 0 0}
+#voteDash .mf-oth{background:radial-gradient(circle at 50% 45%,#37b6d6,#0d5f86)}
+#voteDash tr.new td{animation:vdFlashrow 1.1s ease}
+@keyframes vdFlashrow{0%{background:#ecd08022}100%{background:transparent}}
+#voteDash .vdNote{margin:22px 0 8px;font-size:11px;color:#7f8996;line-height:1.55;border-top:1px solid #ffffff14;padding-top:12px;font-family:'Noto Sans'}
+#dashIntroBtn{display:block;width:100%;margin-top:10px;background:transparent;border:0;color:var(--teal);font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.8px;font-size:12.5px;cursor:pointer;padding:4px}
+#dashIntroBtn:hover{color:#fff}
 </style>
 </head>
 <body>
-<div id="introCard"><div class="introBox"><div class="introEyebrow" data-i18n="introEyebrow">CASE 45+2 / INTERACTIVE RECONSTRUCTION</div><h2 data-i18n="introTitle">Hit the cable. Check the verdict.</h2><p data-i18n="introText">Recreate Nyland’s kick, compare your trajectory with the canonical one and see why one metre changes the whole match.</p><div class="introSteps"><div><b>1</b><span data-i18n="introStep1">Choose power, angle and direction.</span></div><div><b>2</b><span data-i18n="introStep2">Watch the cable and the second ball.</span></div><div><b>3</b><span data-i18n="introStep3">Compare the outcome with the IFAB law.</span></div></div><div class="introActions"><button id="skipIntroBtn" data-i18n="skipIntro">Skip intro</button><button id="startCaseBtn" data-i18n="startCase">▶ Start</button></div></div></div>
+<div id="introCard"><div class="introBox"><div class="introEyebrow" data-i18n="introEyebrow">CASE 45+2 / INTERACTIVE RECONSTRUCTION</div><h2 data-i18n="introTitle">Hit the cable. Check the verdict.</h2><p data-i18n="introText">Recreate Nyland’s kick, compare your trajectory with the canonical one and see why one metre changes the whole match.</p><div class="introSteps"><div><b>1</b><span data-i18n="introStep1">Choose power, angle and direction.</span></div><div><b>2</b><span data-i18n="introStep2">Watch the cable and the second ball.</span></div><div><b>3</b><span data-i18n="introStep3">Compare the outcome with the IFAB law.</span></div></div><div class="introActions"><button id="skipIntroBtn" data-i18n="skipIntro">Skip intro</button><button id="startCaseBtn" data-i18n="startCase">▶ Start</button></div><button id="dashIntroBtn">◆ Community verdict — see the live split</button></div></div>
 <div id="perfToast" data-i18n="perfToast">Graphics adapted for smoothness</div>
 <!-- v3.0: public forensic edition; exact flight physics retained -->
 <div id="loading"><div class="loadCard" id="loadCard"><div class="loadTitle">FORENSIC 3D</div><div class="loadStatus" id="loadStatus">Preparing the offline 3D engine…</div><div class="loadTrack"><div class="loadBar" id="loadBar"></div></div><div class="loadMeta"><span id="loadStage">STARTUP</span><span id="loadPct">8%</span></div><div class="loadError" id="loadError"></div><button class="loadRetry" id="loadRetry" type="button">Restart</button></div></div>
@@ -396,7 +475,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 <div class="hud" id="topbar">
   <div class="score" id="scoreBox"><span class="dotN"></span>NOR 1–1 ENG<span class="dotE"></span><span class="clock">45+2'</span></div>
   <div class="camsel"><button data-cam="auto" class="active" data-i18n="camCinema">Cinema</button><button data-cam="wide" data-i18n="camStand">Stand</button><button data-cam="chase" data-i18n="camBall">Ball cam</button><button data-cam="cable" data-i18n="camCable">Wire cam</button><button data-cam="top" data-i18n="camTop">Top</button><button data-cam="orbit" data-i18n="camOrbit">360° view</button></div>
-  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><div class="langToggle" id="langToggle" aria-label="Language"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button id="gearBtn" aria-label="Settings">⚙</button></div>
+  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="dashHudBtn" aria-label="Community verdict">◆ <span id="dashHudLabel">Verdict</span></button><button id="caseFileBtn" aria-label="Case file">📖 <span data-i18n="storyBtn">Story</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><div class="langToggle" id="langToggle" aria-label="Language"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button id="gearBtn" aria-label="Settings">⚙</button></div>
 </div>
 <div class="hud" id="forensicBadge">● forensic overlay / canonical ghost</div><div class="hud" id="orbitHint" data-i18n="orbitHint">Drag on the pitch to enter 360° view · pinch / wheel to zoom</div><div class="hud" id="caseScoreStrip"><div class="csTop"><span class="csLabel" data-i18n="accuracyLabel">reconstruction accuracy</span><span class="csBest"><span data-i18n="bestLabel">best</span> <em id="bestScoreValue">1000</em></span></div><div class="csVal"><b id="caseScoreValue">1000</b><span>/ 1000</span></div><div class="csBar"><i id="caseScoreBar"></i></div></div>
 <div class="hud" id="telemetry">
@@ -410,11 +489,109 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   <button id="presetBtn" data-i18n="resetMatch">Reset to the match moment</button><button id="recBtn" data-i18n="recordMode">Recording mode</button>
 </div>
 <div class="hud" id="banner"><h1 id="bannerTitle"></h1><p id="bannerSub"></p></div>
-<aside class="hud" id="evidencePanel"><button class="closePanel" id="closeEvidence">×</button><h3 data-i18n="evidenceTitle">Case 45+2: what does the evidence say?</h3><div class="evidenceGrid"><article class="evidenceCard visual"><b data-i18n="visualReplay">Visual replay</b><p data-i18n="visualText">The sudden drop of the ball and Norway’s immediate reaction support the contact theory.</p></article><article class="evidenceCard sensor"><b data-i18n="sensorData">Ball sensor</b><p data-i18n="sensorText">FIFA said the chip showed no spike, so contact was not confirmed.</p></article></div><div class="lawCard"><b data-i18n="lawTitle">IFAB law</b><p data-i18n="lawText">If the ball touches an outside agent, play is stopped and restarted with a dropped ball at the point of contact.</p></div><div class="judgeVerdict" id="judgeVerdict"><span data-i18n="modelVerdict">Model verdict</span><strong>GOAL SHOULD BE DISALLOWED</strong></div><div class="pulseHeadline" data-i18n="pulseTitle">Debate pulse</div><div class="pulseGrid"><div class="pulseCard nor"><b>🇳🇴 Norway</b><p data-i18n="pulseNor">“We were robbed”, “rules are rules”, distrust of VAR — yet pride in a historic tournament.</p></div><div class="pulseCard eng"><b>🏴 England</b><p data-i18n="pulseEng">“We got lucky”, “play to the whistle”, admiration for Bellingham’s run — and debate whether one episode should decide the match.</p></div><div class="pulseCard common"><b>🌍 Global internet</b><p data-i18n="pulseCommon">The main demand: slow motion, more angles, TV picture vs sensor comparison — and a way to test the trajectory yourself.</p></div></div><small data-i18n="evidenceNote">Player positions are an approximate reconstruction from the wide replay; the physical kick parameters are preserved unchanged.</small></aside>
+<aside class="hud" id="evidencePanel"><button class="closePanel" id="closeEvidence">×</button><h3 data-i18n="evidenceTitle">Case 45+2: what does the evidence say?</h3><div class="evidenceGrid"><article class="evidenceCard visual"><b data-i18n="visualReplay">Visual replay</b><p data-i18n="visualText">The sudden drop of the ball and Norway’s immediate reaction support the contact theory.</p></article><article class="evidenceCard sensor"><b data-i18n="sensorData">Ball sensor</b><p data-i18n="sensorText">FIFA said the chip showed no spike, so contact was not confirmed.</p></article></div><div class="lawCard"><b data-i18n="lawTitle">IFAB law</b><p data-i18n="lawText">If the ball touches an outside agent, play is stopped and restarted with a dropped ball at the point of contact.</p></div><div class="judgeVerdict" id="judgeVerdict"><span data-i18n="modelVerdict">Model verdict</span><strong>GOAL SHOULD BE DISALLOWED</strong></div><div class="pulseHeadline" data-i18n="pulseTitle">Debate pulse</div><div class="pulseGrid"><div class="pulseCard nor"><b>🇳🇴 Norway</b><p data-i18n="pulseNor">“We were robbed”, “rules are rules”, distrust of VAR — yet pride in a historic tournament.</p></div><div class="pulseCard eng"><b>🏴 England</b><p data-i18n="pulseEng">“We got lucky”, “play to the whistle”, admiration for Bellingham’s run — and debate whether one episode should decide the match.</p></div><div class="pulseCard common"><b>🌍 Global internet</b><p data-i18n="pulseCommon">The main demand: slow motion, more angles, TV picture vs sensor comparison — and a way to test the trajectory yourself.</p></div></div><small data-i18n="evidenceNote">Player positions are an approximate reconstruction from the wide replay; the physical kick parameters are preserved unchanged.</small><button class="evStoryLink" id="evStoryLink" data-i18n="readFullStory">Read the full case file →</button></aside>
 <div class="hud" id="resultPanel"><button class="closePanel" id="closeResult">×</button><div id="resultKicker">FORENSIC RESULT</div><h3 id="resultTitle">Result</h3><p id="resultWhy"></p><p id="resultHint" class="resultHint"></p><div class="resultScore"><div><b id="resultScoreValue">1000</b><span data-i18n="caseScoreLabel">case score</span></div><div><b id="resultDeltaValue">−0.2 m</b><span data-i18n="deltaLabel">delta at the cable</span></div></div><div class="resultActions"><button id="shareBtn" data-i18n="share">Share the verdict</button><button id="slowReplayBtn" data-i18n="slowReplay">Replay 0.35×</button><button id="replayBtn" data-i18n="replay">Again</button></div><div class="yourVerdict"><span data-i18n="yourVerdict">Your verdict:</span><button id="voteHit" data-i18n="voteHit">There was contact</button><button id="voteNo" data-i18n="voteNo">No contact</button></div></div>
 
 <div class="hud" id="dock"><div class="dockHeader"><button id="controlToggle"><span data-i18n="parameters">Parameters</span>⌃</button><div class="presetChips"><button data-preset="match" class="active" data-i18n="presetMatch">Match</button><button data-preset="low" data-i18n="presetLow">Lower</button><button data-preset="high" data-i18n="presetHigh">Higher</button><button data-preset="wide" data-i18n="presetWide">Wide</button></div></div><div class="advancedControls"><div class="slider"><label><span data-i18n="power">Power</span><span><b id="vPower">30</b> m/s</span></label><input type="range" id="power" min="20" max="36" value="30" step="1"></div><div class="slider"><label><span data-i18n="angle">Angle</span><span><b id="vAngle">49</b>°</span></label><input type="range" id="angle" min="20" max="62" value="49" step="1"></div><div class="slider"><label><span data-i18n="aim">Aim</span><span><b id="vAim">2</b>°</span></label><input type="range" id="aim" min="-16" max="16" value="2" step="1"></div></div><div class="btns"><button class="big" id="kickBtn" data-i18n="kick">Kick</button><button class="big" id="resetBtn" data-i18n="reset">Reset</button></div></div>
 <div class="hud" id="cleanControls"><button id="ccKick">Kick</button><button id="ccReset">Reset</button><button id="ccExit">Exit</button></div>
+<style id="caseFileCss">
+#caseFile{position:fixed;inset:0;z-index:60;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--pageBg);color:var(--ink);pointer-events:auto}
+#caseFile.open{display:block}
+#caseFile .cfTop{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 18px;background:rgba(5,7,12,.94);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);border-bottom:1px solid var(--line)}
+#caseFile .cfTop b{font:800 14px/1 "Barlow Condensed",sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+#caseFile .cfTopR{display:flex;align-items:center;gap:8px}
+#caseFile .cfLang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+#caseFile .cfLang button{background:transparent;color:var(--muted);border:0;padding:5px 9px;font:700 12px "Barlow Condensed",sans-serif;letter-spacing:.6px;cursor:pointer}
+#caseFile .cfLang button.active{background:var(--gold);color:#07111b}
+#caseFile .cfClose{background:transparent;border:1px solid var(--line);color:var(--ink);width:34px;height:34px;border-radius:9px;font-size:19px;line-height:1;cursor:pointer}
+#caseFile .cfClose:hover{border-color:var(--gold);color:var(--gold)}
+.cfWrap{max-width:840px;margin:0 auto;padding:30px 22px 120px}
+.cfEyebrow{font:800 12.5px "Barlow Condensed",sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin:0 0 6px}
+.cfTitle{font:800 clamp(30px,7vw,52px)/1.02 "Barlow Condensed",sans-serif;letter-spacing:.5px;margin:0 0 12px}
+.cfTitle .u{color:var(--gold)}
+.cfDek{font-size:17px;line-height:1.55;color:#c5d3ce;margin:0 0 20px;max-width:64ch}
+.cfMeta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
+.cfMeta span{font:600 12.5px "Noto Sans",sans-serif;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.cfMeta span em{color:var(--muted);font-style:normal}
+.cfH2{font:800 24px "Barlow Condensed",sans-serif;letter-spacing:.4px;margin:42px 0 14px;padding-left:13px;border-left:4px solid var(--tick,var(--gold))}
+.cfProse p{font-size:15.5px;line-height:1.66;color:#c9d6d1;margin:0 0 13px}
+.cfProse strong{color:var(--ink)}
+.cfTl{list-style:none;margin:6px 0 0;padding:0;position:relative}
+.cfTl:before{content:"";position:absolute;left:58px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.cfTl li{position:relative;display:grid;grid-template-columns:52px 1fr;gap:16px;padding:0 0 16px}
+.cfTl .m{font:800 13px "Barlow Condensed",sans-serif;color:var(--gold);text-align:right;padding-top:2px;white-space:nowrap}
+.cfTl .d{position:relative}
+.cfTl .d:before{content:"";position:absolute;left:-22px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--pageBg)}
+.cfTl .d b{display:block;font:700 14.5px "Noto Sans",sans-serif;color:var(--ink);margin:0 0 2px}
+.cfTl .d p{margin:0;font-size:14px;line-height:1.55;color:var(--muted)}
+.cfGrid3,.cfGrid2{display:grid;gap:14px;margin:8px 0 0}
+.cfGrid3{grid-template-columns:repeat(3,1fr)}
+.cfGrid2{grid-template-columns:repeat(2,1fr)}
+.cfCard{background:var(--ds-panel);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 15px;border-top:3px solid var(--edge,var(--muted))}
+.cfCard h4{font:800 15px "Barlow Condensed",sans-serif;letter-spacing:.4px;margin:0 0 7px;display:flex;align-items:center;gap:7px}
+.cfCard p{margin:0;font-size:13.6px;line-height:1.56;color:var(--muted)}
+.cfCard.nor{--edge:var(--nor)}.cfCard.eng{--edge:#9fb2d8}.cfCard.neu{--edge:var(--teal)}
+.cfCard.fact{--edge:var(--lime)}.cfCard.disp{--edge:var(--gold)}.cfCard.unk{--edge:#6b7c86}
+.cfCard ul{margin:0;padding-left:17px}
+.cfCard li{font-size:13.4px;line-height:1.5;color:var(--muted);margin:0 0 6px}
+.cfQ{background:linear-gradient(150deg,rgba(27,158,211,.09),rgba(255,255,255,.02));border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--r-md);padding:15px 17px;margin:0 0 12px}
+.cfQ p{margin:0 0 7px;font-size:16px;line-height:1.5;color:var(--ink);font-style:italic}
+.cfQ cite{font-style:normal;font-size:12.5px;color:var(--muted);font-weight:600}
+.cfNote{font-size:12.7px;line-height:1.5;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;margin:22px 0 0}
+.cfSources{margin:26px 0 0}
+.cfSources summary{cursor:pointer;font:700 14px "Barlow Condensed",sans-serif;letter-spacing:.6px;color:var(--teal);padding:8px 0}
+.cfSources a{display:block;color:#89a7bd;font-size:12.3px;line-height:1.7;text-decoration:none;word-break:break-all}
+.cfSources a:hover{color:var(--teal);text-decoration:underline}
+.cfSources h5{font:800 12px "Barlow Condensed",sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.cfCta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:40px 0 0;padding:22px;background:var(--ds-panel);border:1px solid var(--line);border-radius:var(--r-lg)}
+.cfCta .t{flex:1 1 220px}
+.cfCta .t b{display:block;font:800 20px "Barlow Condensed",sans-serif;margin:0 0 3px}
+.cfCta .t span{font-size:13.5px;color:var(--muted)}
+.cfCta button{background:var(--gold);color:#07111b;border:0;border-radius:10px;padding:12px 20px;font:800 14px "Barlow Condensed",sans-serif;letter-spacing:.6px;cursor:pointer}
+.cfCta button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cfCta button.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.evStoryLink{display:block;width:100%;margin-top:12px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:10px;padding:10px;font:800 13px "Barlow Condensed",sans-serif;letter-spacing:.8px;cursor:pointer;text-align:center}
+.evStoryLink:hover{background:var(--gold);color:#07111b}
+@media(max-width:680px){.cfGrid3,.cfGrid2{grid-template-columns:1fr}.cfTl:before{left:44px}.cfTl li{grid-template-columns:40px 1fr;gap:12px}.cfWrap{padding:24px 16px 110px}}
+
+/* ── v13: world flags + glowing community CTA + share ── */
+#voteDash .mf-arg{background:linear-gradient(180deg,#75aadb 0 33%,#fff 33% 66%,#75aadb 66%)}
+#voteDash .mf-aus{background:linear-gradient(135deg,#00247d 62%,#e4002b 62%)}
+#voteDash .mf-bel{background:linear-gradient(90deg,#000 0 33%,#fae042 33% 66%,#ed2939 66%)}
+#voteDash .mf-bra{background:radial-gradient(circle at 50% 50%,#ffdf00 0 34%,transparent 35%),#009b3a}
+#voteDash .mf-can{background:radial-gradient(circle at 50% 50%,#ff0000 0 16%,transparent 17%),linear-gradient(90deg,#ff0000 0 26%,#fff 26% 74%,#ff0000 74%)}
+#voteDash .mf-cro{background:linear-gradient(180deg,#ff0000 0 33%,#fff 33% 66%,#171796 66%)}
+#voteDash .mf-den{background:linear-gradient(#fff,#fff) 40% 0/13% 100% no-repeat,linear-gradient(#fff,#fff) 0 50%/100% 24% no-repeat,#c60c30}
+#voteDash .mf-fra{background:linear-gradient(90deg,#0055a4 0 33%,#fff 33% 66%,#ef4135 66%)}
+#voteDash .mf-ger{background:linear-gradient(180deg,#000 0 33%,#dd0000 33% 66%,#ffce00 66%)}
+#voteDash .mf-ita{background:linear-gradient(90deg,#009246 0 33%,#fff 33% 66%,#ce2b37 66%)}
+#voteDash .mf-jpn{background:radial-gradient(circle at 50% 50%,#bc002d 0 30%,transparent 31%),#fff}
+#voteDash .mf-kor{background:radial-gradient(circle at 50% 50%,#cd2e3a 0 18%,#0047a0 18% 30%,transparent 31%),#fff}
+#voteDash .mf-mex{background:linear-gradient(90deg,#006847 0 33%,#fff 33% 66%,#ce1126 66%)}
+#voteDash .mf-mar{background:radial-gradient(circle at 50% 50%,#006233 0 22%,transparent 23%),#c1272d}
+#voteDash .mf-ned{background:linear-gradient(180deg,#ae1c28 0 33%,#fff 33% 66%,#21468b 66%)}
+#voteDash .mf-nga{background:linear-gradient(90deg,#008751 0 33%,#fff 33% 66%,#008751 66%)}
+#voteDash .mf-pol{background:linear-gradient(180deg,#fff 0 50%,#dc143c 50%)}
+#voteDash .mf-por{background:linear-gradient(90deg,#006600 0 40%,#ff0000 40%)}
+#voteDash .mf-sco{background:linear-gradient(45deg,transparent 43%,#fff 43% 57%,transparent 57%),linear-gradient(-45deg,transparent 43%,#fff 43% 57%,transparent 57%),#0065bf}
+#voteDash .mf-sen{background:linear-gradient(90deg,#00853f 0 33%,#fdef42 33% 66%,#e31b23 66%)}
+#voteDash .mf-swe{background:linear-gradient(#fecc00,#fecc00) 38% 0/15% 100% no-repeat,linear-gradient(#fecc00,#fecc00) 0 50%/100% 28% no-repeat,#006aa7}
+#voteDash .mf-sui{background:linear-gradient(#fff,#fff) center/42% 13% no-repeat,linear-gradient(#fff,#fff) center/13% 42% no-repeat,#d52b1e}
+/* glowing community CTAs */
+#dashIntroBtn{width:100%;margin-top:14px;padding:14px 18px;border:0;border-radius:12px;cursor:pointer;color:#08131f!important;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:15px;background:linear-gradient(100deg,#ECD080,#fff2c8,#1B9ED3,#6DCF3C,#ECD080);background-size:320% 100%;animation:dashShimmer 4s linear infinite,dashGlow 2.2s ease-in-out infinite;position:relative}
+#dashIntroBtn:hover{filter:brightness(1.06)}
+@keyframes dashShimmer{0%{background-position:0% 50%}100%{background-position:320% 50%}}
+@keyframes dashGlow{0%,100%{box-shadow:0 0 14px 2px rgba(236,208,128,.45),0 6px 18px rgba(27,158,211,.25);transform:translateY(0)}50%{box-shadow:0 0 26px 7px rgba(236,208,128,.75),0 8px 24px rgba(27,158,211,.5);transform:translateY(-1px)}}
+.quickActions #dashHudBtn{background:linear-gradient(100deg,#ECD080,#fff2c8,#1B9ED3,#ECD080)!important;background-size:300% 100%!important;color:#08131f!important;font-family:'Barlow Condensed'!important;font-weight:900!important;letter-spacing:.7px;text-transform:uppercase;border:0!important;padding:0 12px!important;animation:dashShimmer 4s linear infinite,dashGlowSm 2.1s ease-in-out infinite}
+@keyframes dashGlowSm{0%,100%{box-shadow:0 0 8px 1px rgba(236,208,128,.5)}50%{box-shadow:0 0 17px 5px rgba(236,208,128,.9)}}
+.vdShareBtn{display:block;width:100%;margin-top:12px;padding:12px;border:0;border-radius:11px;cursor:pointer;color:#08131f;font-family:'Barlow Condensed';font-weight:900;text-transform:uppercase;letter-spacing:1px;font-size:14px;background:linear-gradient(100deg,#ECD080,#6DCF3C,#1B9ED3,#ECD080);background-size:300% 100%;animation:dashShimmer 4.5s linear infinite;box-shadow:0 4px 16px rgba(27,158,211,.3)}
+.vdShareBtn:hover{filter:brightness(1.07)}
+@media(prefers-reduced-motion:reduce){#dashIntroBtn,.quickActions #dashHudBtn,.vdShareBtn{animation:none!important}}
+</style>
+<div id="caseFile" role="dialog" aria-modal="true" aria-label="Case file 45+2">
+  <div class="cfTop"><b id="cfKicker">Case file · 45+2</b><div class="cfTopR"><div class="cfLang" id="cfLang"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button class="cfClose" id="cfClose" aria-label="Close">×</button></div></div>
+  <div class="cfWrap" id="cfBody"></div>
+</div>
 <script>
 (function(){var NB=/^(no|nb|nn)/.test(((navigator&&navigator.language)||"").toLowerCase());
   var finished=false,failed=false;
@@ -540,6 +717,9 @@ for(let i=0;i<6;i++){addFanFlag('nor',-22-(i%2)*8,8+(i%3)*6,9+i*9,Math.PI/2,.72+
 // low-cost supporter tifos, scarves and phone flashes
 function supporterBanner(text,team,x,y,z,ry,w=15,h=4){const c=document.createElement('canvas');c.width=1024;c.height=256;const q=c.getContext('2d');q.fillStyle=team==='nor'?'#b80f2d':'#f1f1ed';q.fillRect(0,0,c.width,c.height);q.fillStyle=team==='nor'?'#fff':'#b80f2d';q.textAlign='center';q.textBaseline='middle';let fs=92;q.font='900 '+fs+'px "Barlow Condensed"';while(q.measureText(text).width>c.width-90&&fs>26){fs-=3;q.font='900 '+fs+'px "Barlow Condensed"';}q.fillText(text,c.width/2,c.height/2);q.strokeStyle=team==='nor'?'#08245c':'#b80f2d';q.lineWidth=18;q.strokeRect(8,8,c.width-16,c.height-16);const tx=new THREE.CanvasTexture(c);tx.encoding=THREE.sRGBEncoding;const b=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tx,side:THREE.DoubleSide}),false,false);b.position.set(x,y,z);b.rotation.y=ry;scene.add(b);return b}
 supporterBanner('NORGE','nor',-25,24,cz,Math.PI/2,17,4.2);supporterBanner('VI SÅ DET  ·  45+2','nor',-25,16.5,cz,Math.PI/2,20,4.4);supporterBanner('ENGLAND','eng',FIELD_L+25,24,cz,-Math.PI/2,17,4.2);supporterBanner('PLAY TO THE WHISTLE','eng',FIELD_L+25,16.5,cz,-Math.PI/2,22,4.4);
+// giant draped cross-flags on each goal-end wall — Norway Nordic cross + England St George cross, framing the name banners
+(function(){function wallFlag(tex,x,y,z,ry,w){const h=w*.63;const b=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}),false,false);b.position.set(x,y,z);b.rotation.y=ry;scene.add(b);return b}
+[[-24.7,Math.PI/2,flagTexNor],[FIELD_L+24.7,-Math.PI/2,flagTexEng]].forEach(function(a){const x=a[0],ry=a[1],tx=a[2];wallFlag(tx,x,10,cz-21,ry,12);wallFlag(tx,x,10,cz+21,ry,12);wallFlag(tx,x,19,cz-12,ry,9);wallFlag(tx,x,19,cz+12,ry,9);});})();
 // pitch-side club banners draped along each goal-end wall, in front of the crowd (like the real match)
 (function(){const norNames=['BODØ','ROSENBORG','BERGEN','MOLDE','OSLO','TROMSØ','STAVANGER','TRONDHEIM'];const engNames=['BLACKPOOL','WEST BROM','CAERNARFON','CANNOCK','WISBECH','MANSFIELD','GRIMSBY','NUNEATON'];const n=8,dz=7.0,z0=cz-(n-1)*dz/2;for(let i=0;i<n;i++){const z=z0+i*dz;supporterBanner(norNames[i],'nor',-20,3.4,z,Math.PI/2,6.8,2.3);supporterBanner(engNames[i],'eng',FIELD_L+20,3.4,z,-Math.PI/2,6.8,2.3);}})();
 const flashPos=[];for(let i=0;i<(reduced?55:120);i++){const side=i%4,sd=sideDefs[side],lx=(Math.random()-.5)*sd.len,lz=-8-Math.random()*42,ly=5+Math.random()*24,co=Math.cos(sd.ry),sn=Math.sin(sd.ry);flashPos.push(sd.x+lx*co+lz*sn,ly,sd.z-lx*sn+lz*co)}const flashGeo=new THREE.BufferGeometry();flashGeo.setAttribute('position',new THREE.Float32BufferAttribute(flashPos,3));const phoneFlashes=new THREE.Points(flashGeo,new THREE.PointsMaterial({color:0xeef8ff,size:reduced?.16:.22,transparent:true,opacity:.22,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(phoneFlashes);
@@ -670,8 +850,8 @@ let sequenceTime=0,sequenceStart={...ORIGIN},activeTeam=null,ballSpeed=0,shotSco
 const pw=el('power'),an=el('angle'),am=el('aim'),kickBtn=el('kickBtn');
 const TEXT={
 
-no:{camTop:'Ovenfra',camOrbit:'360° visning',orbitHint:'Dra på banen — 360° aktiveres · knip/hjul for zoom',camCinema:'Kino',camStand:'Tribune',camBall:'Bak ballen',camCable:'Wire-cam',evidence:'Bevis',analysis:'Spark-analyse',speed:'Fart',apex:'Toppunkt',atCable:'Høyde ved vaieren',cableAt:'Vaierhøyde',settings:'Innstillinger',telemetry:'Telemetri',score:'Resultattavle',cameras:'Kameraer',stadium:'Stadion og publikum',trail:'Bane',ghost:'Kanonisk spøkelse',labels:'Spillernavn',players:'Spillere',resetMatch:'Tilbake til kampøyeblikket',recordMode:'Opptaksmodus',parameters:'Parametre ',presetMatch:'Kampen',presetLow:'Lavere',presetHigh:'Høyere',presetWide:'Til siden',power:'Kraft',angle:'Vinkel',aim:'Retning',kick:'Spark',reset:'Nullstill',evidenceTitle:'Sak 45+2: Hva sier bevisene?',visualReplay:'TV-bildene',visualText:'Det brå fallet og Norges umiddelbare reaksjon støtter teorien om kontakt.',sensorData:'Ballsensoren',sensorText:'FIFA opplyste at chipen ikke viste noen topp, og avviste derfor kontakt.',lawTitle:'IFAB-regelen',lawText:'Treffer ballen et fremmedlegeme, skal spillet stoppes og startes med droppball på kontaktstedet.',modelVerdict:'Modellens dom',evidenceNote:'Spillerposisjonene er en omtrentlig rekonstruksjon fra vidvinkelbildet. Sparkets fysikk er uendret.',share:'Del dommen',replay:'Prøv igjen',yourVerdict:'Din dom:',voteHit:'Den traff',voteNo:'Ingen kontakt',disclaimer:'Skjematisk fysikkmodell. Ikke en FIFA-databehandling. IMU-grafen er illustrativ.',flight:'Ballen er i lufta … vaieren avgjør hvilken gren som spilles.',engGoal:'Bellingham avslutter Englands angrep. Ved bekreftet vaierkontakt skulle det opprinnelige målet vært annullert.',norGoal:'Haaland avslutter den alternative norske kontringen.',hitVerdict:'MÅLET SKULLE VÆRT ANNULLERT',cleanVerdict:'INGEN BEKREFTET KONTAKT',engResult:'Vaierkontakten utløste England-grenen: Anderson → Gordon → Bellingham. Etter regelen om fremmedlegeme skulle spillet vært stoppet.',norResult:'Vaieren ble ikke truffet. Simuleringen fortsetter med norsk kontring og Haaland-scoring.',retryHintEng:'↻ Dette er kampbanen. Endre kraft, vinkel eller retning og skyt igjen — bommer du på vaieren blir det ren bane → Norge kontrer og scorer.',retryHintNor:'↻ Vil du se England-grenen? Endre banen slik at ballen treffer vaieren.',introEyebrow:'SAK 45+2 / INTERAKTIV REKONSTRUKSJON',introTitle:'Treff vaieren. Test dommen.',introText:'Gjenskap Nylands utspark, sammenlign banen med kampøyeblikket og se hvordan én meter endrer hele kampen.',introStep1:'Velg kraft, vinkel og retning.',introStep2:'Følg vaieren og andreballen.',introStep3:'Sammenlign kampforløpet med IFAB-regelen.',skipIntro:'Hopp over',startCase:'▶ Start',perfToast:'Grafikken er tilpasset for jevnere flyt',accuracyLabel:'rekonstruksjonsnøyaktighet',bestLabel:'rekord',pulseTitle:'Stemningen på nett',pulseNor:'«Vi ble ranet», «regler er regler» og mistillit til VAR — samtidig som stoltheten over Norges historiske mesterskap står sterkt.',pulseEng:'«Vi var heldige», «spill til fløyta» og beundring for Bellinghams løp — men også uenighet om episoden burde avgjøre kampen.',pulseCommon:'Folk vil se sakte film, flere vinkler, TV-bilder mot sensordata og få teste ballbanen selv.',caseScoreLabel:'sakspoeng',deltaLabel:'avvik ved vaieren',slowReplay:'Sakte reprise 0,35×'},
-en:{camTop:'Top view',camOrbit:'360° orbit',orbitHint:'Drag for 360° view · pinch/wheel to zoom',camCinema:'Cinema',camStand:'Stand',camBall:'Behind ball',camCable:'Cable cam',evidence:'Evidence',analysis:'Kick analysis',speed:'Speed',apex:'Apex',atCable:'Height at cable',cableAt:'Cable height',settings:'Settings',telemetry:'Telemetry',score:'Scoreboard',cameras:'Cameras',stadium:'Stadium and crowd',trail:'Trajectory',ghost:'Canonical ghost',labels:'Player labels',players:'Players',resetMatch:'Reset to match moment',recordMode:'Recording mode',parameters:'Parameters ',presetMatch:'Match',presetLow:'Lower',presetHigh:'Higher',presetWide:'Wide',power:'Power',angle:'Angle',aim:'Aim',kick:'Kick',reset:'Reset',evidenceTitle:'Case 45+2: What does the evidence say?',visualReplay:'Visual replay',visualText:'The abrupt drop and Norway’s immediate reaction support the contact theory.',sensorData:'Ball sensor',sensorText:'FIFA said the chip showed no peak and therefore did not confirm contact.',lawTitle:'IFAB law',lawText:'If the ball touches an outside agent, play is stopped and restarted with a dropped ball at the contact point.',modelVerdict:'Model verdict',evidenceNote:'Player positions are an approximate reconstruction from the wide replay. Kick physics is unchanged.',share:'Share verdict',replay:'Replay',yourVerdict:'Your verdict:',voteHit:'It hit',voteNo:'No contact',disclaimer:'Schematic physics model, not a FIFA data reconstruction. IMU graph is illustrative.',flight:'The ball is airborne … cable contact decides the branch.',engGoal:'Bellingham finishes England’s attack. With confirmed cable contact, the original goal should have been disallowed.',norGoal:'Haaland finishes the alternative Norway counterattack.',hitVerdict:'GOAL SHOULD BE DISALLOWED',cleanVerdict:'NO CONFIRMED CONTACT',engResult:'Cable contact triggered the England branch: Anderson → Gordon → Bellingham. Under the outside-agent law, play should have stopped.',norResult:'The cable was not touched. The simulation continues with a Norway counterattack and Haaland goal.',retryHintEng:'↻ This is the match trajectory. Change power, angle or aim and kick again — miss the cable and it becomes a clean flight → Norway counter and goal.',retryHintNor:'↻ Want the England branch? Change the trajectory so the ball clips the cable.',introEyebrow:'CASE 45+2 / INTERACTIVE RECONSTRUCTION',introTitle:'Hit the cable. Test the verdict.',introText:'Recreate Nyland’s goal kick, compare it with the canonical path and see how one metre changes the match.',introStep1:'Choose power, angle and direction.',introStep2:'Track the cable and second ball.',introStep3:'Compare the played branch with the IFAB law.',skipIntro:'Skip intro',startCase:'▶ Start',perfToast:'Graphics adjusted for smoother play',accuracyLabel:'reconstruction accuracy',bestLabel:'best',pulseTitle:'Online discussion pulse',pulseNor:'“We were robbed”, “rules are rules” and distrust of VAR — alongside pride in Norway’s historic tournament.',pulseEng:'“We got lucky”, “play to the whistle” and praise for Bellingham’s run — with disagreement over whether the incident should decide the match.',pulseCommon:'People want slow motion, multiple angles, TV pictures against sensor data, and a way to test the trajectory themselves.',caseScoreLabel:'case score',deltaLabel:'cable delta',slowReplay:'Slow replay 0.35×'}}
+no:{camTop:'Ovenfra',camOrbit:'360° visning',orbitHint:'Dra på banen — 360° aktiveres · knip/hjul for zoom',camCinema:'Kino',camStand:'Tribune',camBall:'Bak ballen',camCable:'Wire-cam',evidence:'Bevis',analysis:'Spark-analyse',speed:'Fart',apex:'Toppunkt',atCable:'Høyde ved vaieren',cableAt:'Vaierhøyde',settings:'Innstillinger',telemetry:'Telemetri',score:'Resultattavle',cameras:'Kameraer',stadium:'Stadion og publikum',trail:'Bane',ghost:'Kanonisk spøkelse',labels:'Spillernavn',players:'Spillere',resetMatch:'Tilbake til kampøyeblikket',recordMode:'Opptaksmodus',parameters:'Parametre ',presetMatch:'Kampen',presetLow:'Lavere',presetHigh:'Høyere',presetWide:'Til siden',power:'Kraft',angle:'Vinkel',aim:'Retning',kick:'Spark',reset:'Nullstill',evidenceTitle:'Sak 45+2: Hva sier bevisene?',visualReplay:'TV-bildene',visualText:'Det brå fallet og Norges umiddelbare reaksjon støtter teorien om kontakt.',sensorData:'Ballsensoren',sensorText:'FIFA opplyste at chipen ikke viste noen topp, og avviste derfor kontakt.',lawTitle:'IFAB-regelen',lawText:'Treffer ballen et fremmedlegeme, skal spillet stoppes og startes med droppball på kontaktstedet.',modelVerdict:'Modellens dom',evidenceNote:'Spillerposisjonene er en omtrentlig rekonstruksjon fra vidvinkelbildet. Sparkets fysikk er uendret.',share:'Del dommen',replay:'Prøv igjen',yourVerdict:'Din dom:',voteHit:'Den traff',voteNo:'Ingen kontakt',disclaimer:'Skjematisk fysikkmodell. Ikke en FIFA-databehandling. IMU-grafen er illustrativ.',flight:'Ballen er i lufta … vaieren avgjør hvilken gren som spilles.',engGoal:'Bellingham avslutter Englands angrep. Ved bekreftet vaierkontakt skulle det opprinnelige målet vært annullert.',norGoal:'Haaland avslutter den alternative norske kontringen.',hitVerdict:'MÅLET SKULLE VÆRT ANNULLERT',cleanVerdict:'INGEN BEKREFTET KONTAKT',engResult:'Vaierkontakten utløste England-grenen: Anderson → Gordon → Bellingham. Etter regelen om fremmedlegeme skulle spillet vært stoppet.',norResult:'Vaieren ble ikke truffet. Simuleringen fortsetter med norsk kontring og Haaland-scoring.',retryHintEng:'↻ Dette er kampbanen. Endre kraft, vinkel eller retning og skyt igjen — bommer du på vaieren blir det ren bane → Norge kontrer og scorer.',retryHintNor:'↻ Vil du se England-grenen? Endre banen slik at ballen treffer vaieren.',introEyebrow:'SAK 45+2 / INTERAKTIV REKONSTRUKSJON',introTitle:'Treff vaieren. Test dommen.',introText:'Gjenskap Nylands utspark, sammenlign banen med kampøyeblikket og se hvordan én meter endrer hele kampen.',introStep1:'Velg kraft, vinkel og retning.',introStep2:'Følg vaieren og andreballen.',introStep3:'Sammenlign kampforløpet med IFAB-regelen.',skipIntro:'Hopp over',startCase:'▶ Start',perfToast:'Grafikken er tilpasset for jevnere flyt',accuracyLabel:'rekonstruksjonsnøyaktighet',bestLabel:'rekord',pulseTitle:'Stemningen på nett',pulseNor:'«Vi ble ranet», «regler er regler» og mistillit til VAR — samtidig som stoltheten over Norges historiske mesterskap står sterkt.',pulseEng:'«Vi var heldige», «spill til fløyta» og beundring for Bellinghams løp — men også uenighet om episoden burde avgjøre kampen.',pulseCommon:'Folk vil se sakte film, flere vinkler, TV-bilder mot sensordata og få teste ballbanen selv.',caseScoreLabel:'sakspoeng',deltaLabel:'avvik ved vaieren',slowReplay:'Sakte reprise 0,35×',storyBtn:'Saken',readFullStory:'Les hele saksmappen →'},
+en:{camTop:'Top view',camOrbit:'360° orbit',orbitHint:'Drag for 360° view · pinch/wheel to zoom',camCinema:'Cinema',camStand:'Stand',camBall:'Behind ball',camCable:'Cable cam',evidence:'Evidence',analysis:'Kick analysis',speed:'Speed',apex:'Apex',atCable:'Height at cable',cableAt:'Cable height',settings:'Settings',telemetry:'Telemetry',score:'Scoreboard',cameras:'Cameras',stadium:'Stadium and crowd',trail:'Trajectory',ghost:'Canonical ghost',labels:'Player labels',players:'Players',resetMatch:'Reset to match moment',recordMode:'Recording mode',parameters:'Parameters ',presetMatch:'Match',presetLow:'Lower',presetHigh:'Higher',presetWide:'Wide',power:'Power',angle:'Angle',aim:'Aim',kick:'Kick',reset:'Reset',evidenceTitle:'Case 45+2: What does the evidence say?',visualReplay:'Visual replay',visualText:'The abrupt drop and Norway’s immediate reaction support the contact theory.',sensorData:'Ball sensor',sensorText:'FIFA said the chip showed no peak and therefore did not confirm contact.',lawTitle:'IFAB law',lawText:'If the ball touches an outside agent, play is stopped and restarted with a dropped ball at the contact point.',modelVerdict:'Model verdict',evidenceNote:'Player positions are an approximate reconstruction from the wide replay. Kick physics is unchanged.',share:'Share verdict',replay:'Replay',yourVerdict:'Your verdict:',voteHit:'It hit',voteNo:'No contact',disclaimer:'Schematic physics model, not a FIFA data reconstruction. IMU graph is illustrative.',flight:'The ball is airborne … cable contact decides the branch.',engGoal:'Bellingham finishes England’s attack. With confirmed cable contact, the original goal should have been disallowed.',norGoal:'Haaland finishes the alternative Norway counterattack.',hitVerdict:'GOAL SHOULD BE DISALLOWED',cleanVerdict:'NO CONFIRMED CONTACT',engResult:'Cable contact triggered the England branch: Anderson → Gordon → Bellingham. Under the outside-agent law, play should have stopped.',norResult:'The cable was not touched. The simulation continues with a Norway counterattack and Haaland goal.',retryHintEng:'↻ This is the match trajectory. Change power, angle or aim and kick again — miss the cable and it becomes a clean flight → Norway counter and goal.',retryHintNor:'↻ Want the England branch? Change the trajectory so the ball clips the cable.',introEyebrow:'CASE 45+2 / INTERACTIVE RECONSTRUCTION',introTitle:'Hit the cable. Test the verdict.',introText:'Recreate Nyland’s goal kick, compare it with the canonical path and see how one metre changes the match.',introStep1:'Choose power, angle and direction.',introStep2:'Track the cable and second ball.',introStep3:'Compare the played branch with the IFAB law.',skipIntro:'Skip intro',startCase:'▶ Start',perfToast:'Graphics adjusted for smoother play',accuracyLabel:'reconstruction accuracy',bestLabel:'best',pulseTitle:'Online discussion pulse',pulseNor:'“We were robbed”, “rules are rules” and distrust of VAR — alongside pride in Norway’s historic tournament.',pulseEng:'“We got lucky”, “play to the whistle” and praise for Bellingham’s run — with disagreement over whether the incident should decide the match.',pulseCommon:'People want slow motion, multiple angles, TV pictures against sensor data, and a way to test the trajectory themselves.',caseScoreLabel:'case score',deltaLabel:'cable delta',slowReplay:'Slow replay 0.35×',storyBtn:'Story',readFullStory:'Read the full case file →'}}
 const browserLang=(navigator.language||'en').toLowerCase();let lang=/^(no|nb|nn)/.test(browserLang)?'no':'en';try{const saved=window.localStorage&&localStorage.getItem('wiregoal_lang');if(saved==='no'||saved==='en')lang=saved}catch(e){}
 function tr(k){return (TEXT[lang]&&TEXT[lang][k])||TEXT.en[k]||k}function setLog(k){el('log').textContent=tr(k)}function setLogText(v){el('log').textContent=v}
 const SEQ_TEXT={
@@ -700,6 +880,126 @@ el('slowBtn').onclick=()=>{timeScale=timeScale===1?.35:1;el('slowBtn').textConte
 el('soundBtn').onclick=()=>{soundEnabled=!soundEnabled;audio.resume();audio.set(soundEnabled);el('soundBtn').textContent=soundEnabled?'🔊':'🔇'};
 const presets={match:[30,49,2],low:[27,43,2],high:[32,56,2],wide:[30,49,11]};document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const v=presets[b.dataset.preset];pw.value=v[0];an.value=v[1];am.value=v[2];el('vPower').textContent=v[0];el('vAngle').textContent=v[1];el('vAim').textContent=v[2];document.querySelectorAll('[data-preset]').forEach(x=>x.classList.toggle('active',x===b));reset();preview()});
 el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLast(false)};el('voteHit').onclick=()=>selectVote('hit',true);el('voteNo').onclick=()=>selectVote('no',true);
+/* ── v12 community dashboard logic (in app scope: uses lang, selectVote, sendVote, fetchTally, safeStore, el) ── */
+;(function(){
+  var DTX={
+    en:{kick:'Cable Goal · community',title:'The verdict is yours',sub:['How the world is calling the cable moment — ',' verdicts and counting. Cast yours, then watch the split move.'],
+      labH:'◆ It hit the cable',labC:'Clean flight ○',castH:'Cast your verdict',name:'Your name',handle:'@handle (optional)',country:'Your country',
+      leanL:'◆ Sure it hit',leanMid:'Your lean',leanR:"Sure it's clean ○",you:'You lean:',ITHIT:'IT HIT',CLEAN:'CLEAN',UND:'UNDECIDED',sure:'sure',cast:'Cast vote',
+      latest:'Latest verdicts',live:'Live · newest first',fromC:' from this country',all:'All',total:'Live tally · updates as verdicts come in',
+      hit:'It hit',noc:'No contact',now:'now',
+      note:'One divided bar is the headline — the running split of opinion. The lean slider captures side and confidence in one gesture. Names shown here are a live session feed; only the anonymous hit / no-contact count is stored.'},
+    no:{kick:'Cable Goal · folket',title:'Dommen er din',sub:['Slik dømmer verden vaier-øyeblikket — ',' stemmer og teller. Avgi din, så ser du fordelingen bevege seg.'],
+      labH:'◆ Den traff vaieren',labC:'Ren bane ○',castH:'Avgi din dom',name:'Navnet ditt',handle:'@brukernavn (valgfritt)',country:'Landet ditt',
+      leanL:'◆ Sikker: traff',leanMid:'Din helning',leanR:'Sikker: ren ○',you:'Du heller mot:',ITHIT:'DEN TRAFF',CLEAN:'REN',UND:'USIKKER',sure:'sikker',cast:'Avgi stemme',
+      latest:'Siste dommer',live:'Live · nyeste først',fromC:' fra dette landet',all:'Alle',total:'Live-telling · oppdateres når stemmer kommer inn',
+      hit:'Den traff',noc:'Ingen kontakt',now:'nå',
+      note:'Én delt stolpe er hovedsaken — den løpende fordelingen. Helningsglideren fanger side og sikkerhet i én bevegelse. Navnene her er en live øktvisning; bare den anonyme traff / ingen-kontakt-tellingen lagres.'}
+  };
+  var COUNTRIES=[['NOR','Norge','Norway'],['ENG','England','England'],['USA','USA','USA'],['ARG','Argentina','Argentina'],['AUS','Australia','Australia'],['BEL','Belgia','Belgium'],['BRA','Brasil','Brazil'],['CAN','Canada','Canada'],['CRO','Kroatia','Croatia'],['DEN','Danmark','Denmark'],['FRA','Frankrike','France'],['GER','Tyskland','Germany'],['ITA','Italia','Italy'],['JPN','Japan','Japan'],['KOR','Sør-Korea','South Korea'],['MEX','Mexico','Mexico'],['MAR','Marokko','Morocco'],['NED','Nederland','Netherlands'],['NGA','Nigeria','Nigeria'],['POL','Polen','Poland'],['POR','Portugal','Portugal'],['SCO','Skottland','Scotland'],['SEN','Senegal','Senegal'],['ESP','Spania','Spain'],['SWE','Sverige','Sweden'],['SUI','Sveits','Switzerland'],['OTH','Annet','Elsewhere']];
+  var TOP={NOR:1,ENG:1,USA:1};
+  var SEED=[['Marius_74','@marius74','hit','NOR',98,'1m'],['three_lions_ella','@ella.eng','clean','ENG',92,'2m'],['vikinghaal9','@haal.9','hit','NOR',100,'3m'],['miami_neutral','@sofla','clean','USA',61,'5m'],['oslo_ultras','@oslo','hit','NOR',89,'6m'],['samba_joao','@joao','clean','OTH',73,'8m']];
+  // seeded fallback split (used offline / until the real tally loads)
+  var demoHit=30471, demoClean=17743;
+  function T(){return DTX[lang]||DTX.en;}
+  function fmt(n){return (n|0).toLocaleString(lang==='no'?'nb-NO':'en-US');}
+  var MF={NOR:1,ENG:1,USA:1,ARG:1,AUS:1,BEL:1,BRA:1,CAN:1,CRO:1,DEN:1,FRA:1,GER:1,ITA:1,JPN:1,KOR:1,MEX:1,MAR:1,NED:1,NGA:1,POL:1,POR:1,SCO:1,SEN:1,ESP:1,SWE:1,SUI:1};function mfClass(code){return MF[code]?code.toLowerCase():'oth';}
+  function bucket(code){return TOP[code]?code:'OTH';}
+  function side(v){return v<50?'hit':(v>50?'clean':'none');}
+  function conf(v){return Math.round(Math.abs(v-50)*2);}
+
+  var dash=el('voteDash'), rows=el('vdRows'), lean=el('vdLean'), curFilter='all', built=false;
+  function counts(){
+    // prefer the real anonymous tally; fall back to the seeded demo numbers
+    var vs=window.__voteSplit;
+    if(vs&&(vs.hitN||vs.cleanN)) return {hit:vs.hitN,clean:vs.cleanN};
+    return {hit:demoHit,clean:demoClean};
+  }
+  function renderSplit(){
+    var c=counts(), total=c.hit+c.clean, ph=total?Math.round(c.hit/total*100):50, pc=100-ph;
+    el('vdPctH').textContent=ph+'%'; el('vdPctC').textContent=pc+'%';
+    el('vdCntH').textContent=fmt(c.hit); el('vdCntC').textContent=fmt(c.clean);
+    el('vdBarH').style.width=ph+'%'; el('vdBarC').style.width=pc+'%'; el('vdMk').style.left=ph+'%';
+    el('vdSubText').innerHTML=T().sub[0]+'<b>'+fmt(total)+'</b>'+T().sub[1];
+  }
+  function rowHTML(nick,handle,s,code,c,when,you){
+    var cls=mfClass(code), rg=you?'you':(code==='NOR'?'nor':code==='ENG'?'eng':'neu');
+    return '<td><div class="u"><b></b><small></small></div></td>'+
+      '<td><span class="chip '+s+'">'+(s==='hit'?T().hit:T().noc)+'</span></td>'+
+      '<td><span class="rg '+rg+'"><span class="mf mf-'+cls+'"></span>'+code+'</span></td>'+
+      '<td class="num"><span class="conf">'+c+'%</span></td>'+
+      '<td class="num">'+when+'</td>';
+  }
+  function addRow(nick,handle,s,code,c,when,you,isNew){
+    var tr=document.createElement('tr'); if(isNew)tr.className='new'; tr.dataset.c=code;
+    tr.innerHTML=rowHTML(nick,handle,s,code,c,when,you);
+    tr.querySelector('.u b').textContent=nick; tr.querySelector('.u small').textContent=handle||'—';
+    if(isNew){rows.insertBefore(tr,rows.firstChild); while(rows.children.length>8)rows.removeChild(rows.lastChild);}
+    else rows.appendChild(tr);
+  }
+  function applyFilter(){
+    var shown=0;
+    Array.prototype.forEach.call(rows.children,function(tr){
+      var b=bucket(tr.dataset.c||'OTH'), show=curFilter==='all'||b===curFilter;
+      tr.style.display=show?'':'none'; if(show)shown++;
+    });
+    el('vdLbcount').textContent=curFilter==='all'?T().live:shown+T().fromC;
+  }
+  function updLean(){
+    var v=+lean.value, sg=side(v), c=conf(v), y=el('vdYoulean');
+    if(sg==='none')y.innerHTML=T().you+' <span style="color:#9aa6b2">'+T().UND+'</span>';
+    else if(sg==='hit')y.innerHTML=T().you+' <span style="color:var(--coral)">'+T().ITHIT+'</span> · <b>'+c+'%</b> '+T().sure;
+    else y.innerHTML=T().you+' <span style="color:var(--teal)">'+T().CLEAN+'</span> · <b>'+c+'%</b> '+T().sure;
+  }
+  function applyLang(){
+    var t=T();
+    el('vdKick').textContent=t.kick; el('vdTitle').textContent=t.title;
+    el('vdLabH').textContent=t.labH; el('vdLabC').textContent=t.labC;
+    el('vdCastH').textContent=t.castH; el('vdNick').placeholder=t.name; el('vdHandle').placeholder=t.handle;
+    el('vdLeanL').textContent=t.leanL; el('vdLeanMid').textContent=t.leanMid; el('vdLeanR').textContent=t.leanR;
+    el('vdCast').textContent=t.cast; el('vdLatestH').textContent=t.latest; el('vdFall').textContent=t.all;
+    el('vdTotalLine').textContent=t.total; el('vdNote').textContent=t.note;
+    var sel=el('vdCountry'); var cur=sel.value;
+    sel.innerHTML='<option value="" selected>'+t.country+'</option>'+COUNTRIES.map(function(c){return '<option value="'+c[0]+'">'+(lang==='no'?c[1]:c[2])+'</option>';}).join('');
+    if(cur)sel.value=cur;var FL={NOR:lang==='no'?'Norge':'Norway',ENG:'England',USA:'USA',OTH:lang==='no'?'Annet':'Other'};Array.prototype.forEach.call(el('vdFilters').children,function(bt){var f=bt.dataset.f;if(f==='all'){bt.textContent=t.all;return;}var sp=bt.querySelector('.mf');bt.textContent='';if(sp)bt.appendChild(sp);bt.appendChild(document.createTextNode(FL[f]||f));});var dib=el('dashIntroBtn');if(dib)dib.textContent=lang==='no'?'◆ Folkets dom — se fordelingen live':'◆ Community verdict — see the live split';
+    updLean(); renderSplit(); applyFilter();
+  }
+  function build(){
+    if(built)return; built=true;
+    SEED.forEach(function(r){addRow(r[0],r[1],r[2],r[3],r[4],r[5],false,false);});
+    lean.addEventListener('input',updLean);
+    el('vdFilters').addEventListener('click',function(e){var b=e.target.closest('.vdFchip');if(!b)return;Array.prototype.forEach.call(el('vdFilters').children,function(x){x.classList.toggle('on',x===b);});curFilter=b.dataset.f;applyFilter();});
+    el('vdCast').addEventListener('click',function(){
+      var v=+lean.value, sg=side(v); if(sg==='none')sg='hit'; var c=conf(v);
+      var nick=(el('vdNick').value||('anon_'+Math.floor(Math.random()*900+100))).trim();
+      var handle=el('vdHandle').value.trim(), code=el('vdCountry').value||'OTH';
+      if(sg==='hit')demoHit++; else demoClean++;
+      // record the anonymous count on the shared backend (hit / no); name+country stay client-side
+      try{selectVote(sg==='hit'?'hit':'no',true);}catch(_){}
+      addRow(nick,handle,sg,code,c,T().now,true,true);
+      renderSplit(); applyFilter();
+      el('vdNick').value=''; el('vdHandle').value='';
+    });
+  }
+  function openDash(){build();applyLang();dash.classList.add('open');try{fetchTally();}catch(_){}}
+  function closeDash(){dash.classList.remove('open');}
+  el('vdClose').onclick=closeDash;
+  dash.addEventListener('click',function(e){if(e.target===dash)closeDash();});
+  var dib=el('dashIntroBtn'); if(dib)dib.onclick=openDash;
+  var dhb=el('dashHudBtn'); if(dhb)dhb.onclick=openDash;
+  var dhl0=el('dashHudLabel'); if(dhl0)dhl0.textContent=(lang==='no'?'Dommen':'Verdict');
+  var vsh=el('vdShare'); if(vsh)vsh.onclick=function(){var st=side(+lean.value); if(st==='none'){var cv=safeStore.get('cableVerdict'); st=cv==='no'?'clean':'hit';} if(window.__shareCard){try{window.__shareCard(st);}catch(_){}}};
+  // verdict buttons in the result modal lead to the rating dashboard
+  var vh=el('voteHit'), vn=el('voteNo');
+  if(vh)vh.addEventListener('click',function(){setTimeout(openDash,260);});
+  if(vn)vn.addEventListener('click',function(){setTimeout(openDash,260);});
+  // keep the dashboard split in sync with the real tally + relanguage on switch
+  var _rt=renderTally;
+  renderTally=function(t){_rt(t); if(t){window.__voteSplit=window.__voteSplit||{}; window.__voteSplit.hitN=t.hit|0; window.__voteSplit.cleanN=t.no|0; var tot=(t.hit|0)+(t.no|0); if(tot){window.__voteSplit.hit=Math.round((t.hit|0)/tot*100); window.__voteSplit.clean=100-window.__voteSplit.hit;} if(dash.classList.contains('open'))renderSplit();}};
+  var _al=applyLanguage;
+  applyLanguage=function(l){_al(l); var _d=el('dashHudLabel');if(_d)_d.textContent=lang==='no'?'Dommen':'Verdict'; var _vs=el('vdShare');if(_vs)_vs.textContent=lang==='no'?'◆ Del din dom':'◆ Share my verdict'; if(built)applyLang();};
+  window.__openDash=openDash;
+})();
 // Live community tally ("did it hit the cable?") backed by the Netlify vote function; degrades silently offline.
 const VOTE_API='/api/vote',VOTE_ENABLED=/^https?:$/.test(location.protocol);const voteTally=document.createElement('div');voteTally.id='voteTally';voteTally.style.cssText='margin-top:10px';
 (function(){const yv=document.querySelector('#resultPanel .yourVerdict');(yv||el('resultPanel')).insertAdjacentElement('afterend',voteTally)})();
@@ -711,7 +1011,7 @@ selectVote(safeStore.get('cableVerdict')||'',false);fetchTally();
 const __showResultTally=showResult;showResult=function(team){__showResultTally(team);fetchTally()};
 async function shareVerdict(){const __v=safeStore.get('cableVerdict');const __stance=__v==='hit'?'hit':__v==='no'?'clean':'hit';if(window.__shareCard){try{await window.__shareCard(__stance);return;}catch(e){}}const d=yAtCable===null?'—':(yAtCable-CABLE_Y).toFixed(2);const text=`Norway–England 45+2 forensic simulation: ${clipped?tr('hitVerdict'):tr('cleanVerdict')} (Δ ${d} m, case score ${currentCaseScore}/1000).`;try{if(navigator.share)await navigator.share({title:'Goal through the cable',text});else await navigator.clipboard.writeText(text)}catch(e){}}
 el('shareBtn').onclick=shareVerdict;
-function showResult(team){const eng=team==='eng';const _tf=eng?(lang==='no'?'England scorer — men spillet skulle stoppes':'England score — but play should stop'):(lang==='no'?'Norge scorer i den alternative grenen':'Norway score in the alternative branch');const _tp=_tf.split(' — ');el('resultTitle').innerHTML=_tp.length>1?_tp[0]+' — <span class="titleStop">'+_tp[1]+'</span>':_tf;el('resultWhy').textContent=tr(eng?'engResult':'norResult');el('resultHint').textContent=tr(eng?'retryHintEng':'retryHintNor');setTimeout(()=>el('resultPanel').classList.add('open'),650)}
+function showResult(team){const eng=team==='eng';const _tf=eng?(lang==='no'?'England scorer — men spillet skulle stoppes':'England score — but play should stop'):(lang==='no'?'Norge scorer — i den alternative grenen':'Norway score — in the alternative branch');const _tp=_tf.split(' — ');const _hl=eng?'titleStop':'titleBranch';el('resultTitle').innerHTML=_tp.length>1?_tp[0]+' — <span class="'+_hl+'">'+_tp[1]+'</span>':_tf;el('resultWhy').textContent=tr(eng?'engResult':'norResult');el('resultHint').textContent=tr(eng?'retryHintEng':'retryHintNor');setTimeout(()=>el('resultPanel').classList.add('open'),650)}
 
 function applyToggle(t,on){if(t==='telemetry')el('telemetry').style.display=on?'block':'none';if(t==='score')document.querySelector('.score').style.visibility=on?'visible':'hidden';if(t==='camsel')document.querySelector('.camsel').style.visibility=on?'visible':'hidden';if(t==='crowd'){stadium.visible=on;crowdGroup.visible=on;boards.visible=on}if(t==='trail')trail.visible=on;if(t==='ghost'){ghostLine.visible=on;ghostDots.forEach(x=>x.visible=on)}if(t==='labels')players.forEach(p=>{if(p.tag)p.tag.visible=on});if(t==='players')players.forEach(p=>p.root.visible=on)}document.querySelectorAll('.sw').forEach(sw=>sw.onclick=()=>{sw.classList.toggle('on');applyToggle(sw.dataset.t,sw.classList.contains('on'))});el('recBtn').onclick=()=>{document.body.classList.add('clean');el('settings').classList.remove('open')};el('ccExit').onclick=()=>document.body.classList.remove('clean');el('presetBtn').onclick=()=>{pw.value=30;an.value=49;am.value=2;el('vPower').textContent=30;el('vAngle').textContent=49;el('vAim').textContent=2;el('settings').classList.remove('open');reset();preview()};
 function resetPlayers(){players.forEach(p=>{p.state='idle';p.root.position.copy(p.base);p.root.rotation.set(0,0,0);p.hips.position.y=.92;p.hips.rotation.set(0,0,0);p.actionStarted=0});gk.root.rotation.y=Math.PI/2;engKeeper.root.rotation.y=-Math.PI/2}
@@ -3386,5 +3686,41 @@ var qrcode = function() {
 })();
 
 </script>
+
+<div id="voteDash"><div class="vdWrap">
+  <button class="vdClose" id="vdClose" aria-label="Close">×</button>
+  <div class="vdKick" id="vdKick">Cable Goal · community</div>
+  <h1 id="vdTitle">The verdict is yours</h1>
+  <p class="vdSub" id="vdSubText"></p>
+  <div class="vdSplit">
+    <div class="vdSplitTop">
+      <div class="vdSide h"><span class="lab" id="vdLabH">◆ It hit the cable</span><span class="pct" id="vdPctH">63%</span><span class="cnt" id="vdCntH">30,471</span></div>
+      <div class="vdSide c r"><span class="lab" id="vdLabC">Clean flight ○</span><span class="pct" id="vdPctC">37%</span><span class="cnt" id="vdCntC">17,743</span></div>
+    </div>
+    <div class="vdTrack"><div class="h" id="vdBarH" style="width:63%"></div><div class="c" id="vdBarC" style="width:37%"></div><span class="mk" id="vdMk" style="left:63%"></span></div>
+    <div class="vdTotal" id="vdTotalLine">Live tally · updates as verdicts come in</div><button class="vdShareBtn" id="vdShare">◆ Share my verdict</button>
+  </div>
+  <div class="vdCast">
+    <h2 id="vdCastH">Cast your verdict</h2>
+    <div class="vdFields">
+      <input id="vdNick" type="text" placeholder="Your name" maxlength="20">
+      <input id="vdHandle" type="text" placeholder="@handle (optional)" maxlength="20">
+      <select id="vdCountry"></select>
+    </div>
+    <div class="vdLeanhead"><span class="l" id="vdLeanL">◆ Sure it hit</span><span id="vdLeanMid">Your lean</span><span class="r" id="vdLeanR">Sure it's clean ○</span></div>
+    <input id="vdLean" class="vdLean" type="range" min="0" max="100" value="28">
+    <div class="vdReadout"><div class="vdYoulean" id="vdYoulean"></div><button class="vdCastBtn" id="vdCast">Cast vote</button></div>
+  </div>
+  <div class="vdLbhead"><h2 id="vdLatestH">Latest verdicts</h2><span id="vdLbcount">Live · newest first</span></div>
+  <div class="vdFilters" id="vdFilters">
+    <button class="vdFchip on" data-f="all" id="vdFall">All</button>
+    <button class="vdFchip" data-f="NOR"><span class="mf fchipMf mf-nor"></span>Norway</button>
+    <button class="vdFchip" data-f="ENG"><span class="mf fchipMf mf-eng"></span>England</button>
+    <button class="vdFchip" data-f="USA"><span class="mf fchipMf mf-usa"></span>USA</button>
+    <button class="vdFchip" data-f="OTH"><span class="mf fchipMf mf-oth"></span>Other</button>
+  </div>
+  <table><thead><tr><th id="vdThVoter">Voter</th><th id="vdThSide">Side</th><th id="vdThRegion">Region</th><th class="num" id="vdThSure">Sure</th><th class="num" id="vdThWhen">When</th></tr></thead><tbody id="vdRows"></tbody></table>
+  <p class="vdNote" id="vdNote"></p>
+</div></div>
 </body>
 </html>
