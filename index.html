@@ -669,6 +669,7 @@ setTimeout(async()=>{'use strict';try{await Promise.all(['700 40px "Barlow Conde
 const FIELD_L=105,FIELD_W=68,cx=FIELD_L/2,cz=FIELD_W/2;
 const ORIGIN={x:6,y:0.35,z:34};
 const GOAL_X=99,GOAL_Z1=30.34,GOAL_Z2=37.66,GOAL_H=2.44;
+const NOR_GOAL_X=0.6;// Norway goal line: sits behind the ball (ORIGIN x=6) so Nyland stands in FRONT of his net, not inside it. Was 6 = on the ball → keeper looked stuck in the goal.
 const CABLE_X=55,CABLE_Y=17.0,HIT_TOL=1.15;
 const G=9.81,K=0.006;
 // Adidas Trionda "drag crisis": below ~12 m/s the boundary layer separates, drag spikes and the ball drops almost vertically. This reproduces the real broadcast illusion (FIFA's sensor showed no cable contact) — it only triggers while descending and slow, so the ball's height at the cable (near apex, fast) is unchanged and the canonical verdict still holds.
@@ -781,7 +782,7 @@ const flashPos=[];for(let i=0;i<(reduced?55:120);i++){const side=i%4,sd=sideDefs
 // floodlights and soft glow
 const lamps=[];[[-12,39,-12],[FIELD_L+12,39,-12],[-12,39,FIELD_W+12],[FIELD_L+12,39,FIELD_W+12]].forEach(([x,y,z])=>{const pole=mesh(new THREE.CylinderGeometry(.22,.3,34,8),mat(0x59636d,.55,.7),true,true);pole.position.set(x,17,z);scene.add(pole);const bank=mesh(new THREE.BoxGeometry(8,2,.5),new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xfff2cf,emissiveIntensity:3}),false,false);bank.position.set(x,y,z);bank.lookAt(cx,5,cz);scene.add(bank);const l=new THREE.SpotLight(0xfff1d8,reduced?.6:1.15,180,.58,.5,1);l.position.set(x,y,z);l.target.position.set(cx,0,cz);scene.add(l,l.target);lamps.push(l)});
 // goals
-function addGoal(x,flip){const g=new THREE.Group(),white=mat(0xf9fbff,.38,.15);const post=(z)=>{const p=mesh(new THREE.CylinderGeometry(.06,.06,GOAL_H,12),white);p.position.set(x,GOAL_H/2,z);g.add(p)};post(GOAL_Z1);post(GOAL_Z2);const bar=mesh(new THREE.CylinderGeometry(.06,.06,GOAL_Z2-GOAL_Z1,12),white);bar.rotation.x=Math.PI/2;bar.position.set(x,GOAL_H,(GOAL_Z1+GOAL_Z2)/2);g.add(bar);const verts=[];const back=x+(flip?-2.1:2.1);for(let i=0;i<=10;i++){const z=GOAL_Z1+(GOAL_Z2-GOAL_Z1)*i/10;verts.push(x,0,z,back,0,z,x,GOAL_H,z,back,GOAL_H*.7,z)}for(let j=0;j<=6;j++){const y=GOAL_H*j/6;verts.push(x,y,GOAL_Z1,x,y,GOAL_Z2,back,y*.7,GOAL_Z1,back,y*.7,GOAL_Z2)}const ng=new THREE.BufferGeometry();ng.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.add(new THREE.LineSegments(ng,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.38})));scene.add(g)}addGoal(GOAL_X,false);addGoal(6,true);
+function addGoal(x,flip){const g=new THREE.Group(),white=mat(0xf9fbff,.38,.15);const post=(z)=>{const p=mesh(new THREE.CylinderGeometry(.06,.06,GOAL_H,12),white);p.position.set(x,GOAL_H/2,z);g.add(p)};post(GOAL_Z1);post(GOAL_Z2);const bar=mesh(new THREE.CylinderGeometry(.06,.06,GOAL_Z2-GOAL_Z1,12),white);bar.rotation.x=Math.PI/2;bar.position.set(x,GOAL_H,(GOAL_Z1+GOAL_Z2)/2);g.add(bar);const verts=[];const back=x+(flip?-2.1:2.1);for(let i=0;i<=10;i++){const z=GOAL_Z1+(GOAL_Z2-GOAL_Z1)*i/10;verts.push(x,0,z,back,0,z,x,GOAL_H,z,back,GOAL_H*.7,z)}for(let j=0;j<=6;j++){const y=GOAL_H*j/6;verts.push(x,y,GOAL_Z1,x,y,GOAL_Z2,back,y*.7,GOAL_Z1,back,y*.7,GOAL_Z2)}const ng=new THREE.BufferGeometry();ng.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.add(new THREE.LineSegments(ng,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.38})));scene.add(g)}addGoal(GOAL_X,false);addGoal(NOR_GOAL_X,true);
 // spidercam and exact hit cable
 const rig=new THREE.Group();scene.add(rig);const pod=new THREE.Group();pod.position.set(CABLE_X,CABLE_Y,cz+10);rig.add(pod);const podBody=mesh(new THREE.BoxGeometry(1.1,.65,.9),mat(0x0c1017,.4,.75));pod.add(podBody);const lens=mesh(new THREE.CylinderGeometry(.18,.24,.45,12),new THREE.MeshStandardMaterial({color:0x182735,emissive:0x2a9dff,emissiveIntensity:1.7,metalness:.6,roughness:.25}));lens.rotation.x=Math.PI/2;lens.position.set(0,-.14,.54);pod.add(lens);const hitCableMat=new THREE.MeshStandardMaterial({color:0xb9c2cc,metalness:.72,roughness:.3,emissive:0x000000});// Real broadcast rig = a spidercam support cable, not an infinite horizontal wire. A single sloped taut cable running downfield through the contact zone (CABLE_X,CABLE_Y). Collision physics is unchanged (still the x=CABLE_X / y=CABLE_Y test), only the visual is honest now.
 const hcP1=new THREE.Vector3(18,22.4,30),hcP2=new THREE.Vector3(96,12.6,40),hcD=new THREE.Vector3().subVectors(hcP2,hcP1);const hitCable=mesh(new THREE.CylinderGeometry(.045,.045,hcD.length(),10),hitCableMat);hitCable.position.copy(hcP1).addScaledVector(hcD,.5);hitCable.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),hcD.clone().normalize());rig.add(hitCable);const rigArray=new Float32Array(24),rigGeo=new THREE.BufferGeometry();rigGeo.setAttribute('position',new THREE.BufferAttribute(rigArray,3));const cableLines=new THREE.LineSegments(rigGeo,new THREE.LineBasicMaterial({color:0x9fa8b2,transparent:true,opacity:.6}));rig.add(cableLines);const anchors=[new THREE.Vector3(-4,27.4,-4),new THREE.Vector3(FIELD_L+4,27.4,-4),new THREE.Vector3(-4,27.4,FIELD_W+4),new THREE.Vector3(FIELD_L+4,27.4,FIELD_W+4)];function updateRig(){let i=0;for(const v of anchors){rigArray[i++]=pod.position.x;rigArray[i++]=pod.position.y;rigArray[i++]=pod.position.z;rigArray[i++]=v.x;rigArray[i++]=v.y;rigArray[i++]=v.z}rigGeo.attributes.position.needsUpdate=true}updateRig();
@@ -805,7 +806,7 @@ const schjelderup=createPlayer(61.5,49,NOR_SHIRT,NOR_SHORTS,'schjelderup',21,2);
 const norwayReceiver=createPlayer(65,20.5,NOR_SHIRT,NOR_SHORTS,'sorloth',7,2);
 const haaland=createPlayer(72.5,33.5,NOR_SHIRT,NOR_SHORTS,'haaland',9,0);
 
-const engKeeper=createPlayer(100.3,34,ENG_GK,ENG_GK_SH,'pickford',1,2);engKeeper.root.scale.setScalar(.78);// same fix as Nyland — head below the crossbar
+const engKeeper=createPlayer(97.2,34,ENG_GK,ENG_GK_SH,'pickford',1,2);engKeeper.root.scale.setScalar(.78);// stands ON his line (GOAL_X 99), in front of the net — was 100.3, i.e. inside the goal// same fix as Nyland — head below the crossbar
 const konsa=createPlayer(73,18,ENG,ENG,'konsa',2,1);
 const stones=createPlayer(76,29,ENG,ENG,'stones',5,0);
 const guehi=createPlayer(76,40,ENG,ENG,'guehi',6,3);
@@ -1107,7 +1108,7 @@ function shapeShiftV11(dt){
   runV11(referee,referee.base.x+24,referee.base.z-9,5.8,dt);  // ref sprints to follow play
   if(performance.now()-kickStarted>620)runV11(gk,Math.min(12,gk.base.x+7),34,2.6,dt); // Nyland runs out after the strike
 }
-function flightChoreo(dt){try{window.__fc=(window.__fc||0)+1;
+function flightChoreo(dt){
   shapeShiftV11(dt);
   const lx=pos.x+vel.x*.42,lz=pos.z+vel.z*.42;                 // where the ball is heading
   runV11(collector,lx,lz,8.7,dt);                             // Anderson #8 attacks the drop
@@ -1120,7 +1121,7 @@ function flightChoreo(dt){try{window.__fc=(window.__fc||0)+1;
   runV11(haaland,Math.min(lx+2,80),(haaland.base.z+lz)/2,7.0,dt);             // chasing flick-on
   runV11(norwayReceiver,Math.min(lx-2,74),(norwayReceiver.base.z+lz)/2,6.7,dt); // Sørloth
   runV11(schjelderup,Math.min(lx-6,66),schjelderup.base.z-2,6.5,dt);
-}catch(e){window.__fcErr=(window.__fcErr||'')+' | '+e.message}}
+}
 function windupStep(dt){
   // Ball is still at rest on Nyland's foot; the pitch stirs, then the strike
   // launches the ball at foot contact (~430 ms into the swing) — not from thin air.
@@ -1128,14 +1129,14 @@ function windupStep(dt){
   shapeShiftV11(dt);
   if(performance.now()-kickStarted>=430){vel.x=pendingKick.x;vel.y=pendingKick.y;vel.z=pendingKick.z;phase='flight';audio.kick();haptic(14)}
 }
-function flightStep(dt){const px=pos.x;const sp=Math.hypot(vel.x,vel.y,vel.z);vel.x+=(-K*sp*vel.x)*dt;vel.y+=(-G-K*sp*vel.y)*dt;vel.z+=(-K*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;ballSpeed=Math.hypot(vel.x,vel.y,vel.z);apexH=Math.max(apexH,pos.y);const ra=Math.abs(vel.y-prevVy)/dt/G;prevVy=vel.y;if((imuStepCounter++&1)===0){imu.push(Math.min(ra*.1,1));imu.shift()}if(!clipped&&px<CABLE_X&&pos.x>=CABLE_X){yAtCable=pos.y;if(Math.abs(pos.y-CABLE_Y)<=HIT_TOL){clipped=true;vel.y=-Math.abs(vel.y)*.34-2.6;vel.x*=.3;vel.z+=(Math.random()-.5)*2;const spike=sensorDetects?1:.13;for(let k=0;k<5;k++){imu.push(spike);imu.shift()}el('log').textContent=sensorDetects?seq('contactStrong'):seq('contactLight');haptic([22,35,45]);audio.cable();hitCableMat.emissive.setHex(0xff3b30);hitCableMat.emissiveIntensity=2.2;setTimeout(()=>hitCableMat.emissiveIntensity=0,450)}}pod.position.z+=(pos.z-pod.position.z)*.05;flightChoreo(dt);if(pos.y<=.34&&vel.y<0){pos.y=.34;beginLooseBall()}else if((pos.x>FIELD_L+9||pos.x<-9||pos.z<-9||pos.z>FIELD_W+9)&&pos.y<1.2){beginLooseBall()}}
+function flightStep(dt){const px=pos.x;const sp=Math.hypot(vel.x,vel.y,vel.z);vel.x+=(-K*sp*vel.x)*dt;vel.y+=(-G-K*sp*vel.y)*dt;vel.z+=(-K*sp*vel.z)*dt;pos.x+=vel.x*dt;pos.y+=vel.y*dt;pos.z+=vel.z*dt;ballSpeed=Math.hypot(vel.x,vel.y,vel.z);apexH=Math.max(apexH,pos.y);const ra=Math.abs(vel.y-prevVy)/dt/G;prevVy=vel.y;if((imuStepCounter++&1)===0){imu.push(Math.min(ra*.1,1));imu.shift()}if(!clipped&&px<CABLE_X&&pos.x>=CABLE_X){yAtCable=pos.y;if(Math.abs(pos.y-CABLE_Y)<=HIT_TOL){clipped=true;vel.y=-Math.abs(vel.y)*.34-2.6;vel.x*=.3;vel.z+=(Math.random()-.5)*2;const spike=sensorDetects?1:.13;for(let k=0;k<5;k++){imu.push(spike);imu.shift()}el('log').textContent=sensorDetects?seq('contactStrong'):seq('contactLight');haptic([22,35,45]);audio.cable();hitCableMat.emissive.setHex(0xff3b30);hitCableMat.emissiveIntensity=2.2;setTimeout(()=>hitCableMat.emissiveIntensity=0,450)}}pod.position.z+=(pos.z-pod.position.z)*.05;if(pos.y<=.34&&vel.y<0){pos.y=.34;beginLooseBall()}else if((pos.x>FIELD_L+9||pos.x<-9||pos.z<-9||pos.z>FIELD_W+9)&&pos.y<1.2){beginLooseBall()}}
 function sequenceStep(dt){sequenceTime+=dt;
   if(phase==='eng_collect'){collector.state='dribble';const fx=collector.root.position.x-.48,fz=collector.root.position.z;setBallPosition(pos.x+(fx-pos.x)*.22,.34+.035*Math.abs(Math.sin(sequenceTime*10)),pos.z+(fz-pos.z)*.22,dt);if(sequenceTime>=.34)enterPhase('eng_drive',seq('engDrive'))}
   else if(phase==='eng_drive'){movePlayer(collector,50,46,8.3,dt,'dribble');movePlayer(gordon,36,48,7.2,dt);movePlayer(bellingham,27,36,6.7,dt);movePlayer(norMidL,34,44,6,dt);movePlayer(norCB1,18,39,5,dt);setBallPosition(collector.root.position.x-.62,.34+.08*Math.abs(Math.sin(sequenceTime*11)),collector.root.position.z-.05,dt);if(sequenceTime>=1.45)enterPhase('eng_to_gordon',seq('engPass'))}
   else if(phase==='eng_to_gordon'){movePlayer(gordon,35,47,6,dt);const to={x:gordon.root.position.x-.35,y:.34,z:gordon.root.position.z};ballArc(sequenceStart,to,sequenceTime/.62,.7,dt);if(sequenceTime>=.62)enterPhase('gordon_cut',seq('gordonCut'))}
   else if(phase==='gordon_cut'){movePlayer(gordon,28.5,43,7.6,dt,'dribble');movePlayer(bellingham,24.5,35.2,7.2,dt);movePlayer(kane,18.5,32,5.8,dt);movePlayer(norLB,17,45,6,dt);setBallPosition(gordon.root.position.x-.58,.34+.07*Math.abs(Math.sin(sequenceTime*12)),gordon.root.position.z-.05,dt);if(sequenceTime>=1.05)enterPhase('gordon_to_bellingham',seq('gordonBell'))}
   else if(phase==='gordon_to_bellingham'){movePlayer(bellingham,23.7,35.1,5.5,dt);const to={x:bellingham.root.position.x-.32,y:.34,z:bellingham.root.position.z};ballArc(sequenceStart,to,sequenceTime/.55,.38,dt);if(sequenceTime>=.55)enterPhase('eng_bellingham_drive',seq('bellDrive'))}
-  else if(phase==='eng_bellingham_drive'){movePlayer(bellingham,12.8,33.4,7.4,dt,'dribble');movePlayer(norCB1,bellingham.root.position.x+1.6,bellingham.root.position.z+1.5,7.5,dt);movePlayer(norCB2,17,30,6.6,dt);movePlayer(gk,6.7,34,2.3,dt);setBallPosition(bellingham.root.position.x-.62,.34+.075*Math.abs(Math.sin(sequenceTime*13)),bellingham.root.position.z,dt);if(sequenceTime>.95){if(norCB1.state!=='slide')norCB1.actionStarted=performance.now();norCB1.state='slide';norCB1.slideDir=-1}if(sequenceTime>=1.55){gk.state='dive';gk.actionStarted=performance.now();gk.diveDir=-1;enterPhase('eng_shot',seq('engShot'))}}
+  else if(phase==='eng_bellingham_drive'){movePlayer(bellingham,12.8,33.4,7.4,dt,'dribble');movePlayer(norCB1,bellingham.root.position.x+1.6,bellingham.root.position.z+1.5,7.5,dt);movePlayer(norCB2,17,30,6.6,dt);movePlayer(gk,NOR_GOAL_X+1.1,34,2.3,dt);setBallPosition(bellingham.root.position.x-.62,.34+.075*Math.abs(Math.sin(sequenceTime*13)),bellingham.root.position.z,dt);if(sequenceTime>.95){if(norCB1.state!=='slide')norCB1.actionStarted=performance.now();norCB1.state='slide';norCB1.slideDir=-1}if(sequenceTime>=1.55){gk.state='dive';gk.actionStarted=performance.now();gk.diveDir=-1;enterPhase('eng_shot',seq('engShot'))}}
   else if(phase==='eng_shot'){const to={x:4.55,y:.74,z:31.15};ballArc(sequenceStart,to,sequenceTime/.48,.12,dt);if(sequenceTime>=.48)enterPhase('eng_goal_wait')}
   else if(phase==='eng_goal_wait'){if(sequenceTime>=.42)showGoal('eng')}
   else if(phase==='nor_collect'){norPossessor.state='dribble';const fx=norPossessor.root.position.x+.48,fz=norPossessor.root.position.z;setBallPosition(pos.x+(fx-pos.x)*.22,.34+.035*Math.abs(Math.sin(sequenceTime*10)),pos.z+(fz-pos.z)*.22,dt);if(sequenceTime>=.34)enterPhase('nor_break',seq('norBreak'))}
@@ -1170,7 +1171,7 @@ function stopInNetV6(goalX){pos.x=goalX+(goalX===GOAL_X?.72:-.72);pos.y=clampV6(
 function goalOrFrameV6(prev){
   const crossings=[];
   if(prev.x<GOAL_X&&pos.x>=GOAL_X)crossings.push({x:GOAL_X,dir:1});
-  if(prev.x>6&&pos.x<=6)crossings.push({x:6,dir:-1});
+  if(prev.x>NOR_GOAL_X&&pos.x<=NOR_GOAL_X)crossings.push({x:NOR_GOAL_X,dir:-1});
   for(const g of crossings){
     if(goalMouthV6(pos.y,pos.z)){stopInNetV6(g.x);showGoal(clipped?'eng':'nor');return true}
     const postHit=(Math.abs(pos.z-GOAL_Z1)<BALL_RADIUS+POST_RADIUS||Math.abs(pos.z-GOAL_Z2)<BALL_RADIUS+POST_RADIUS)&&pos.y<GOAL_H+BALL_RADIUS;
@@ -1181,12 +1182,12 @@ function goalOrFrameV6(prev){
 }
 movePlayer=function(p,tx,tz,speed,dt,state='run'){
   const keeper=p.role==='gk'||p.role==='pickford';
-  tx=clampV6(tx,keeper?3.25:4.7,keeper?101.75:100.3);tz=clampV6(tz,.8,FIELD_W-.8);
+  tx=clampV6(tx,keeper?-1.4:4.7,keeper?101.75:100.3);tz=clampV6(tz,.8,FIELD_W-.8);
   // Outfield players cannot cut through the goal mouth to reach a ball behind the net.
   const inMouthBand=tz>GOAL_Z1-.55&&tz<GOAL_Z2+.55;
-  if(!keeper&&inMouthBand){if(p.root.position.x<GOAL_X&&tx>GOAL_X)tx=GOAL_X-.55;if(p.root.position.x>6&&tx<6)tx=6+.55}
+  if(!keeper&&inMouthBand){if(p.root.position.x<GOAL_X&&tx>GOAL_X)tx=GOAL_X-.55;if(p.root.position.x>NOR_GOAL_X&&tx<NOR_GOAL_X)tx=NOR_GOAL_X+.55}
   const dx=tx-p.root.position.x,dz=tz-p.root.position.z,d=Math.hypot(dx,dz);p.state=state;
-  if(d>.001){const step=Math.min(d,speed*dt),nx=p.root.position.x+dx/d*step,nz=p.root.position.z+dz/d*step;p.root.position.x=clampV6(nx,keeper?3.1:4.65,keeper?101.9:100.35);p.root.position.z=clampV6(nz,.75,FIELD_W-.75);p.root.rotation.y=Math.atan2(dx,dz)}return d<.18
+  if(d>.001){const step=Math.min(d,speed*dt),nx=p.root.position.x+dx/d*step,nz=p.root.position.z+dz/d*step;p.root.position.x=clampV6(nx,keeper?-1.6:4.65,keeper?101.9:100.35);p.root.position.z=clampV6(nz,.75,FIELD_W-.75);p.root.rotation.y=Math.atan2(dx,dz)}return d<.18
 };
 flightStep=function(dt){
   const prev={x:pos.x,y:pos.y,z:pos.z},px=pos.x;const sp=Math.hypot(vel.x,vel.y,vel.z);
@@ -1249,7 +1250,7 @@ const skinColorsV7=[0xe6bd98,0xc88f69,0x8b5b3d,0x6a432f],bodyColorV7=new THREE.C
 
 function finishOutV7(kind){if(phase==='done')return;phase='done';vel={x:0,y:0,z:0};ballSpeed=0;kickBtn.disabled=false;shotScored=false;crowdRoar=.18;audio.whistle();haptic(28);el('resultPanel').classList.remove('open');const isSide=kind==='touchline',title=isSide?(lang==='no'?'INNKAST':'THROW-IN'):(lang==='no'?'BALLEN UTE':'BALL OUT OF PLAY'),sub=isSide?(lang==='no'?'Hele ballen krysset sidelinjen. Ingen sprett fra linjen.':'The whole ball crossed the touchline. It does not bounce from the line.'):(lang==='no'?'Ballen passerte mållinjen utenfor målet.':'The ball crossed the goal line outside the goal.');const bt=el('bannerTitle');bt.className='out';bt.textContent=title;el('bannerSub').textContent=sub;el('banner').classList.add('show');setLogText(sub);outRestartV7.querySelector('b').textContent=title;outRestartV7.querySelector('span').textContent=sub;setTimeout(()=>outRestartV7.classList.add('show'),420)}
 function checkOutV7(){if(phase==='done')return true;if(pos.z<-BALL_RADIUS||pos.z>FIELD_W+BALL_RADIUS){finishOutV7('touchline');return true}if(pos.x<-BALL_RADIUS||pos.x>FIELD_L+BALL_RADIUS){finishOutV7('goalLine');return true}return false}
-const flightStepV6Final=flightStep;flightStep=function(dt){const was=clipped;flightStepV6Final(dt);pod.position.z=POD_Z_V7;if(!was&&clipped)triggerCableFlashV7();if(phase!=='done')checkOutV7()};
+const flightStepV6Final=flightStep;flightStep=function(dt){const was=clipped;flightStepV6Final(dt);if(phase==='flight')flightChoreo(dt);pod.position.z=POD_Z_V7;if(!was&&clipped)triggerCableFlashV7();if(phase!=='done')checkOutV7()};
 const looseBallStepV6Final=looseBallStep;looseBallStep=function(dt){if(checkOutV7())return;looseBallStepV6Final(dt);pod.position.z=POD_Z_V7;if(phase!=='done')checkOutV7()};
 const resetV6Final=reset;reset=function(){outRestartV7.classList.remove('show');contactFlashV7.classList.remove('show');cableFlashUntilV7=0;impactMarkerV7.visible=impactCoreV7.visible=false;impactLightV7.intensity=0;resetV6Final();pod.position.z=POD_Z_V7;updateRig()};
 
@@ -1323,7 +1324,7 @@ const animatePlayerV72Base=animatePlayer;animatePlayer=function(p,t){animatePlay
   if(p.root.rotation.x)p.root.rotation.x*=.82;
   if(p.state!=='slide'&&p.state!=='dive'){p.armL.rotation.x*=.78;p.armR.rotation.x*=.78;p.armL.rotation.z=clamp72(p.armL.rotation.z,-.48,.48);p.armR.rotation.z=clamp72(p.armR.rotation.z,-.48,.48)}};
 let frontCrowdStampV72=0;const animateFlagsV72Base=animateFlags;animateFlags=function(t,now){animateFlagsV72Base(t,now);if(now-frontCrowdStampV72>(reduced?72:48)){updateFrontCrowdV72(t);updateNearFlagsV72(t);frontCrowdStampV72=now}};
-let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getPlayers:()=>players.map(p=>({r:p.role,st:p.state,x:+p.root.position.x.toFixed(2),z:+p.root.position.z.toFixed(2)})),tScale:()=>timeScale,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
+let __lastTapV8=0;orbitCanvas.addEventListener('pointerup',function(e){const now=performance.now();if(now-__lastTapV8<300){if(camMode==='orbit'){orbit.yaw=-1.05;orbit.pitch=.38;orbit.distance=46;snapOrbitV72()}else{safeCameraPoseV72(camMode)}}__lastTapV8=now;});window.__simDebugV72={version:'9.0',setCamera:setCameraModeV72,getState:()=>({camMode,phase,camera:[camera.position.x,camera.position.y,camera.position.z],up:[camera.up.x,camera.up.y,camera.up.z],orbit:{yaw:orbit.yaw,pitch:orbit.pitch,distance:orbit.distance},finite:finiteVecV72(camera.position),crowd:frontCountV72})};
 
 el('tCableH').textContent=CABLE_Y.toFixed(1)+' m';if(!mobile)document.body.classList.add('controls-open','telemetry-open');if(mobile){players.forEach(p=>{if(p.tag){p.tag.visible=true;p.tag.scale.set(2.55,.48,1)}})}el('bestScoreValue').textContent=bestCaseScore||1000;applyLanguage(lang);reset();requestAnimationFrame(loop);window.__boot.set(96,__b('First frame and interface…','Første bilde og grensesnitt…'),__b('FINAL','FINALE'));requestAnimationFrame(()=>requestAnimationFrame(()=>window.__boot.done()));
 }catch(error){console.error(error);window.__boot.fail(error)}},40);
