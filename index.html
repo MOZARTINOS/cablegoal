@@ -252,7 +252,10 @@ html,body{background:var(--pageBg)}
 /* Camera tabs: segmented, active = flat gold */
 .camsel{background:#0a0f16!important;padding:4px!important;gap:3px!important}
 .camsel button{color:#9aa6b2;font-family:'Barlow Condensed';font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:12px;border-radius:6px}
-.camsel button.active{background:var(--gold)!important;color:#08131f!important}
+.camsel button.active{position:relative;overflow:hidden;background:var(--gold)!important;color:#08131f!important;animation:camPulse 1.6s ease-in-out infinite}
+.camsel button.active::after{content:'';position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.75) 50%,transparent 80%);transform:translateX(-160%) skewX(-16deg);animation:kickSheen 2.8s ease-in-out infinite;pointer-events:none}
+@keyframes camPulse{0%,100%{box-shadow:0 0 0 0 rgba(236,208,128,0)}50%{box-shadow:0 0 16px 3px rgba(236,208,128,.85)}}
+@media(prefers-reduced-motion:reduce){.camsel button.active{animation:none}.camsel button.active::after{display:none}}
 /* Quick-action + gear icon buttons */
 .quickActions button,#gearBtn{background:#0c141d!important;color:#fff;font-family:'Barlow Condensed';font-weight:800}
 .quickActions button.active,#gearBtn.on{background:var(--gold)!important;color:#08131f!important;border-color:var(--gold)!important}
@@ -282,7 +285,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--gold
 /* KICK = hero CTA: breathing gold halo + shimmer sweep, invites the press */
 #kickBtn::after{content:'';position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.85) 50%,transparent 80%);transform:translateX(-160%) skewX(-16deg);animation:kickSheen 2.8s ease-in-out infinite;pointer-events:none}
 #kickBtn:disabled::after{display:none}
-@keyframes kickGlow{0%,100%{box-shadow:5px 5px 0 0 var(--teal),0 0 0 0 rgba(236,208,128,0)}50%{box-shadow:5px 5px 0 0 var(--teal),0 0 24px 6px rgba(236,208,128,.85)}}
+@keyframes kickGlow{0%,100%{box-shadow:5px 5px 0 0 var(--teal),0 0 0 0 rgba(255,45,35,0)}50%{box-shadow:5px 5px 0 0 var(--teal),0 0 27px 7px rgba(255,45,35,.9)}}
 @keyframes kickSheen{0%,12%{transform:translateX(-160%) skewX(-16deg)}55%,100%{transform:translateX(520%) skewX(-16deg)}}
 @media(prefers-reduced-motion:reduce){#kickBtn{animation:none}#kickBtn::after{display:none}}
 #resetBtn{background:#0c141d!important;color:#fff!important;border:1px solid #ffffff1f!important}
@@ -405,6 +408,11 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 .score .scoreT .scoreDiv{margin:3px 0!important;background:rgba(6,32,28,.42)!important}
 .langToggle{display:inline-flex;gap:2px;background:rgba(10,16,24,.6);border:1px solid #ffffff1c;border-radius:9px;padding:3px;vertical-align:middle}
 .langToggle button{border:0;background:transparent;color:#9aa6b2;font:800 11px 'Barlow Condensed';letter-spacing:.6px;padding:5px 9px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:background .12s,color .12s}
+/* language buttons carry the country flag (Norway Nordic cross / England St George) */
+.langToggle button,.cfLang button{display:inline-flex;align-items:center;gap:5px}
+.langToggle button::before,.cfLang button::before{content:"";width:16px;height:11px;border-radius:2px;flex:none;box-shadow:0 0 0 1px #ffffff33}
+.langToggle [data-lang="no"]::before,.cfLang [data-lang="no"]::before{background:linear-gradient(90deg,transparent 0 34%,#172442 34% 44%,transparent 44%),linear-gradient(180deg,transparent 0 40%,#172442 40% 60%,transparent 60%),linear-gradient(90deg,transparent 0 28%,#fff 28% 50%,transparent 50%),linear-gradient(180deg,transparent 0 34%,#fff 34% 66%,transparent 66%),#c8102e}
+.langToggle [data-lang="en"]::before,.cfLang [data-lang="en"]::before{background:linear-gradient(#c8102e,#c8102e) center/100% 22% no-repeat,linear-gradient(#c8102e,#c8102e) center/22% 100% no-repeat,#fff}
 .langToggle button:hover{color:#fff}
 .langToggle button.active,.quickActions .langToggle button.active{background:var(--green)!important;color:#08131f!important;border-color:var(--green)!important}
 
