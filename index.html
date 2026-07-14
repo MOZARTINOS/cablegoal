@@ -5671,8 +5671,69 @@ function tint(orig,hex){const k=(orig.name||'m')+'_'+hex;if(!matCache[k]){const 
 function kitColors(p){
   const gk=p.role==='gk'||p.role==='pickford';
   if(p.team==='ref')return{Shirt:0x181818,Pants:0x181818,Socks:0x181818};
-  if(p.team==='nor')return gk?{Shirt:0x7cc24a,Pants:0x7cc24a,Socks:0x7cc24a}:{Shirt:0xc8102e,Pants:0x172442,Socks:0xb81029};
+  if(p.team==='nor')return gk?{Shirt:0x7cc24a,Pants:0x7cc24a,Socks:0x7cc24a}:{Shirt:0xc8102e,Pants:0x172442,Socks:0x172442};
   return gk?{Shirt:0xe89a3a,Pants:0x172442,Socks:0xe89a3a}:{Shirt:0xf4f4f4,Pants:0xf4f4f4,Socks:0xf4f4f4};
+}
+/* Kit shader: the GLB has no UVs, so the Norway flag-cross, England trim and shirt numbers
+   are painted in bind-pose mesh space (x=left/right, y=front(-)/back(+), z=height 0.025–0.040
+   for the shirt). Bind-pose coords deform with the skin, so prints stay glued to the cloth. */
+const ROLE_NUM={gk:1,wolfe:5,heggem:17,ajer:3,ryerson:26,berge:8,berg:6,odegaard:10,schjelderup:21,sorloth:7,haaland:9,pickford:1,konsa:2,stones:5,guehi:6,oreilly:3,rice:4,collector:8,madueke:20,bellingham:10,gordon:18,forward:9};
+function linV(h){const c=new THREE.Color(h);if(c.convertSRGBToLinear)c.convertSRGBToLinear();return new THREE.Vector3(c.r,c.g,c.b)}
+function makeNumTex(num,dark){const cn=document.createElement('canvas');cn.width=128;cn.height=160;const t=new THREE.CanvasTexture(cn);t.anisotropy=4;const paint=function(){const nc=cn.getContext('2d');nc.clearRect(0,0,128,160);const fs=num>9?100:118;nc.font='italic 900 '+fs+'px "Barlow Condensed"';nc.textAlign='center';nc.textBaseline='middle';nc.lineJoin='round';nc.lineWidth=fs*.11;nc.strokeStyle=dark?'#ffffff':'#141f3a';nc.strokeText(String(num),64,84);nc.fillStyle=dark?'#172033':'#ffffff';nc.fillText(String(num),64,84);t.needsUpdate=true};registerLabel(paint);return t}
+function kitFrag(team,gkRole){
+  let s='float kx=vKitPos.x,ky=vKitPos.y,kz=vKitPos.z;\n';
+  if(team==='nor'&&!gkRole){
+    s+='float dv=abs(kx+0.0009);float dh=abs(kz-0.0353);bool tors=abs(kx)<0.0036;\n';
+    s+='if(dv<0.00095||(dh<0.00115&&tors))diffuseColor.rgb=kitB;\n';
+    s+='if(dv<0.0006||(dh<0.0008&&tors))diffuseColor.rgb=kitA;\n';
+  }
+  if(team==='eng'&&!gkRole){
+    s+='float ax=abs(kx);\n';
+    s+='if(kz<0.036){if(ax>0.0072&&ax<=0.0079)diffuseColor.rgb=kitC;if(ax>0.0079)diffuseColor.rgb=kitA;}\n';
+    s+='if(kz>0.0392&&length(vec2(kx,ky))<0.0028)diffuseColor.rgb=kitA;\n';
+  }
+  s+='vec2 buv=vec2(kx/0.0075+0.5,(kz-0.0335)/0.0094+0.5);\n';
+  s+='if(ky>0.0002&&buv.x>0.0&&buv.x<1.0&&buv.y>0.0&&buv.y<1.0){vec4 nn=texture2D(numTex,vec2(1.0-buv.x,buv.y));nn.rgb=pow(nn.rgb,vec3(2.2));diffuseColor.rgb=mix(diffuseColor.rgb,nn.rgb,nn.a);}\n';
+  const fx=(team==='nor'&&!gkRole)?'0.001':'0.0';
+  s+='vec2 fuv=vec2((kx-('+fx+'))/0.0034+0.5,(kz-0.031)/0.0042+0.5);\n';
+  s+='if(ky<-0.0002&&fuv.x>0.0&&fuv.x<1.0&&fuv.y>0.0&&fuv.y<1.0){vec4 nf=texture2D(numTex,fuv);nf.rgb=pow(nf.rgb,vec3(2.2));diffuseColor.rgb=mix(diffuseColor.rgb,nf.rgb,nf.a);}\n';
+  return s;
+}
+/* The GLB's "Socks" mesh is only a thin ankle ring hidden by the boots, so real knee-high
+   socks are painted onto the Skin material over the shin band (bind-pose z 0.0018–0.0115). */
+function sockSkin(orig,skinHex,sockHex){
+  const k='sk_'+skinHex+'_'+sockHex;if(matCache[k])return matCache[k];
+  const m=orig.clone();m.color.setHex(skinHex);if(m.color.convertSRGBToLinear)m.color.convertSRGBToLinear();m.metalness=.05;m.roughness=.75;
+  const sc=linV(sockHex);
+  m.onBeforeCompile=function(sh){
+    sh.uniforms.sockCol={value:sc};
+    sh.vertexShader='varying vec3 vKitPos;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvKitPos=position;');
+    sh.fragmentShader='varying vec3 vKitPos;\nuniform vec3 sockCol;\n'+sh.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nif(vKitPos.z>0.0018&&vKitPos.z<0.0115)diffuseColor.rgb=sockCol;');
+  };
+  m.customProgramCacheKey=function(){return 'sockskin'};
+  matCache[k]=m;return m}
+const shirtCache={};
+function kitShirtMat(p,orig){
+  const gkRole=p.role==='gk'||p.role==='pickford';
+  const num=ROLE_NUM[p.role]||0;
+  const key=p.team+(gkRole?'g':'o')+num;
+  if(shirtCache[key])return shirtCache[key];
+  const m=orig.clone();
+  m.color.setHex(p.team==='nor'?(gkRole?0x7cc24a:0xc1122b):(gkRole?0xe89a3a:0xf4f4f4));
+  if(m.color.convertSRGBToLinear)m.color.convertSRGBToLinear();
+  m.metalness=.05;m.roughness=.75;
+  const numTex=makeNumTex(num,p.team==='eng');
+  m.onBeforeCompile=function(sh){
+    sh.uniforms.numTex={value:numTex};
+    sh.uniforms.kitA={value:linV(0x141f3a)};
+    sh.uniforms.kitB={value:linV(0xeef1f5)};
+    sh.uniforms.kitC={value:linV(0xc8102e)};
+    sh.vertexShader='varying vec3 vKitPos;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvKitPos=position;');
+    sh.fragmentShader='varying vec3 vKitPos;\nuniform sampler2D numTex;uniform vec3 kitA;uniform vec3 kitB;uniform vec3 kitC;\n'+sh.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\n{\n'+kitFrag(p.team,gkRole)+'}');
+  };
+  m.customProgramCacheKey=function(){return 'kit'+p.team+(gkRole?'g':'o')};
+  shirtCache[key]=m;
+  return m;
 }
 players.forEach(p=>{
   const g=THREE.SkeletonUtils.clone(src);
@@ -5683,10 +5744,10 @@ players.forEach(p=>{
   const hairHex=prof&&prof.hair?prof.hair:0x2b211b;
   g.traverse(o=>{if(o.isMesh){o.castShadow=!reduced;o.receiveShadow=false;o.frustumCulled=false;
     const n=o.material&&o.material.name;
-    if(n==='Shirt')o.material=tint(o.material,cols.Shirt);
+    if(n==='Shirt')o.material=p.team==='ref'?tint(o.material,cols.Shirt):kitShirtMat(p,o.material);
     else if(n==='Pants')o.material=tint(o.material,cols.Pants);
     else if(n==='Socks')o.material=tint(o.material,cols.Socks);
-    else if(n==='Skin')o.material=tint(o.material,skinHex);
+    else if(n==='Skin')o.material=sockSkin(o.material,skinHex,cols.Socks);
     else if(n==='Hair')o.material=tint(o.material,hairHex);
   }});
   p.root.add(g);p.gltf=g;
@@ -5695,6 +5756,15 @@ players.forEach(p=>{
   for(const k in clips){const a=p.mix.clipAction(clips[k]);if(ONE_SHOT[k]){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true}p.acts[k]=a}
   p._anim='Idle';p.acts.Idle.play();p.mix.update(Math.random()*2);
 });
+// console helper: frame a player up close for kit QA — __kitCam(roleOrIndex, yawOffset, dist); yawOffset 0 = front, PI = back; __kitCam(null) unlocks
+window.__kitCam=function(idx,yawOff,dist){
+  if(!window.__kitCamWrapped){const u=updateCamera;updateCamera=function(){if(window.__kitCamLock)return;u()};window.__kitCamWrapped=1}
+  if(idx===null){window.__kitCamLock=0;return 'unlocked'}
+  const p=typeof idx==='string'?players.find(q=>q.role===idx):players[idx||0];if(!p)return 'no player';
+  window.__kitCamLock=1;
+  const a=p.root.rotation.y+(yawOff||0),d=dist||2.2,t=new THREE.Vector3(p.root.position.x,1.05,p.root.position.z);
+  camera.position.set(t.x+Math.sin(a)*d,1.4,t.z+Math.cos(a)*d);camera.lookAt(t);
+  return p.role+' at '+t.x.toFixed(1)+','+t.z.toFixed(1)};
 const prevAnimate=animatePlayer;
 animatePlayer=function(p,t){
   if(!p.mix){prevAnimate(p,t);return}
