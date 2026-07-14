@@ -4,20 +4,43 @@
 //   • Server-side dedup: an HttpOnly `cgv` token cookie identifies the browser;
 //     the server remembers each token's current choice, so repeat POSTs from
 //     the same browser only ever move one vote (no double counting).
-//   • Per-IP rate limit (3 writes/min) caps direct-API padding.
-//   • Only anonymous counts are stored — global {hit, no} plus per-country
-//     {hit, no} derived from Netlify edge geo. No names/handles/IPs persisted.
+//   • Per-IP rate limit (3 writes/min) caps direct-API padding. The limiter is
+//     a compare-and-swap loop on a Blobs key — parallel bursts from one IP
+//     lose the CAS race and fail closed (429) instead of slipping through.
+//   • POST requires an allowlisted Origin (browser writes from our site only)
+//     and an application/json body ≤ 1 KB. GET stays public.
+//   • Privacy: no raw IPs persisted anywhere — the rate-limit key is a salted
+//     SHA-256 hash of the IP (salt from VOTE_IP_SALT env when set), one small
+//     bucket per hash, overwritten in place each 1-minute window. Only
+//     anonymous counts are stored — global {hit, no} plus per-country {hit, no}
+//     derived from Netlify edge geo. No names/handles persisted.
 //   • No secrets in code: Blobs auth is injected by the Netlify runtime; any
 //     future keys must come from environment variables (repo stays public).
+// Known residual risk (accepted for a sentiment counter): token write and
+// tally write are two separate Blob stores and cannot be transactional; a
+// crash between them can drift one vote. The origin allowlist + atomic IP
+// limit cap deliberate abuse at 3 writes/min per IP.
 import { getStore } from '@netlify/blobs';
+import { createHash } from 'node:crypto';
 
 const KEY = 'tally';
 const CHOICES = ['hit', 'no'];
 const WINDOW_MS = 60_000;   // per-IP rate-limit window
 const MAX_PER_WINDOW = 3;   // max writes per IP per window (casual/bot padding guard)
 const CAS_RETRIES = 5;      // optimistic-concurrency retries on the shared counter
+const RL_RETRIES = 3;       // CAS retries on the rate-limit bucket (then fail closed)
+const MAX_BODY_BYTES = 1024;
 const COOKIE = 'cgv';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+
+// Browsers may only POST from these origins (site itself + netlify dev).
+const POST_ORIGINS = [
+  'https://cablegoal.com',
+  'https://www.cablegoal.com',
+  'https://cablegoal.netlify.app',
+  'http://localhost:8888',
+  'http://127.0.0.1:8888',
+];
 
 const CORS = {
   'content-type': 'application/json',
@@ -27,6 +50,10 @@ const CORS = {
   'cache-control': 'no-store',
 };
 
+function json(status, obj, extra) {
+  return new Response(JSON.stringify(obj), { status, headers: extra ? { ...CORS, ...extra } : CORS });
+}
+
 function clientIp(req, context) {
   return (
     (context && context.ip) ||
@@ -34,6 +61,12 @@ function clientIp(req, context) {
     (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() ||
     'unknown'
   );
+}
+
+// Rate-limit key: salted hash so no raw network identifier is ever stored.
+function ipKey(ip) {
+  const salt = process.env.VOTE_IP_SALT || 'cablegoal-rl-v1';
+  return createHash('sha256').update(ip + '|' + salt).digest('hex').slice(0, 32);
 }
 
 function readToken(req) {
@@ -89,10 +122,28 @@ async function casUpdate(store, prev, next) {
   return null;
 }
 
+// Atomic fixed-window rate limit. Returns true when this request is allowed.
+// A lost CAS race means the same IP is writing in parallel → fail closed.
+async function rateLimitOk(rl, key) {
+  for (let i = 0; i < RL_RETRIES; i++) {
+    const cur = await rl.getWithMetadata(key, { type: 'json' });
+    const now = Date.now();
+    let bucket = (cur && cur.data) || { n: 0, t: now };
+    if (now - bucket.t > WINDOW_MS) bucket = { n: 0, t: now };
+    if (bucket.n >= MAX_PER_WINDOW) return false;
+    bucket = { n: bucket.n + 1, t: bucket.t };
+    const opts = cur ? { onlyIfMatch: cur.etag } : { onlyIfNew: true };
+    const res = await rl.setJSON(key, bucket, opts);
+    if (!res || res.modified !== false) return true;
+    await new Promise(r => setTimeout(r, 20 + Math.floor(Math.random() * 40)));
+  }
+  return false;
+}
+
 export default async (req, context) => {
   if (req.method === 'OPTIONS') return new Response('', { headers: CORS });
   if (req.method !== 'GET' && req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'method-not-allowed' }), { status: 405, headers: CORS });
+    return json(405, { error: 'method-not-allowed' });
   }
 
   const store = getStore('votes');
@@ -101,29 +152,41 @@ export default async (req, context) => {
 
   if (req.method === 'GET') {
     const tally = normTally(await store.get(KEY, { type: 'json' }));
-    return new Response(JSON.stringify({ ...tally, country }), { headers: CORS });
+    return json(200, { ...tally, country });
   }
 
   // ---- POST ----
-  // per-IP rate limit (fixed window kept in a separate Blobs store)
+  // Browser writes must come from the site itself (curl/bots send no or a
+  // foreign Origin). Not an auth mechanism — just kills drive-by cross-site writes.
+  const origin = req.headers.get('origin') || '';
+  if (!POST_ORIGINS.includes(origin)) {
+    return json(403, { error: 'bad-origin' });
+  }
+  const postCors = { 'access-control-allow-origin': origin, vary: 'Origin' };
+
+  const contentType = (req.headers.get('content-type') || '').toLowerCase();
+  if (!contentType.includes('application/json')) {
+    return json(415, { error: 'bad-content-type' }, postCors);
+  }
+
+  // per-IP rate limit (atomic CAS on a salted-hash key; no raw IP persisted)
   const ip = clientIp(req, context);
   const rl = getStore('votes-rl');
-  const now = Date.now();
-  let bucket = (await rl.get(ip, { type: 'json' })) || { n: 0, t: now };
-  if (now - bucket.t > WINDOW_MS) bucket = { n: 0, t: now };
-  if (bucket.n >= MAX_PER_WINDOW) {
+  if (!(await rateLimitOk(rl, ipKey(ip)))) {
     const tally = normTally(await store.get(KEY, { type: 'json' }));
-    return new Response(JSON.stringify({ ...tally, country, rateLimited: true }), { status: 429, headers: CORS });
+    return json(429, { ...tally, country, rateLimited: true }, postCors);
   }
-  bucket.n++;
-  await rl.setJSON(ip, bucket);
 
-  // strictly validated input: only `choice` is read from the body
+  // strictly validated input: capped body size, JSON only, only `choice` is read
   let body = {};
-  try { body = await req.json(); } catch { body = {}; }
-  const choice = body.choice;
+  try {
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) return json(413, { error: 'body-too-large' }, postCors);
+    body = JSON.parse(raw);
+  } catch { body = {}; }
+  const choice = body && body.choice;
   if (!CHOICES.includes(choice)) {
-    return new Response(JSON.stringify({ error: 'bad-choice' }), { status: 400, headers: CORS });
+    return json(400, { error: 'bad-choice' }, postCors);
   }
 
   // browser token: the server's memory of this browser's current vote
@@ -143,7 +206,7 @@ export default async (req, context) => {
     const applied = await casUpdate(store, prev && CHOICES.includes(prev.choice) ? prev : null, { choice, country });
     if (!applied) {
       const cur = normTally(await store.get(KEY, { type: 'json' }));
-      return new Response(JSON.stringify({ ...cur, country, busy: true }), { status: 503, headers: CORS });
+      return json(503, { ...cur, country, busy: true }, postCors);
     }
     await tokens.setJSON(token, { choice, country });
     tally = applied;
@@ -151,8 +214,8 @@ export default async (req, context) => {
     tally = normTally(await store.get(KEY, { type: 'json' }));
   }
 
-  const headers = setCookie ? { ...CORS, 'set-cookie': setCookie } : CORS;
-  return new Response(JSON.stringify({ ...tally, country }), { headers });
+  const headers = setCookie ? { ...postCors, 'set-cookie': setCookie } : postCors;
+  return json(200, { ...tally, country }, headers);
 };
 
 export const config = { path: '/api/vote' };

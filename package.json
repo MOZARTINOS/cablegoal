@@ -7,6 +7,12 @@
   "homepage": "https://cablegoal.com",
   "license": "MIT",
   "dependencies": {
-    "@netlify/blobs": "^8.1.0"
+    "@netlify/blobs": "^10.0.0"
+  },
+  "overrides": {
+    "@opentelemetry/core": "^2.8.0",
+    "@opentelemetry/resources": "^2.8.0",
+    "@opentelemetry/sdk-trace-base": "^2.8.0",
+    "@opentelemetry/sdk-trace-node": "^2.8.0"
   }
 }
