@@ -11,6 +11,7 @@ CLAUDE.md
 .remember/
 NOTES*.md
 HANDOFF*.md
+*AUDIT*.md
 
 # import artifacts
 extracted/
