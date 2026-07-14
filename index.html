@@ -659,7 +659,7 @@ async function sendVote(choice,prev){if(!VOTE_ENABLED)return;try{const r=await f
 function selectVote(v,send){const prev=safeStore.get('cableVerdict')||'';safeStore.set('cableVerdict',v);el('voteHit').classList.toggle('selected',v==='hit');el('voteNo').classList.toggle('selected',v==='no');if(send&&v&&v!==prev)sendVote(v,prev)}
 selectVote(safeStore.get('cableVerdict')||'',false);fetchTally();
 const __showResultTally=showResult;showResult=function(team){__showResultTally(team);fetchTally()};
-async function shareVerdict(){const __v=safeStore.get('cableVerdict');const __stance=__v==='hit'?'hit':__v==='no'?'clean':(clipped?'hit':'clean');if(window.__shareCard){try{await window.__shareCard(__stance);return;}catch(e){}}const d=yAtCable===null?'—':(yAtCable-CABLE_Y).toFixed(2);const text=`Norway–England 45+2 forensic simulation: ${clipped?tr('hitVerdict'):tr('cleanVerdict')} (Δ ${d} m, case score ${currentCaseScore}/1000).`;try{if(navigator.share)await navigator.share({title:'Goal through the cable',text});else await navigator.clipboard.writeText(text)}catch(e){}}
+async function shareVerdict(){const __v=safeStore.get('cableVerdict');const __stance=__v==='hit'?'hit':__v==='no'?'clean':'hit';if(window.__shareCard){try{await window.__shareCard(__stance);return;}catch(e){}}const d=yAtCable===null?'—':(yAtCable-CABLE_Y).toFixed(2);const text=`Norway–England 45+2 forensic simulation: ${clipped?tr('hitVerdict'):tr('cleanVerdict')} (Δ ${d} m, case score ${currentCaseScore}/1000).`;try{if(navigator.share)await navigator.share({title:'Goal through the cable',text});else await navigator.clipboard.writeText(text)}catch(e){}}
 el('shareBtn').onclick=shareVerdict;
 function showResult(team){const eng=team==='eng';el('resultTitle').textContent=eng?(lang==='no'?'England scorer — men spillet skulle stoppes':'England score — but play should stop'):(lang==='no'?'Norge scorer i den alternative grenen':'Norway score in the alternative branch');el('resultWhy').textContent=tr(eng?'engResult':'norResult');el('resultHint').textContent=tr(eng?'retryHintEng':'retryHintNor');setTimeout(()=>el('resultPanel').classList.add('open'),650)}
 
@@ -3261,7 +3261,7 @@ var qrcode = function() {
     q.fillStyle=fg;q.font='900 '+(42*s)+'px "Barlow Condensed"';q.fillText('CABLE GOAL',pad+46*s,hy+26*s);
     q.fillStyle=sub;q.font='700 '+(15*s)+'px "Noto Sans"';q.fillText((hit?'KJENNELSEN':'FORENSIC VERDICT').toUpperCase(),pad+46*s,hy+50*s);
     // score pill (outline)
-    var score=hit?'NOR 1–2 ENG':'NOR 2–1 ENG';
+    var score=hit?'NOR 2–1 ENG':'NOR 1–2 ENG';
     q.font='900 '+(30*s)+'px "Barlow Condensed"';var sw=q.measureText(score).width, sph=54*s, spw=sw+44*s, spx=W-pad-spw, spy=hy-12*s;
     q.lineWidth=3*s;q.strokeStyle=hit?'#ffd2ce':ENGNAVY;rr(q,spx,spy,spw,sph,999);q.stroke();
     q.fillStyle=hit?'#ffd2ce':ENGNAVY;q.textAlign='center';q.fillText(score,spx+spw/2,spy+sph*0.68);
@@ -3285,7 +3285,7 @@ var qrcode = function() {
     if(hit)q.restore();
     // lede
     q.fillStyle=lede;q.font='700 '+(30*s)+'px "Noto Sans"';q.textAlign='center';
-    var ledeTxt=hit?'Bellinghams mål på overtid burde vært annullert.':"Clear by 9.8 m. Haaland's counter stands.";
+    var ledeTxt=hit?'Bellinghams mål på overtid burde vært annullert.':"Clear by 9.8 m. Bellingham's goal stands.";
     wrap(q,ledeTxt,cx,top+bandH-352*s,W-pad*2.2,37*s);
     // ---- proof split bar ----
     var split=(window.__voteSplit&&window.__voteSplit.hit)?window.__voteSplit:{hit:63,clean:37};
