@@ -75,19 +75,18 @@ function applyDelta(tally, prev, next) {
 }
 
 // Compare-and-swap update of the shared tally blob (Blobs etag conditional write).
+// Returns the applied tally on success, or null if all retries lost the race.
 async function casUpdate(store, prev, next) {
   for (let i = 0; i < CAS_RETRIES; i++) {
     const cur = await store.getWithMetadata(KEY, { type: 'json' });
-    if (!cur) {
-      const res = await store.setJSON(KEY, applyDelta(null, prev, next), { onlyIfNew: true });
-      if (!res || res.modified !== false) return true;
-    } else {
-      const res = await store.setJSON(KEY, applyDelta(cur.data, prev, next), { onlyIfMatch: cur.etag });
-      if (!res || res.modified !== false) return true;
-    }
+    const applied = applyDelta(cur ? cur.data : null, prev, next);
+    const opts = cur ? { onlyIfMatch: cur.etag } : { onlyIfNew: true };
+    const res = await store.setJSON(KEY, applied, opts);
+    // Blobs returns { modified: false } when the condition failed → retry; otherwise the write landed.
+    if (!res || res.modified !== false) return applied;
     await new Promise(r => setTimeout(r, 30 + Math.floor(Math.random() * 70) * (i + 1)));
   }
-  return false;
+  return null;
 }
 
 export default async (req, context) => {
@@ -137,16 +136,21 @@ export default async (req, context) => {
   }
   const prev = token ? await tokens.get(token, { type: 'json' }) : null;
 
+  // Use the tally returned by the write so the client sees its own vote immediately
+  // (a re-read here can lag behind the write under Blobs read-after-write consistency).
+  let tally;
   if (!prev || prev.choice !== choice) {
-    const ok = await casUpdate(store, prev && CHOICES.includes(prev.choice) ? prev : null, { choice, country });
-    if (!ok) {
-      const tally = normTally(await store.get(KEY, { type: 'json' }));
-      return new Response(JSON.stringify({ ...tally, country, busy: true }), { status: 503, headers: CORS });
+    const applied = await casUpdate(store, prev && CHOICES.includes(prev.choice) ? prev : null, { choice, country });
+    if (!applied) {
+      const cur = normTally(await store.get(KEY, { type: 'json' }));
+      return new Response(JSON.stringify({ ...cur, country, busy: true }), { status: 503, headers: CORS });
     }
     await tokens.setJSON(token, { choice, country });
+    tally = applied;
+  } else {
+    tally = normTally(await store.get(KEY, { type: 'json' }));
   }
 
-  const tally = normTally(await store.get(KEY, { type: 'json' }));
   const headers = setCookie ? { ...CORS, 'set-cookie': setCookie } : CORS;
   return new Response(JSON.stringify({ ...tally, country }), { headers });
 };
