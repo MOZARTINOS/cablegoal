@@ -8304,6 +8304,20 @@ var qrcode = function() {
 
   // ── leaderboard share card — the "world is voting" country table as an image ──
   function fmtN(n){return (n|0).toLocaleString(cardLang()==='no'?'nb-NO':'en-US');}
+  function miniFlag(q,x,y,w,h,team,s){
+    q.save();rr(q,x,y,w,h,3*s);q.clip();
+    if(team==='nor'){
+      q.fillStyle='#BA0C2F';q.fillRect(x,y,w,h);
+      var vx=x+w*0.36,vy=y+h/2;
+      q.fillStyle='#fff';q.fillRect(vx-w*0.15,y,w*0.30,h);q.fillRect(x,vy-h*0.15,w,h*0.30);
+      q.fillStyle='#00205B';q.fillRect(vx-w*0.075,y,w*0.15,h);q.fillRect(x,vy-h*0.075,w,h*0.15);
+    }else{
+      q.fillStyle='#f4f6f8';q.fillRect(x,y,w,h);
+      q.fillStyle='#C8102E';q.fillRect(x+w*0.41,y,w*0.18,h);q.fillRect(x,y+h*0.41,w,h*0.18);
+    }
+    q.restore();
+    q.lineWidth=1.5*s;q.strokeStyle='rgba(255,255,255,.3)';rr(q,x,y,w,h,3*s);q.stroke();
+  }
   function drawBoardCard(W,H){
     var no=cardLang()==='no';
     var L=no?{sub:'FOLKETS DOM · DIREKTE',hl:['VERDEN','STEMMER'],campHit:'DEN TRAFF',campClean:'REN BANE',
@@ -8328,8 +8342,12 @@ var qrcode = function() {
     q.fillStyle='#fff';q.font='900 '+(42*s)+'px "Barlow Condensed"';q.fillText('CABLE GOAL',pad+46*s,hy+26*s);
     q.fillStyle=GOLD;q.font='700 '+(15*s)+'px "Noto Sans"';q.fillText(L.sub,pad+46*s,hy+50*s);
     var score='NOR 1–2 ENG';
-    q.font='900 '+(30*s)+'px "Barlow Condensed"';var sw=q.measureText(score).width,sph=54*s,spw=sw+44*s,spx=W-pad-spw,spy=hy-12*s;
+    q.font='900 '+(30*s)+'px "Barlow Condensed"';
+    var sw=q.measureText(score).width,fw=36*s,fh=25*s,fg=13*s,sph=54*s,spw=sw+(fw+fg)*2+44*s,spx=W-pad-spw,spy=hy-12*s;
     q.lineWidth=3*s;q.strokeStyle='#3a4a63';rr(q,spx,spy,spw,sph,999);q.stroke();
+    var fy=spy+(sph-fh)/2;
+    miniFlag(q,spx+22*s,fy,fw,fh,'nor',s);
+    miniFlag(q,spx+spw-22*s-fw,fy,fw,fh,'eng',s);
     q.fillStyle='#c8d2e2';q.textAlign='center';q.fillText(score,spx+spw/2,spy+sph*0.68);
     // headline (two giant italic lines)
     q.textAlign='center';
