@@ -508,12 +508,17 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   #topbar .quickActions{display:contents}
   /* row 1 — scorebug + language + settings */
   #scoreBox{order:0;flex:1 1 auto;min-width:0;justify-content:flex-start}
-  #langToggle{order:1}
+  #langToggle{order:1;flex:none}
+  /* flags-only lang toggle on phones — the NO/EN text next to a flag is dead width
+     that was pushing the gear onto a 4th row; the flag alone says it */
+  #topbar .langToggle button{font-size:0;padding:6px 7px;gap:0;min-height:34px}
+  #topbar .langToggle button::before{width:19px;height:13px}
   #gearBtn{order:2;flex:none}
   /* row 2 — camera tabs back in flow, full width, scrollable */
   #topbar .camsel{order:3;position:static;left:auto;right:auto;top:auto;transform:none;flex:1 1 100%;width:100%;max-width:none;margin:0}
-  /* row 3 — content actions as equal pills + sound */
-  #evidenceBtn,#dashHudBtn,#caseFileBtn{order:4;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* row 3 — Evidence/Story hug their labels, Verdict (the hero CTA) takes the slack */
+  #evidenceBtn,#dashHudBtn,#caseFileBtn{order:4;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #dashHudBtn{flex:1 1 0}
   #dashHudBtn{order:5}#caseFileBtn{order:6}#slowBtn{order:7;flex:none}#soundBtn{order:8;flex:none}
   /* undo the old icon-only squeeze on Evidence: pills carry labels again */
   #topbar #evidenceBtn{width:auto;padding:0 10px;font-size:10px}
@@ -590,7 +595,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
 <div class="hud" id="topbar">
   <div class="score" id="scoreBox"><span class="dotN"></span>NOR 1–1 ENG<span class="dotE"></span><span class="clock">45+2'</span></div>
   <div class="camsel"><button data-cam="auto" class="active" data-i18n="camCinema">Cinema</button><button data-cam="wide" data-i18n="camStand">Stand</button><button data-cam="chase" data-i18n="camBall">Ball cam</button><button data-cam="cable" data-i18n="camCable">Wire cam</button><button data-cam="top" data-i18n="camTop">Top</button><button data-cam="orbit" data-i18n="camOrbit">360° view</button></div>
-  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="dashHudBtn" aria-label="Community verdict">◆ <span id="dashHudLabel">Verdict</span></button><button id="caseFileBtn" aria-label="Case file">📖 <span data-i18n="storyBtn">Story</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><div class="langToggle" id="langToggle" aria-label="Language"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button id="gearBtn" aria-label="Settings">⚙</button></div>
+  <div class="quickActions"><button id="evidenceBtn" aria-label="Evidence">⚖ <span data-i18n="evidence">Evidence</span></button><button id="dashHudBtn" aria-label="Community verdict">🌐 <span id="dashHudLabel">Verdict</span></button><button id="caseFileBtn" aria-label="Case file">📖 <span data-i18n="storyBtn">Story</span></button><button id="replayLastBtn" aria-label="Replay last">↻</button><button id="slowBtn" aria-label="Slow motion">1×</button><button id="soundBtn" aria-label="Sound">🔊</button><div class="langToggle" id="langToggle" aria-label="Language"><button data-lang="no">NO</button><button data-lang="en">EN</button></div><button id="gearBtn" aria-label="Settings">⚙</button></div>
 </div>
 <div class="hud" id="forensicBadge">● forensic overlay / canonical ghost</div><div class="hud" id="orbitHint" data-i18n="orbitHint">Drag on the pitch to enter 360° view · pinch / wheel to zoom</div><div class="hud" id="caseScoreStrip"><div class="csTop"><span class="csLabel" data-i18n="accuracyLabel">reconstruction accuracy</span><span class="csBest"><span data-i18n="bestLabel">best</span> <em id="bestScoreValue">1000</em></span></div><div class="csVal"><b id="caseScoreValue">1000</b><span>/ 1000</span></div><div class="csBar"><i id="caseScoreBar"></i></div></div>
 <div class="hud" id="telemetry">
