@@ -508,9 +508,8 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   #topbar .quickActions{display:contents}
   /* row 1 — scorebug + language + settings */
   #scoreBox{order:0;flex:1 1 auto;min-width:0;justify-content:flex-start}
-  #langToggle{order:1;flex:none}
-  /* flags-only lang toggle on phones — the NO/EN text next to a flag is dead width
-     that was pushing the gear onto a 4th row; the flag alone says it */
+  /* flags-only lang toggle on phones; it lives in row 3 so the scorebug keeps
+     its team flags — those matter more than decorating the language switch */
   #topbar .langToggle button{font-size:0;padding:6px 7px;gap:0;min-height:34px}
   #topbar .langToggle button::before{width:19px;height:13px}
   #gearBtn{order:2;flex:none}
@@ -519,7 +518,7 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   /* row 3 — Evidence/Story hug their labels, Verdict (the hero CTA) takes the slack */
   #evidenceBtn,#dashHudBtn,#caseFileBtn{order:4;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #dashHudBtn{flex:1 1 0}
-  #dashHudBtn{order:5}#caseFileBtn{order:6}#slowBtn{order:7;flex:none}#soundBtn{order:8;flex:none}
+  #dashHudBtn{order:5}#caseFileBtn{order:6}#langToggle{order:7;flex:none}#slowBtn{order:8;flex:none}#soundBtn{order:9;flex:none}
   /* undo the old icon-only squeeze on Evidence: pills carry labels again */
   #topbar #evidenceBtn{width:auto;padding:0 10px;font-size:10px}
   #topbar #evidenceBtn:first-letter{font-size:13px}
@@ -556,8 +555,12 @@ body:not(.telemetry-open) #telemetry #clearance{display:none!important}
   #resultPanel .resultScore b{font-size:21px!important}
 }
 @media(max-width:430px){
-  .score .flag{display:none}
-  #topbar #evidenceBtn,#dashHudBtn,#caseFileBtn{padding:0 7px;font-size:9.5px}
+  .score .flag{width:16px;height:11px}
+  #topbar{column-gap:5px}
+  #topbar #evidenceBtn,#dashHudBtn,#caseFileBtn{padding:0 6px;font-size:9.5px}
+  #topbar .langToggle button{padding:6px 5px}
+  #topbar .langToggle button::before{width:17px;height:11px}
+  #topbar #soundBtn{width:38px}
   #topbar .camsel button{padding:6px 7px;font-size:10.5px}
   .presetChips button{padding:7px 9px!important;font-size:11px!important}
   .dockHeader #controlToggle{padding:8px 9px;font-size:9px}
