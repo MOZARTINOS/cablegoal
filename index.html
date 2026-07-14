@@ -5311,7 +5311,7 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
     el('vdSubText').innerHTML=total?T().sub[0]+'<b>'+fmt(total)+'</b>'+T().sub[1]:T().empty;
   }
   // country leaderboard built from the server's per-country tally (edge geo)
-  function renderBoard(){
+  function boardList(){
     var bc=(window.__voteSplit&&window.__voteSplit.byCountry)||{}, agg={}, list=[];
     Object.keys(bc).forEach(function(k){
       var code=ISO2[k]||(MF[k]?k:'OTH');
@@ -5320,6 +5320,17 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
     });
     Object.keys(agg).forEach(function(code){list.push([code,agg[code]]);});
     list.sort(function(a,b){return (b[1].hit+b[1].no)-(a[1].hit+a[1].no);});
+    return list;
+  }
+  // localized aggregated rows for the leaderboard share card (lives in another closure)
+  window.__boardRows=function(){
+    return boardList().map(function(e){
+      var tot=e[1].hit+e[1].no;
+      return {code:e[0],name:cName(e[0]),hit:e[1].hit,no:e[1].no,tot:tot,ph:tot?Math.round(e[1].hit/tot*100):0};
+    });
+  };
+  function renderBoard(){
+    var list=boardList();
     rows.innerHTML='';
     if(!list.length){
       var tr0=document.createElement('tr'),td0=document.createElement('td');
@@ -5375,6 +5386,7 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
   var dhb=el('dashHudBtn'); if(dhb)dhb.onclick=openDash;
   var dhl0=el('dashHudLabel'); if(dhl0)dhl0.textContent=(lang==='no'?'Avstemning':'Voting');
   var vsh=el('vdShare'); if(vsh)vsh.onclick=function(){var st=side(+lean.value); if(st==='none'){var cv=safeStore.get('cableVerdict'); st=cv==='no'?'clean':'hit';} if(window.__shareCard){try{window.__shareCard(st);}catch(_){}}};
+  var vbb=el('vdShareBoard'); if(vbb)vbb.onclick=function(){if(window.__shareBoard){try{window.__shareBoard();}catch(_){}}};
   // verdict buttons in the result modal lead to the rating dashboard
   var vh=el('voteHit'), vn=el('voteNo');
   if(vh)vh.addEventListener('click',function(){setTimeout(openDash,260);});
@@ -5383,7 +5395,7 @@ el('replayBtn').onclick=()=>{el('resultPanel').classList.remove('open');replayLa
   var _rt=renderTally;
   renderTally=function(t){_rt(t); if(t){window.__voteSplit=window.__voteSplit||{}; window.__voteSplit.hitN=t.hit|0; window.__voteSplit.cleanN=t.no|0; window.__voteSplit.byCountry=t.byCountry||{}; var tot=(t.hit|0)+(t.no|0); if(tot){window.__voteSplit.hit=Math.round((t.hit|0)/tot*100); window.__voteSplit.clean=100-window.__voteSplit.hit;} if(dash.classList.contains('open')){renderSplit();renderBoard();}}};
   var _al=applyLanguage;
-  applyLanguage=function(l){_al(l); var _d=el('dashHudLabel');if(_d)_d.textContent=lang==='no'?'Avstemning':'Voting'; var _vs=el('vdShare');if(_vs)_vs.textContent=lang==='no'?'✋ Del din stemme':'✋ Share my vote'; var _di=el('dashIntroBtn');if(_di)_di.textContent=lang==='no'?'◆ Folkets dom — se fordelingen live':'◆ Community verdict — see the live split'; if(built)applyLang();};
+  applyLanguage=function(l){_al(l); var _d=el('dashHudLabel');if(_d)_d.textContent=lang==='no'?'Avstemning':'Voting'; var _vs=el('vdShare');if(_vs)_vs.textContent=lang==='no'?'✋ Del din stemme':'✋ Share my vote'; var _vb=el('vdShareBoard');if(_vb)_vb.textContent=lang==='no'?'📊 Del verdensrangeringen':'📊 Share the leaderboard'; var _di=el('dashIntroBtn');if(_di)_di.textContent=lang==='no'?'◆ Folkets dom — se fordelingen live':'◆ Community verdict — see the live split'; if(built)applyLang();};
   window.__openDash=openDash;
 })();
 // Live community tally ("did it hit the cable?") backed by the Netlify vote function; degrades silently offline.
@@ -8290,8 +8302,108 @@ var qrcode = function() {
   var URL_=function(b){return URL_obj().createObjectURL(b);},URL_revoke=function(u){URL_obj().revokeObjectURL(u);};
   function URL_obj(){return window.URL||window.webkitURL;}
 
+  // ── leaderboard share card — the "world is voting" country table as an image ──
+  function fmtN(n){return (n|0).toLocaleString(cardLang()==='no'?'nb-NO':'en-US');}
+  function drawBoardCard(W,H){
+    var no=cardLang()==='no';
+    var L=no?{sub:'FOLKETS DOM · DIREKTE',hl:['VERDEN','STEMMER'],campHit:'DEN TRAFF',campClean:'REN BANE',
+      votes:'stemmer verden over',thC:'LAND',thH:'TRAFF',thN:'REN',thV:'STEMMER',thP:'TRAFF %',
+      empty:'Ingen stemmer ennå — vær den første.',cta:'STEM SELV'}
+    :{sub:'COMMUNITY VERDICT · LIVE',hl:['THE WORLD','IS VOTING'],campHit:'IT HIT',campClean:'NO CONTACT',
+      votes:'votes worldwide',thC:'COUNTRY',thH:'IT HIT',thN:'CLEAN',thV:'VOTES',thP:'HIT %',
+      empty:'No votes yet — be the first.',cta:'CAST YOURS'};
+    var list=[];try{list=(window.__boardRows&&window.__boardRows())||[];}catch(e){}
+    var vs=window.__voteSplit||{}, hitN=vs.hitN|0, cleanN=vs.cleanN|0, tot=hitN+cleanN;
+    var ph=tot?Math.round(hitN/tot*100):((vs.hit|0)||50), pc=100-ph;
+    var c=document.createElement('canvas');c.width=W;c.height=H;var q=c.getContext('2d');
+    var s=W/1080, pad=70*s, cx=W/2, barX=pad, barW=W-pad*2;
+    // deep-navy forensic backdrop
+    var g=q.createRadialGradient(cx,-H*0.08,0,cx,-H*0.08,H*1.15);
+    g.addColorStop(0,'#16233c');g.addColorStop(.55,'#0c1424');g.addColorStop(1,'#070b14');
+    q.fillStyle=g;q.fillRect(0,0,W,H);
+    // header (same DNA as the verdict card)
+    var hy=34*s;
+    diamond(q,pad+17*s,hy+17*s,34*s,GOLD);
+    q.textAlign='left';q.textBaseline='alphabetic';
+    q.fillStyle='#fff';q.font='900 '+(42*s)+'px "Barlow Condensed"';q.fillText('CABLE GOAL',pad+46*s,hy+26*s);
+    q.fillStyle=GOLD;q.font='700 '+(15*s)+'px "Noto Sans"';q.fillText(L.sub,pad+46*s,hy+50*s);
+    var score='NOR 1–2 ENG';
+    q.font='900 '+(30*s)+'px "Barlow Condensed"';var sw=q.measureText(score).width,sph=54*s,spw=sw+44*s,spx=W-pad-spw,spy=hy-12*s;
+    q.lineWidth=3*s;q.strokeStyle='#3a4a63';rr(q,spx,spy,spw,sph,999);q.stroke();
+    q.fillStyle='#c8d2e2';q.textAlign='center';q.fillText(score,spx+spw/2,spy+sph*0.68);
+    // headline (two giant italic lines)
+    q.textAlign='center';
+    var hpx=Math.min(fitFont(q,L.hl[0],900,true,barW,116*s,60*s),fitFont(q,L.hl[1],900,true,barW,116*s,60*s));
+    q.font='italic 900 '+hpx+'px "Barlow Condensed"';q.fillStyle='#fff';
+    q.save();q.shadowColor='rgba(0,0,0,.45)';q.shadowOffsetY=6*s;
+    q.fillText(L.hl[0],cx,208*s);q.fillText(L.hl[1],cx,208*s+hpx*0.92);q.restore();
+    // global split bar
+    var barY=352*s,barH=38*s;
+    q.save();rr(q,barX,barY,barW,barH,999);q.clip();
+    var wH2=barW*ph/100;q.fillStyle=CORAL;q.fillRect(barX,barY,wH2,barH);q.fillStyle=TEAL;q.fillRect(barX+wH2,barY,barW-wH2,barH);
+    q.font='900 '+(23*s)+'px "Barlow Condensed"';q.textAlign='center';q.textBaseline='middle';
+    q.fillStyle='#210707';q.fillText(ph+'%',barX+wH2/2,barY+barH/2);
+    q.fillStyle='#04121c';q.fillText(pc+'%',barX+wH2+(barW-wH2)/2,barY+barH/2);
+    q.restore();q.textBaseline='alphabetic';
+    var lblY=barY+barH+32*s;
+    q.font='800 '+(21*s)+'px "Barlow Condensed"';
+    q.textAlign='left';q.fillStyle=CORAL;q.fillText('◆ '+L.campHit+' '+ph+'%',barX,lblY);
+    q.textAlign='right';q.fillStyle=TEAL;q.fillText(L.campClean+' '+pc+'% ○',barX+barW,lblY);
+    q.textAlign='center';q.fillStyle='#8fa0b8';q.font='700 '+(18*s)+'px "Noto Sans"';
+    q.fillText(fmtN(tot)+' '+L.votes,cx,lblY);
+    // country table — top 10
+    var thY=468*s, xh=barX+barW*0.56, xn=barX+barW*0.72, xv=barX+barW*0.87;
+    q.font='800 '+(20*s)+'px "Barlow Condensed"';q.fillStyle='#7f8996';
+    q.textAlign='left';q.fillText(L.thC,barX+6*s,thY);
+    q.textAlign='right';q.fillText(L.thH,xh,thY);q.fillText(L.thN,xn,thY);q.fillText(L.thV,xv,thY);q.fillText(L.thP,barX+barW,thY);
+    q.strokeStyle='rgba(255,255,255,.14)';q.lineWidth=2*s;q.beginPath();q.moveTo(barX,thY+12*s);q.lineTo(barX+barW,thY+12*s);q.stroke();
+    var rowH=42*s, ry0=thY+22*s;
+    if(!list.length){q.textAlign='center';q.fillStyle='#8fa0b8';q.font='700 '+(22*s)+'px "Noto Sans"';q.fillText(L.empty,cx,ry0+90*s);}
+    list.slice(0,10).forEach(function(r,i){
+      var y=ry0+i*rowH, by=y+rowH*0.68;
+      if(i%2===0){q.fillStyle='rgba(255,255,255,.04)';rr(q,barX,y,barW,rowH,8*s);q.fill();}
+      q.textAlign='left';
+      q.fillStyle=GOLD;q.font='900 '+(22*s)+'px "Barlow Condensed"';q.fillText(String(i+1),barX+8*s,by);
+      diamond(q,barX+52*s,y+rowH/2,13*s,r.code==='NOR'?NOR:r.code==='ENG'?'#dde3ea':'#3a4a63');
+      q.fillStyle='#eef2f8';q.font='800 '+(26*s)+'px "Barlow Condensed"';
+      var nm=r.name;while(q.measureText(nm).width>barW*0.42&&nm.length>3)nm=nm.slice(0,-2);if(nm!==r.name)nm+='…';
+      q.fillText(nm,barX+72*s,by);
+      q.textAlign='right';q.font='800 '+(25*s)+'px "Barlow Condensed"';
+      q.fillStyle=CORAL;q.fillText(fmtN(r.hit),xh,by);
+      q.fillStyle=TEAL;q.fillText(fmtN(r.no),xn,by);
+      q.fillStyle='#c8d2e2';q.fillText(fmtN(r.tot),xv,by);
+      q.fillStyle=GOLD;q.fillText(r.ph+'%',barX+barW,by);
+    });
+    // CTA + QR
+    var ctaY=930*s,qrS=104*s,ctaH=96*s,qx=W-pad-qrS,cw=(qx-24*s)-pad;
+    drawQR(q,qx,ctaY,qrS,'#0a0a0a','#ffffff');
+    q.fillStyle=TEAL;rr(q,pad+9*s,ctaY+9*s,cw,ctaH,15*s);q.fill();
+    q.fillStyle=GOLD;rr(q,pad,ctaY,cw,ctaH,15*s);q.fill();
+    q.fillStyle='#07111b';q.textAlign='left';q.textBaseline='middle';
+    q.font='900 '+(40*s)+'px "Barlow Condensed"';q.fillText(L.cta,pad+30*s,ctaY+ctaH*0.44);
+    q.font='700 '+(20*s)+'px "Noto Sans"';q.globalAlpha=.85;q.fillText(URL,pad+30*s,ctaY+ctaH*0.74);q.globalAlpha=1;
+    q.textBaseline='alphabetic';
+    return c;
+  }
+  async function shareBoard(){
+    try{await document.fonts.ready;}catch(e){}
+    var cv=drawBoardCard(1080,1080);
+    var invite=cardLang()==='no'
+      ?'Verden stemmer over kabelmålet — se landsrangeringen og avgi din stemme på cablegoal.com'
+      :'The world is voting on the Cable Goal — see the country leaderboard and cast yours at cablegoal.com';
+    var b=await new Promise(function(res){cv.toBlob(res,'image/png');});
+    var file=new File([b],'cablegoal-leaderboard.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:'Cable Goal',text:invite,url:QURL});return;}catch(e){if(e&&e.name==='AbortError')return;}
+    }
+    try{if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(invite);}catch(e){}
+    dl(cv,'cablegoal-leaderboard.png');
+  }
+
   window.__shareCard=share;
   window.__shareCardPreview=function(stance){return drawCard(stance,1080,1080);};
+  window.__shareBoard=shareBoard;
+  window.__shareBoardPreview=function(){return drawBoardCard(1080,1080);};
 })();
 
 </script>
@@ -8318,6 +8430,7 @@ var qrcode = function() {
   </div>
   <div class="vdLbhead"><h2 id="vdLatestH">Votes by country</h2><span id="vdLbcount">Live</span></div>
   <table><thead><tr><th id="vdThCountry">Country</th><th class="num" id="vdThHit">It hit</th><th class="num" id="vdThNo">No contact</th><th class="num" id="vdThVotes">Votes</th><th class="num" id="vdThPct">Hit %</th></tr></thead><tbody id="vdRows"></tbody></table>
+  <button class="vdShareBtn" id="vdShareBoard">📊 Share the leaderboard</button>
   <p class="vdNote" id="vdNote"></p>
 </div></div>
 <script>
