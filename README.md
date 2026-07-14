@@ -1,5 +1,7 @@
 # Cable Goal — interactive 3D reconstruction
 
+[![Cable Goal — Norway vs England, World Cup 2026. Re-kick the goal. You decide.](banner.jpg)](https://cablegoal.com)
+
 **[▶ Try it live at cablegoal.com](https://cablegoal.com)** · free · runs in your browser · no install
 
 An interactive **3D forensic reconstruction** of the disputed goal in
