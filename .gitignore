@@ -18,6 +18,10 @@ HANDOFF*.md
 extracted/
 *.zip
 
+# raw audio sources — the SFX/anthems ship embedded as base64 in index.html, not as files
+sounds/
+deno.lock
+
 # private research notes (owner's forensic reports) — never publish
 deep research/
 *research*.md
