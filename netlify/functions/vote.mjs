@@ -218,4 +218,17 @@ export default async (req, context) => {
   return json(200, { ...tally, country }, headers);
 };
 
-export const config = { path: '/api/vote' };
+export const config = {
+  path: '/api/vote',
+  // Edge request-rate limit — runs BEFORE the function, so floods of GETs or
+  // rejected POSTs never reach Blob reads (caps quota/billing abuse, SEC-002).
+  // Generous cap: the page GETs the tally on every load, so this only bites
+  // floods, not real users. The in-function 3/min POST limiter (poll-padding
+  // guard, SEC-001) is a separate layer and stays.
+  rateLimit: {
+    windowSize: 60,        // seconds
+    windowLimit: 120,      // requests per window per IP
+    aggregateBy: ['ip'],
+    action: 'rate_limit',  // 429 past the limit
+  },
+};
